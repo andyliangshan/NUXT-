@@ -1,0 +1,64 @@
+[2018-04-12 09:52:43.159] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_store_phone *1ms 
+[2018-04-12 09:52:43.163] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_phoneData *1ms 
+[2018-04-12 09:52:57.928] [INFO] logs - request-get-url: http://apitest.zhib.net/util/valid/phone?timespan=0cc797f50898c9abf2012f3240c4d9f2&raid=6c3ae1d65fc6376d62e2c0f1cbedb29e&dba=b1d4c0b625026ece5dbcc52632aeb9018f8c58606b18b352f97a7bd7ecbb93c1****68ms
+[2018-04-12 09:52:57.935] [DEBUG] logs - redis cache set * zhib|api|JGJiOhAT_store_phone *4ms 
+[2018-04-12 09:52:57.935] [DEBUG] logs - redis cache set * zhib|api|JGJiOhAT_phoneData *4ms 
+[2018-04-12 09:52:58.685] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_store_phone *4ms 
+[2018-04-12 09:52:58.686] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_phoneData *1ms 
+[2018-04-12 09:53:33.527] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_store_phone *0ms 
+[2018-04-12 09:55:34.252] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_store_phone *1ms 
+[2018-04-12 09:55:34.253] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_phoneData *1ms 
+[2018-04-12 09:55:56.284] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_store_phone *0ms 
+[2018-04-12 09:58:37.757] [INFO] logs - request-get-url: http://apitest.zhib.net/util/valid/phone?timespan=a0c5172123df6ca37142be485900a335&raid=90d157dafdb2fb7fc3c88e2fd13c0e00&dba=e81e1c3a657c2719eacdce64ab3b573d8457a179ea540f72f27530840a398fc0****39ms
+[2018-04-12 09:58:37.760] [DEBUG] logs - redis cache set * zhib|api|JGJiOhAT_store_phone *1ms 
+[2018-04-12 09:58:37.760] [DEBUG] logs - redis cache set * zhib|api|JGJiOhAT_phoneData *2ms 
+[2018-04-12 09:58:38.450] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_store_phone *0ms 
+[2018-04-12 09:58:38.452] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_phoneData *1ms 
+[2018-04-12 09:59:13.622] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_store_phone *31ms 
+[2018-04-12 09:59:13.622] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_phoneData *0ms 
+[2018-04-12 09:59:25.456] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_store_phone *0ms 
+[2018-04-12 09:59:25.457] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_phoneData *0ms 
+[2018-04-12 10:01:58.985] [INFO] logs - request-get-url: http://apitest.zhib.net/util/valid/phone?timespan=b47537bc732df590cfc57556771586fe&raid=b208e46a446f47ef91c4955f4f2c3229&dba=b1d4c0b625026ece5dbcc52632aeb9018f8c58606b18b352f97a7bd7ecbb93c1****43ms
+[2018-04-12 10:01:59.035] [DEBUG] logs - redis cache set * zhib|api|JGJiOhAT_store_phone *49ms 
+[2018-04-12 10:01:59.036] [DEBUG] logs - redis cache set * zhib|api|JGJiOhAT_phoneData *50ms 
+[2018-04-12 10:01:59.929] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_store_phone *0ms 
+[2018-04-12 10:01:59.930] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_phoneData *1ms 
+[2018-04-12 10:02:36.753] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_store_phone *1ms 
+[2018-04-12 10:06:09.541] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_store_phone *16ms 
+[2018-04-12 10:06:09.550] [DEBUG] logs - redis cache get * zhib|api|JGJiOhAT_phoneData *3ms 
+[2018-04-12 10:23:49.243] [INFO] logs - request-get-url: http://apitest.zhib.net/util/valid/phone?timespan=5f979fd46fe86e2c5d77a8d46c217864&raid=d544bbad7d9cb28a2d01ca142b253f29&dba=b1d4c0b625026ece5dbcc52632aeb9018f8c58606b18b352f97a7bd7ecbb93c1****68ms
+[2018-04-12 10:23:49.253] [DEBUG] logs - redis cache set * zhib|api|PwinLApj_store_phone *6ms 
+[2018-04-12 10:23:49.254] [DEBUG] logs - redis cache set * zhib|api|PwinLApj_phoneData *6ms 
+[2018-04-12 10:23:49.921] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *1ms 
+[2018-04-12 10:23:49.922] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_phoneData *1ms 
+[2018-04-12 10:24:04.272] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *1ms 
+[2018-04-12 10:24:04.272] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_phoneData *0ms 
+[2018-04-12 10:24:25.736] [INFO] logs - request-get-url: http://apitest.zhib.net/util/valid/phone?timespan=d2b75f73a52177060f905538fbc5eadf&raid=82bc3ce58e65c303f04fe8b855e1855e&dba=e81e1c3a657c2719eacdce64ab3b573d8457a179ea540f72f27530840a398fc0****34ms
+[2018-04-12 10:24:25.738] [DEBUG] logs - redis cache set * zhib|api|PwinLApj_store_phone *2ms 
+[2018-04-12 10:24:25.739] [DEBUG] logs - redis cache set * zhib|api|PwinLApj_phoneData *2ms 
+[2018-04-12 10:24:26.477] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *4ms 
+[2018-04-12 10:24:26.484] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_phoneData *6ms 
+[2018-04-12 10:25:03.723] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *1ms 
+[2018-04-12 10:25:03.724] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_phoneData *0ms 
+[2018-04-12 10:25:06.718] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *0ms 
+[2018-04-12 10:25:06.719] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_phoneData *1ms 
+[2018-04-12 10:25:08.654] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *0ms 
+[2018-04-12 10:25:08.655] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_phoneData *0ms 
+[2018-04-12 10:25:13.256] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *0ms 
+[2018-04-12 10:25:13.256] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_phoneData *0ms 
+[2018-04-12 10:25:18.035] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *1ms 
+[2018-04-12 10:25:18.036] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_phoneData *1ms 
+[2018-04-12 10:25:20.646] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *0ms 
+[2018-04-12 10:25:20.647] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_phoneData *1ms 
+[2018-04-12 10:25:28.599] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *1ms 
+[2018-04-12 10:25:28.599] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_phoneData *0ms 
+[2018-04-12 10:26:54.303] [INFO] logs - request-get-url: http://apitest.zhib.net/util/valid/phone?timespan=c7186127ba61ce05d2848e74f04664d2&raid=b81ccfd4cc2ec0bc0e0a76945a15f14d&dba=dc1cd62fc4b33e7410a2d3782af58982ba60b29c28c83e6c70c5bf4420804e57****37ms
+[2018-04-12 10:26:54.305] [DEBUG] logs - redis cache set * zhib|api|PwinLApj_store_phone *2ms 
+[2018-04-12 10:26:54.305] [DEBUG] logs - redis cache set * zhib|api|PwinLApj_phoneData *2ms 
+[2018-04-12 10:26:55.039] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *1ms 
+[2018-04-12 10:26:55.040] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_phoneData *0ms 
+[2018-04-12 10:27:19.758] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *0ms 
+[2018-04-12 10:28:16.994] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *19ms 
+[2018-04-12 10:28:17.042] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_phoneData *47ms 
+[2018-04-12 10:28:24.150] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_store_phone *4ms 
+[2018-04-12 10:28:24.156] [DEBUG] logs - redis cache get * zhib|api|PwinLApj_phoneData *4ms 

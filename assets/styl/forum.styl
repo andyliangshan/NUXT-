@@ -1,0 +1,443 @@
+@import "./base";
+.pt20   
+    padding-top 20px
+.forum-top
+    border color-border
+    background-color #fff
+    padding 20px 
+    > li 
+        float left 
+        margin-right 60px
+        height 30px 
+        line-height 30px 
+        font-size size3
+        color color3 
+        text-indent 20px 
+        background-repeat no-repeat
+        background-position left center
+        &:nth-child(1)
+            background-image url('/public/i1.png')
+        &:nth-child(2)
+            background-image url('/public/i2.png')
+        &:nth-child(3)
+            background-image url('/public/i3.png')
+        &:nth-child(4)
+            float right
+            margin-right 0
+
+.forum-hot
+    padding 20px 0
+    display flex 
+    > h3,nav,aside
+        height 26px 
+    > h3 
+        width 80px 
+        line-height 26px 
+        text-align center
+        font-size size3
+        color color3 
+    > nav 
+        width 1036px
+        min-height 36px 
+        overflow hidden 
+        margin-top -10px
+        &.active 
+            height auto 
+        > a 
+            float left
+            width 74px
+            height 24px
+            line-height 24px
+            border 1px solid color-base
+            color color-base
+            font-size 14px 
+            text-align center 
+            margin-top 10px 
+            margin-right 20px
+            border-radius 5px 
+            
+            &:nth-child(11n)
+                margin-right 0
+
+
+
+    > aside 
+        align-self flex-end
+        cursor pointer
+        width 42px
+        transition 0.3s
+        background url('/public/more.png') no-repeat center center
+
+        &.active
+            transform rotateZ(180deg) 
+
+.forum-main
+    display flex 
+.forum-main-l
+    width 900px
+    margin-right 12px
+    
+    > ul
+        background-color #fff
+        border color-border
+        display flex 
+        padding 9px 0
+        > li 
+            position relative
+            display block
+            width 120px 
+            height 22px 
+            line-height 22px 
+            text-align center
+            font-size size3 
+            border-right color-border
+            &:last-child
+                border-right none
+            &:nth-child(1)
+                width 70px
+                border-right none
+                a 
+                    color color-base 
+            &.active a
+                color color-base
+            a 
+                color color3 
+
+            &.active:after
+                content ""
+                position absolute
+                bottom -9px
+                left 50%
+                margin-left -20px
+                height 4px 
+                width 40px 
+                background-color color-base
+
+            &.active:nth-child(4):after
+                width 70px 
+                margin-left -35px 
+
+
+.forum-more 
+    display block
+    width 300px 
+    height 30px 
+    line-height 30px 
+    color color-base
+    font-size 14px 
+    border 1px solid color-base
+    border-radius 15px 
+    margin 12px auto
+    text-align center
+
+.forum-main-r
+    flex 1
+
+    > h4 
+        height 40px 
+        line-height 40px 
+        border 1px solid transparent
+        border-bottom color-border
+        color color-base
+        text-indent 6px 
+
+.forum-cell 
+    background-color #fff
+    margin-top 10px 
+    border color-border 
+    padding-top 10px 
+    cursor pointer
+    > h5 
+        line-height 18px 
+        color color2
+        font-size size2 
+        text-align center
+        text-indent 18px 
+        i 
+            display inline-block
+            vertical-align top
+            color #fff
+            width 36px 
+            height 18px 
+            text-align center
+            margin-left 11px 
+            font-size 12px 
+            background url('/public/sign.png') no-repeat
+            text-indent 0px 
+
+    > div 
+        width 206px 
+        margin 0 auto
+        padding 16px 0 20px 
+        border-bottom color-border2
+        display flex
+        > section
+            flex 1 
+            p 
+                font-size size4
+                color color4 
+                text-align center
+                &:nth-child(1)
+                    height 22px 
+                    line-height 22px 
+                    margin-bottom 10px 
+                &:nth-child(2)
+                    line-height 16px 
+            &:nth-child(1) p:nth-child(1)
+                color color-red
+                font-size 24px 
+            &:nth-child(3) p 
+                font-size size2 
+                color color2 
+                text-align left
+
+    > aside
+        display flex 
+        padding 0 20px 
+        img 
+            width 42px 
+            height 42px 
+            border-radius 50%
+            margin 12px 14px
+        > div 
+            h6 
+                padding-top 12px 
+                font-size size2
+                color color2 
+                line-height size2
+                margin-bottom 12px 
+            p  
+                line-height size4 
+                font-size size4 
+                color color4 
+
+    > nav 
+        display flex
+        border-top color-border 
+        a 
+            display block
+            flex 1 
+            border-right color-border 
+            height 40px 
+            line-height 40px 
+            text-align center
+            color color2 
+            font-size size2 
+            &:last-child 
+                border-right none
+
+.create-topic-mask
+    z-index 900
+    position fixed
+    top 0
+    left 0
+    right 0
+    bottom 0
+    background-color rgba(0,0,0,0.4)
+
+.create-topic
+    z-index 950
+    position fixed 
+    top 50%
+    left 50%
+    transform translate3d(-50%,-50%,0)
+    width 480px
+    border-radius 5px
+    background-color #fff
+    padding-bottom 20px
+
+    > h4
+        height 40px 
+        line-height 40px 
+        text-indent 10px
+        color color2
+        font-size size2
+        border-bottom color-border
+
+    h5
+        text-align center
+        font-size size3
+        color color3
+
+    > nav
+        padding 20px 30px 20px 50px
+        a 
+            float left 
+            padding 0 5px
+            height 24px
+            line-height 24px 
+            border-radius 5px
+            color color-base
+            border 1px solid color-base
+            font-size size3
+            margin-right 20px 
+            margin-bottom 10px
+
+    > a 
+        margin -10px auto 0
+        display block
+        width 120px
+        height 30px
+        line-height 30px
+        border-radius 3px
+        text-align center
+        color #fff
+        font-size size3
+        background-color #fcc850
+
+    .close
+        position absolute
+        top 0
+        right 0
+        width 40px
+        height 40px
+        background url('/public/close.png') no-repeat center center
+
+
+.create-input 
+    position relative
+    margin 40px auto
+    width 378px
+    .create-input-box 
+        width 100%
+        min-height 38px
+        padding 8px 10px 0
+        border color-border
+        box-sizing border-box
+
+        font-size size3
+        color color3
+
+        input 
+            float left 
+            width 112px
+            height 26px
+            line-height 26px
+            padding 0
+            color color3
+            font-size size3
+            border none
+            margin-bottom 8px
+
+    .create-input-item
+        float left 
+        position relative
+        padding 0 20px 0 4px
+        height 26px
+        line-height 26px
+        margin-right 14px
+        margin-bottom 8px
+        background-color #c9d7ec
+        border-radius 5px
+        color #fff
+        > a
+            position absolute
+            top 0
+            right 0
+            width 18px
+            height 25px 
+            background url('/public/close2.png') no-repeat center center  
+
+    > ul 
+        z-index 10
+        position absolute
+        bottom 0
+        left 0
+        transform translate3d(0,100%,0)
+        border color-border
+        width 240px
+        box-shadow 0 0 2px rgba(0,0,0,0.2)
+        &:empty
+            display none
+        li  
+            padding 0 15px
+            cursor pointer
+            background-color #fff
+            height 40px
+            line-height 40px
+            color color3
+            font-size size3
+            &:hover
+                background-color #f1f1f1
+                
+    
+
+
+.send-topic
+    z-index 950
+    position fixed 
+    top 50%
+    left 50%
+    transform translate3d(-50%,-50%,0)
+    width 480px
+    border-radius 5px
+    background-color #fff
+    padding-bottom 20px
+
+    > h4
+        height 40px 
+        line-height 40px 
+        text-indent 10px
+        color color2
+        font-size size2
+        border-bottom color-border
+
+    > h5 
+        padding 20px 0 10px
+        text-align center
+        font-size size1
+        color color1
+        line-height size1
+
+    > p
+        padding-bottom 20px
+        font-size size3
+        color color3
+        line-height size3
+        text-align center
+
+    textarea
+        resize none
+        display block
+        width 380px
+        margin 0 auto 
+        box-sizing border-box
+        border color-border
+        font-size size3
+        color color3
+        padding 5px 10px
+        line-height 25px
+        outline none
+    .textarea1
+        height 60px
+    .textarea2
+        height 80px
+    .create-input
+        margin 18px auto
+
+    h6
+        font-size size3
+        color color3
+        line-height size3
+        text-indent 56px
+        padding-bottom 10px
+
+    .close
+        position absolute
+        top 0
+        right 0
+        width 40px
+        height 40px
+        background url('/public/close.png') no-repeat center center
+
+    > a 
+        margin 20px auto 0
+        display block
+        width 120px
+        height 30px
+        line-height 30px
+        border-radius 3px
+        text-align center
+        color #fff
+        font-size size3
+        background-color #fcc850

@@ -1,0 +1,82 @@
+@import "./base";
+
+.yufu
+    display none
+    position fixed
+    top 50%
+    left 50%
+    margin-left -300px 
+    margin-top -260px 
+    width 600px 
+    padding 40px 
+    background-color #fff
+    border color-border
+    box-sizing border-border
+    border-radius 5px 
+
+    &.show
+        display block
+
+    h2 
+        font-size size1
+        color color1 
+        text-align center 
+    > ul 
+        padding 20px 
+        li 
+            position relative
+            padding-left 40px
+            font-size size3
+            color color3
+            line-height 24px
+            margin-bottom 10px 
+            i 
+                position absolute
+                top 0
+                left 0
+                border-radius 50%
+                width 24px
+                height 24px 
+                line-height 24px 
+                text-align center 
+                background-color color-yellow
+
+    .close
+        position absolute
+        top 0
+        right 0
+        width 30px
+        height 30px
+        background url('/public/close.png') no-repeat center center 
+.yufu-b
+    border-top color-border
+    display flex
+    > div 
+        flex 1
+.yufu-l > div
+    display flex 
+    margin 10px 0
+    p:nth-child(1) 
+        width 120px
+        font-size size3
+        line-height 30px 
+    p:nth-child(2) 
+        flex 1
+        font-size size3
+        line-height 30px
+
+.yufu-r
+    padding 10px 50px 
+    > p 
+        font-size size3
+        color color3 
+        line-height 40px 
+    > a 
+        display block
+        margin 20px auto
+        width 80px
+        height 40px
+        line-height 40px
+        border color-border
+        text-align center
+        border-radius 5px 

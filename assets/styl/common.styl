@@ -1,0 +1,710 @@
+@import "./base";
+
+.fade-enter-active, .fade-leave-active
+    transition all .2s ease
+
+.fade-enter, .fade-leave-active
+    opacity 0
+.main-width
+    width main-width
+    margin 0 auto
+    box-sizing border-box
+.color-red
+    color color-red !important
+.color-base
+    color color-base !important
+.bg-white
+    background-color #fff
+.bg-grey
+    background-color #f8f8f8
+.eps
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+body
+    //min-width main-width
+.common-h2
+    height: 40px;
+    line-height: 40px;
+    font-size: 18px;
+    color: color-base;
+.common-detail-top
+    height 40px
+    line-height 40px
+    font-size size3
+    color color3
+
+.common-zixun
+    z-index 100
+    position relative
+    display block
+    margin 0 auto
+    width 72px
+    height 26px
+    line-height 26px
+    text-align center
+    border 1px solid color-blue
+    color color-blue
+    font-size 14px
+    border-radius 5px
+
+.common-nav-top-p
+    width main-width
+    margin 0 auto
+    height 40px
+    line-height 40px
+    color color2
+    font-size size2
+.common-nav-top
+    background-color #fff
+    box-sizing border-box
+    padding 18px
+    border color-border
+    > nav
+        display flex
+        font-size size3
+        color color3
+        line-height 36px
+        > div
+            width 100px
+
+        > ul
+            width 1000px
+            overflow hidden
+            > li
+                float left
+                width 100px
+                height 36px
+                text-align center
+                > a
+                    color color3
+    > aside
+        position relative
+        height 32px
+        display flex
+        justify-content flex-end
+        margin-top 2px
+        input, a
+            color color3
+            font-size size3
+        input
+            display none
+            width 195px
+            height 30px
+            line-height 35px
+            border color-border
+            padding 0 40px 0 15px
+            border-radius 15px
+            margin-right -20px
+        a
+            display block
+            width 100px
+            height 32px
+            line-height 32px
+            text-align right
+            > i
+                float right
+                width 18px
+                height 36px
+                background url(/public/more.png) no-repeat center center
+                margin-left 12px
+
+        &.active
+            input
+                display block
+            > i
+                z-index 10
+                position absolute
+                right 81px
+                top 0px
+                width 30px
+                height 30px
+                background url('/public/search.png') no-repeat left center
+                background-size 14px 14px
+                cursor pointer
+            a > i
+                transform rotateX(180deg)
+
+
+
+
+.common-nav-sort
+    > nav
+        display flex
+        padding 12px 0 16px
+        > div
+            position relative
+            // min-width 80px
+            height 30px
+            line-height 30px
+            margin-right 12px
+            background-color color-base
+            font-size 14px
+            color #fff
+            box-sizing border-box
+            padding 0 20px 0 7px
+            > a
+                position absolute
+                top 5px
+                right 0
+                width 20px
+                height 20px
+                background url(/public/delete.png) no-repeat center center
+    > ul
+        position relative
+        display flex
+        padding 0 18px
+
+        li
+            width 100px
+            height 14px
+            line-height 14px
+            font-size 14px
+            > a
+                display flex
+                width 100%
+                height 100%
+                color color3
+                font-size size3
+            i
+                margin-left 2px
+                display block
+                width 7px
+                height 14px
+                background url(/public/sort-g.png) no-repeat center center
+            &.active
+                i
+                    background-image url(/public/sort-r.png)
+                a
+                    color color-red
+
+        li.market-newproduct
+            position absolute
+            top -16px
+            right 0
+            width 130px
+            height 30px
+            line-height 30px
+            font-size 14px
+            background color-yellow
+            a
+                display block
+                color #fff
+                text-align center
+
+.common-person-top
+    position relative
+    padding 36px 0
+    margin-bottom 12px
+    border color-border
+    background-color #fff
+    > a
+        position absolute
+        top 16px
+        right 16px
+        width 100px
+        height 30px
+        line-height 30px
+        background-color #fff
+        text-align center
+        border color-border
+        border-radius 2px
+
+    > img
+        display block
+        width 100px
+        height 100px
+        box-shadow 0 0 20px rgba(0,0,0,.2)
+        margin 0 auto 14px
+        border-radius 50%
+    > p
+        text-align center
+        color #fff
+
+        &:nth-of-type(1)
+            margin-bottom 12px
+            line-height size1
+            font-size size1
+
+        &:nth-of-type(2),&:nth-of-type(3)
+            line-height size3
+            font-size size3
+
+    > nav
+        display flex
+        margin 14px auto
+        justify-content center
+        > a
+            display block
+            width 76px
+            height 24px
+            line-height 24px
+            background-color color-base
+            margin-right 20px
+            color #fff
+            text-align center
+            border-radius 5px
+            &:last-child
+                margin-right 0
+
+.common-person-order-top
+    position relative
+    > ul
+        display flex
+        border color-border
+        background-color #fff
+        > li
+            position relative
+            width 120px
+            padding 9px 0
+            a
+                display block
+                width 100%
+                height 22px
+                line-height 22px
+                font-size size3
+                color color3
+                text-align center
+                border-right color-border
+                box-sizing border-box
+            &:last-child a
+                border-right 0
+            &:hover,&.router-link-active,&.active
+                &:after
+                    content ""
+                    position absolute
+                    bottom 0
+                    left 50%
+                    margin-left -45px
+                    width 90px
+                    height 2px
+                    background-color color-base
+                a
+                    color color-base
+
+    > ol
+        border color-border
+        border-top none
+        height 40px
+        overflow hidden
+        background-color #fff
+        &:first-child
+            border-top color-border
+        li
+            float left
+            width 100px
+            line-height 40px
+            text-align center
+            color color2
+            font-size size2
+            a
+                display block
+                width 100%
+                color color2
+
+            &:hover a,&.active a
+                color color-base
+
+    > nav
+        display flex
+        position absolute
+        top 0
+        right 0
+        width 50%
+        height 40px
+        justify-content flex-end
+        align-items center
+
+        > a, > input
+            display block
+            height 26px
+            line-height 26px
+            font-size size3
+            color color3
+            margin-right 14px
+
+        > input
+            width 136px
+            border color-border
+            border-radius 13px
+            padding 0 14px
+            background #fff url('/public/find.png') no-repeat 143px center
+
+.common-person-custom-table
+    border color-border
+    margin-top 12px
+    dt,dd
+        display flex
+        height 40px
+        line-height 40px
+        > p
+            flex 1
+            text-align center
+
+            a:nth-child(2)
+                margin-left 10px
+    dt
+        background-color #e6effc
+        font-size size2
+        color color2
+    dd
+        background-color #fff
+        border-top color-border
+        font-size size3
+        color color3
+
+.input-error
+    border 1px solid color-red !important
+
+.financial-item-box
+    width main-width
+    margin 0 auto
+    padding 18px 18px 0
+    margin-bottom -16px
+    overflow hidden
+
+    .financial-item
+        float left
+
+.common_person_my_info
+    background-color #fff
+    padding-bottom 30px
+    border color-border
+    .join-step3-main > p
+        text-align center
+    > h3
+        height 40px
+        line-height 40px
+        font-size size2
+        color color2
+        text-indent 14px
+        border-bottom color-border
+
+.person_my_info_main
+    padding 30px 125px
+    overflow hidden
+    border-top none
+    > ul
+        li
+            float left
+            display flex
+            width 50%
+            margin-bottom 18px
+            min-height 40px
+
+            > span,> input,.add
+                display block
+                height 40px
+                font-size size2
+                color color2
+            .add
+                flex 1
+                position relative
+                line-height 40px
+                padding-left 35px
+
+                &.active
+                    cursor pointer
+                &:before,&:after
+                    position absolute
+                    top 50%
+                    margin-top -6px
+                    left 17px
+                    box-sizing border-box
+                    width 12px
+                    height 12px
+                    line-height 12px
+                    text-align center
+
+                &:before
+                    content ""
+                    border-radius 50%
+                    border 1px dashed color-blue
+                &:after
+                    content "+"
+                    color color-blue
+
+            > span
+                width 84px
+                line-height 40px
+                text-align center
+            > input
+                flex 1
+                border color-border
+                padding 4px 18px
+                box-sizing border-box
+            > article
+                flex 1
+                min-height 40px
+                font-size size2
+                color color2
+                line-height 40px
+                text-indent 18px
+                text-align justify
+
+            &.large
+                width 100%
+            &.fileLi
+                position relative
+                > input
+                    &:nth-of-type(1)
+                        margin-left 10px
+                        padding-left 102px
+                    &:nth-of-type(2)
+                        z-index 10
+                        position absolute
+                        opacity 0
+                        top 0
+                        left 0
+                        width 100%
+                        height 100%
+                        cursor pointer
+                        font-size 0
+                        &:hover + a,&:active + a
+                             background-color color-yellow-select
+                > a
+                    position absolute
+                    top 6px
+                    left 16px
+                    width 90px
+                    height 28px
+                    line-height 28px
+                    font-size 12px
+                    text-align center
+                    color #fff
+                    background-color color-black
+                    &.active
+                        background-color color-yellow
+                        &:active,&:hover
+                            background-color color-yellow-select
+
+            &.fileLi2
+                input:nth-of-type(1)
+                    margin-left 0
+                    padding-left 0
+                    text-indent 100px
+                > a
+                    left 90px
+
+            &.fileImg
+                .imgbox
+                    width 239px
+                    height 144px
+                    line-height 144px
+
+                img
+                    text-align center
+                    max-width 100%
+                    max-height 100%
+
+    > a
+        float right
+        margin-top 30px
+        width 120px
+        height 30px
+        line-height 30px
+        font-size 14px
+        color color-blue
+        text-align center
+        border 1px solid color-blue
+        border-radius 5px
+
+.common_person_my_info_alert
+        z-index 1000
+        position fixed
+        top 50%
+        left 50%
+        margin-top -50px
+        margin-left -50px
+        background-color rgba(0,0,0,0.8)
+        width 100px
+        height 100px
+        line-height 100px
+        text-align center
+        font-size 14px
+        color #fff
+        border-radius 5px
+
+.checkbox-ui
+    width 234px
+    height 40px
+    > div
+        position relative
+        float left
+        width 50%
+        text-indent 25px
+        cursor pointer
+        height 40px
+        line-height 40px
+
+        &:before,&:after
+            content ""
+            position absolute
+            top 50%
+            border-radius 50%
+            box-sizing border-box
+
+        &:before
+            left 0
+            margin-top -7px
+            width 14px
+            height 14px
+            border color-border
+        &.active:before
+            border-color color-red
+        &.active:after
+            left 3px
+            margin-top -4px
+            width 8px
+            height 8px
+            background-color color-red
+
+/*----*/
+.common-item
+    position relative
+    padding 18px
+    display flex
+    border color-border
+    justify-content space-between
+    background-color #fff
+    margin-bottom 12px
+
+    &:first-of-type
+        margin-top 12px
+
+    &:hover
+        z-index 2
+        box-shadow 0 0 10px 3px rgba(0,0,0,0.2)
+
+.common-item-l
+    width 860px
+    cursor pointer
+.common-item-l-t
+    height 20px
+    line-height 20px
+    display flex
+    justify-content space-between
+    margin-bottom 32px
+    p:nth-child(1)
+        display flex
+
+        span
+            display block
+            font-size size1
+            color color1
+
+        span:nth-child(2)
+            margin-left 10px
+            text-align center
+            font-size size4
+            color #fff
+            width 36px
+            height 20px
+            background url(/public/sign.png) no-repeat center center
+
+    p:nth-child(2)
+        font-size 14px
+.common-item-l-c
+    display flex
+    align-items center
+    > div
+        flex 1
+        text-align center
+        p:nth-child(1)
+            font-size 20px
+            line-height 20px
+            color color-red
+            margin-bottom 14px
+        p:nth-child(2)
+            font-size size5
+            color color5
+            line-height 14px
+    > section
+        width 228px
+        display flex
+        justify-content space-between
+        p:nth-child(1)
+            width 186px
+            height 14px
+            border-radius 7px
+            background-color #e5e5e5
+            overflow hidden
+            span
+                display block
+                height 14px
+                background-color color-blue
+
+        p:nth-child(2)
+            height 14px
+            line-height 14px
+            font-size 12px
+            color color1
+
+.common-item-l-b
+    display flex
+    justify-content space-between
+    align-items flex-end
+    padding-top 15px
+    > div
+        display flex
+        line-height 14px
+        > span, > a
+            font-size size5
+            color color5
+
+        > a
+            display block
+            margin-right 18px
+            padding-left 20px
+            background-repeat no-repeat
+            background-position left center
+
+            &:nth-of-type(1)
+                background-image url(/public/eyes.png)
+            &:nth-of-type(2)
+                background-image url(/public/comment.png)
+            &:nth-of-type(3)
+                background-image url(/public/car.png)
+            &:nth-of-type(4)
+                padding-left 0
+                padding-right 20px
+                background-image url(/public/down.png)
+                background-position right center
+        > span:nth-child(2)
+            width 90px
+            i
+                float left
+                width 12px
+                height 14px
+                background url(/public/star.png) no-repeat center center
+                margin-right 8px
+    > a
+        display block
+        width 134px
+        height 32px
+        font-size 18px
+        line-height 32px
+        color #fff
+        background-color color-red
+        text-align center
+        &:hover,&:active
+            background-color color-red-select
+
+    > section
+        display flex
+    .person-btn
+        display block
+        width 90px
+        height 32px
+        line-height 32px
+        font-size 16px
+        background-color color-yellow
+        margin-right 18px
+        text-align center
+        color #fff
+        &:hover,&:active
+            background-color color-yellow-select
+        &:last-of-type
+            margin-right 0
+
+/*----*/
