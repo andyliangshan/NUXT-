@@ -1,11 +1,11 @@
-const path = require('path');
+const path = require('path')
 
 module.exports = {
   /*
   ** Headers of the page
   */
   head: {
-    title: 'starte12342134r',
+    title: 'start',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

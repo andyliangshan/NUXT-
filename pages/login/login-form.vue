@@ -1,0 +1,316 @@
+<template>
+  <div class="accountCourse">
+    <div class="closeForm" @click="linkhref">×</div>
+    <div class="yuyueForm">
+      <div class="tit">登录知币社区</div>
+      <div class="subtit">投资机会早知道</div>
+      <form @submit.stop.prevent="submitLogin">
+        <div class="cont phone">
+          <input type="text" placeholder="请输入你的手机号" name="phone" v-model="phone" maxlength="11" autocomplete="off" />
+        </div>
+        <div class="about-danger" role="alert">{{errTips1}}</div>
+        <div class="submitBtn">
+          <button type="submit" class="btn btn-default about-btn" ref="btnCode">继续</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+<script>
+  import axios from '~/plugins/axios'
+  export default{
+    name: 'accountCourse',
+    data () {
+      return {
+        validate: {
+          phoneError: '*手机号码错误'
+        },
+        phone: '',
+        errTips1: '',
+        isDoubleClick: false
+      }
+    },
+    head () {
+      return {
+        title: '登录/注册知币社区',
+        meta: [
+          { hid: 'description', name: 'description', content: '登录/注册知币社区' }
+        ]
+      }
+    },
+    props: {
+      showLogin: {
+        type: Boolean,
+        default: false
+      }
+    },
+    mounted () {},
+    methods: {
+      setErrTips1 (msg) {
+        this.errTips1 = msg
+        setTimeout(() => {
+          this.errTips1 = ''
+        }, 2000)
+      },
+      linkhref () {
+        window.location.href = '/login'
+      },
+      async submitLogin () {
+        const regPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|16[0-9]|17[0-9]|18[0-9]|19[0-9]|14[57])[0-9]{8}$/
+        if (!regPhone.test(this.phone)) {
+          this.setErrTips1(this.validate.phoneError)
+          return
+        }
+        // 防止重复点击
+        const _this = this; // eslint-disable-line
+        if (this.isDoubleClick) {
+          return
+        }
+        this.isDoubleClick = true
+        _this.$refs.btnCode.innerHTMl = 'loading'
+        const removeClick = () => {
+          setTimeout(() => {
+            _this.$refs.btnCode.innerHTMl = 'reset'
+            this.isDoubleClick = false
+          }, 1000)
+        }
+        const bkData = await axios.get(`/api/valid/phone?phone=${this.phone}`)
+        console.log(bkData, '....')
+        if (!bkData.success) {
+          this.errTips1 = ''
+          if (bkData.password === 'true') {
+            window.location.href = '/login/password'
+          } else {
+            window.location.href = '/login/setPassword'
+          }
+        } else {
+          this.setErrTips1(bkData.data.msg)
+        }
+        removeClick(_this)
+      }
+    }
+  }
+</script>
+<style lang="stylus">
+  .accountCourse {
+    width: 100%;
+    z-index: 1111;
+    height: 175%;
+    background: #fff;
+    max-width: 750px;
+    margin: 0 auto;
+    position absolute
+    top 0
+    left 0
+
+  .closeForm {
+    position: absolute;
+    top 20px
+    right 20px
+    width 30px
+    height 30px
+    font-size 26px
+    line-height 30px
+    color: #000;
+    text-align: center;
+
+  &:hover {
+     transform: rotate(360deg);
+   }
+  }
+
+  .yuyueForm {
+    padding 30px 0
+    background: #fff;
+    border-radius: 5px;
+    width: 82%;
+    margin: 10% auto 0;
+  }
+
+  .tit {
+    color: #0D0D0D;
+    font-size 26px
+    width: 100%;
+    text-align: center;
+    line-height: 1;
+  }
+
+  .subtit {
+    clear: both;
+    margin-top 20px
+    font-size 12px
+    overflow: hidden;
+    color: #939393;
+    width: 100%;
+    text-align: center;
+    line-height: 1;
+  }
+
+  form {
+    clear: both;
+    margin-top 40px
+    overflow: hidden;
+
+  .cont {
+    clear: both;
+    margin-bottom 15px
+    width: 100%;
+    position: relative;
+    text-align: center;
+
+  input {
+    display: inline-block;
+    padding 12px 0 12px 12px
+    font-size 12px
+    background: #fff;
+    color: #0D0D0D;
+    width: 90%;
+    margin: 0 auto;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .btnCode {
+    position: absolute;
+    right 10px
+    top 0
+    font-size 12px
+    height 42px
+    line-height 42px
+    color: #939393;
+    display: inline-block;
+    text-decoration: none;
+    background: none;
+    z-index: 2;
+    border: none;
+
+    &:focus {
+       text-decoration: none;
+    }
+  }
+
+  .btnCode.gray {
+    color: #939393;
+  }
+  }
+
+  .about-danger {
+    clear: both;
+    overflow: hidden;
+    width: 100%;
+    text-align: center;
+    color: #f00;
+    padding-top 10px
+    font-size 12px
+  }
+
+  .submitBtn {
+    clear: both;
+    overflow: hidden;
+    margin-top 10px
+    text-align: center;
+    width: 100%;
+
+  button {
+    background: #138ff2;
+    background-size: contain;
+    font-size 17px
+    border-radius 4px
+    width 279px
+    height 40px
+    line-height 40px
+    border: none;
+    color: #fff;
+    padding: 0;
+    display: inline-block;
+
+    &:focus {
+      outline: none;
+    }
+  }
+  }
+  }
+
+  .logoZhib {
+    clear: both;
+    padding-top 70px
+    width: 100%;
+    text-align: center;
+
+  img {
+    width 86px
+    vertical-align: middle;
+  }
+  }
+  }
+
+  .login-swiper {
+    position: relative;
+    margin: 0 auto 18px;
+    width: 300px;
+    height: 40px;
+    line-height: 40px;
+    background: #f2f2f2;
+    text-align: center;
+    font-size: 16px;
+    color: #939393;
+
+    span {
+      position: relative;
+      z-index: 5;
+    }
+
+    i {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: #58bc29;
+      transition: width 0.5s;
+    }
+
+    a {
+      position: absolute;
+      z-index: 10;
+      top: 1px;
+      left: 1px;
+      width: 38px;
+      height: 38px;
+      background: url(/public/img/range.png) no-repeat;
+      transition: left 0.5s;
+      background-size: contain;
+      color: #939393;
+
+      &.end {
+         background: #fff;
+
+        em {
+          display: inline-block;
+          background: url(/public/img/ok.png) no-repeat #fff right center;
+          color: #fff;
+          width: 16px;
+          height: 16px;
+          background-size: contain;
+        }
+      }
+    }
+
+    &.end {
+      color: #fff;
+    }
+  }
+
+  @media screen and (max-width:374px){
+    .accountCourse {
+      .yuyueForm {
+        margin-left: 10px;
+        margin-right: 10px;
+        width: auto;
+      }
+    }
+  }
+</style>

@@ -1,0 +1,70 @@
+/*color-red =  #e05556*/
+color-red =  #ff5c36
+color-red2 =  #e05556
+color-yellow =  #fbd40a
+color-yellow2 = #fcc850
+
+color-blue =  #83b1ee
+color-blue2 = #7aa4dd
+color-black = #979797
+color-base = #0069b8
+
+
+color-red-select = #e94c27
+color-yellow-select = #ffce00
+
+color-border = 1px solid #e5e5e5
+color-border2 = 1px dashed #e5e5e5
+
+main-width = 750px
+
+color1 = #323232
+color2 = #323232
+color3 = #666666
+color4 = #666666
+color5 = #a5a5a5
+
+size1 = 18px
+size2 = 14px
+size3 = 14px
+size4 = 12px
+size5 = 12px
+
+
+/*UI更改的分割线*/
+color-black = #333333
+color-blue3 = #208ce9
+color-about = #515151
+
+px2px($name, $px)
+  {$name} round($px/ 2) * 1px
+
+  [data-dpr='2'] &
+    {$name} $px * 1px
+
+  // for mx3
+  [data-dpr="2.5"] &
+    {$name} round($px * 2.5 / 2) * 1px
+
+  // for 小米note
+  [data-dpr="2.75"] &
+    {$name} round($px * 2.75 / 2) * 1px
+
+  [data-dpr="3"] &
+    {$name} round($px / 2 * 3) * 1px
+
+  // for 三星note4
+  [data-dpr="4"] &
+    {$name} $px * 2px;
+
+// 宽高等比较大的使用
+px2rem($name, $px, $base = 75)
+  {$name} ($px / $base) * 1rem
+
+px2remImp($name, $px, $base = 75)
+  {$name} ($px / $base) * 1rem !important
+
+body, html
+  font-family: "PingFangSC-Regular","Microsoft YaHei","微软雅黑","华文细黑",STHeiti,SimHei,"Helvetica Neue",PingFangSC-Regular,Arial,sans-serif!important;
+  background #fff!important
+

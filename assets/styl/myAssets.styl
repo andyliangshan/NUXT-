@@ -1,0 +1,439 @@
+@import "./base.styl"
+
+body, html
+  background #f8f8f8!important
+
+.myAssets {
+  width 100%
+  max-width 750px
+  margin 0 auto
+
+  .assetsBg {
+    width 100%
+
+    img {
+      width 100%
+      vertical-align middle
+    }
+  }
+
+  .assetsHead {
+    width 100%
+    position relative
+
+    .assets-top {
+      position absolute
+      padding 15px 0
+      overflow hidden
+      top 0
+      display flex
+      width 100%
+
+      .backpage {
+        width 24px
+        height 24px
+        padding-left 15px
+
+        a {
+          display block
+          width 24px
+          height 24px
+        }
+
+        img {
+          width 12px
+          height 19px
+        }
+      }
+
+
+      .myTitle {
+        flex 1
+        color #fff
+        font-size 16px
+        font-weight bolder
+        text-align center
+      }
+
+
+      .myBill {
+        width 24px
+        height 24px
+        padding-right 15px
+
+        img {
+          width 100%
+        }
+      }
+    }
+
+
+    .incomeSelf {
+      position absolute
+      top 60px
+      width 100%
+      text-align center
+
+      .self-tit {
+        color #fff
+        font-size 14px
+        opacity 0.5
+      }
+
+      .self-assets {
+        line-height 1
+        clear both
+        padding-top 10px
+        font-size 60px
+        color #fff
+        font-weight bolder
+      }
+
+      .total-assets {
+        clear both
+        padding-top 15px
+        font-size 14px
+        opacity 0.5
+        color #fff
+      }
+    }
+  }
+
+  .assetsOne {
+    clear both
+    overflow hidden
+    padding 0 15px
+    background #fff
+
+    .assets-title {
+      padding 10px 0
+      color #939393
+      font-size 14px
+      border-bottom 1px solid #e6e6e6
+      text-align center
+
+      b {
+        color #202020
+      }
+    }
+
+
+    .assets-zib {
+      clear both
+      padding 15px 0
+      display flex
+      text-align center
+
+      .unget, .get {
+        flex 1
+
+        span, em {
+          display inline-block
+          width 100%
+        }
+
+        span {
+          font-size 14px
+          color #939393
+        }
+
+        em {
+          font-size 24px
+          color #202020
+          clear both
+          padding-top 5px
+          font-style normal
+          line-height 1
+        }
+      }
+
+      .unget {
+        border-right 1px solid #e6e6e6
+      }
+    }
+  }
+
+  .fill {
+    width 100%
+    height 10px
+    background #F8F8F8
+    clear both
+    overflow hidden
+  }
+
+  .assetsTwo {
+    clear both
+    overflow hidden
+    padding 0 15px 15px
+    background #fff
+
+    .assets-title {
+      padding 10px 0
+      color #939393
+      font-size 14px
+      border-bottom 1px solid #e6e6e6
+      text-align center
+
+      b {
+        color #202020
+      }
+    }
+
+
+    .assets-zib {
+      clear both
+      padding 30px 0
+      display flex
+      text-align center
+
+      .unget, .get {
+        flex 1
+
+        span, em {
+          display inline-block
+          width 100%
+        }
+
+        span {
+          font-size 14px
+          color #939393
+        }
+
+        em {
+          font-size 24px
+          color #202020
+          clear both
+          padding-top 5px
+          font-style normal
+          line-height 1
+        }
+      }
+
+      .unget {
+        border-right 1px solid #e6e6e6
+        position relative
+
+        i {
+          display inline-block
+          width 42px
+          height 15px
+          font-size 9px
+          text-align center
+          color #fff
+          background #FF8200
+          border-radius 2px
+          font-style normal
+          position absolute
+          top -15px
+          left 50%
+          margin-left -21px
+        }
+      }
+    }
+
+    .lockBtn {
+      clear both
+      display flex
+
+      a {
+        display inline-block
+        height 38px
+        line-height 38px
+        text-align center
+        border-radius 4px
+        font-size 14px
+        border 1px solid #138FF2
+        padding 0 30px
+        flex 1
+      }
+
+      a.unlock {
+        color #138FF2
+        margin-right 15px
+      }
+
+      a.pay {
+        color #fff
+        background #138FF2
+      }
+    }
+  }
+
+  .cash {
+    clear both
+    margin-top 10px
+    display flex
+    background #fff
+    padding 10px 15px
+
+    .canCash {
+      font-size 14px
+      color #939393
+      flex 1
+
+      span, em {
+        display inline-block
+        float left
+      }
+
+      em {
+        width 42px
+        height 15px
+        text-align center
+        line-height 15px
+        font-size 9px
+        background #9CA4B5
+        border-radius 2px
+        color #fff
+        margin-left 5px
+        font-style normal
+        margin-top 2px
+      }
+    }
+
+    .cashTotal {
+      text-align right
+      font-size 12px
+      color #939393
+      flex 1
+
+      b {
+        display inline-block
+        margin-left 5px
+      }
+    }
+  }
+
+  .expect {
+    position fixed
+    width 100%
+    height 100%
+    background rgba(0, 0, 0, 0.5);
+    top 0;
+    left 0
+    z-index 1000
+
+    .expectCont {
+      width 60%
+      background #fff
+      border-radius 6px
+      padding 20px
+      color #202020
+      font-size 18px;
+      text-align center
+      font-weight bolder
+      margin 0 auto
+      margin-top 40%
+    }
+  }
+}
+
+
+.bill {
+  width 100%
+  max-width 750px
+  margin 0 auto
+
+  .bill-top {
+    padding 10px 15px
+    overflow hidden
+    top 0
+    display flex
+    background #fafafa
+
+    .backpage {
+      width 24px
+      height 24px
+
+      a {
+        display block
+        width 24px
+        height 24px
+      }
+
+      img {
+        width 12px
+        height 19px
+      }
+    }
+
+
+    .myTitle {
+      flex 1
+      color #202020
+      font-size 18px
+      font-weight bolder
+      text-align center
+    }
+
+
+    .myBill {
+      width 24px
+      height 24px
+
+      img {
+        width 100%
+      }
+    }
+  }
+
+
+  .bill-list {
+    clear both
+    overflow hidden
+    width 100%
+
+    .listdata {
+      margin-bottom 10px
+      clear both
+
+      .date-line {
+        padding 10px 0 10px 15px
+        border-bottom 1px solid #e6e6e6
+        color #939393
+        font-size 12px
+        background #fff
+      }
+
+      .income-bill-list {
+        clear both
+
+        .data {
+          padding 15px 0 15px 15px
+          border-bottom 1px solid #e6e6e6
+          display flex
+          background #fff
+
+          .data-l {
+            color #202020
+            font-size 14px
+            flex 1
+            font-weight bolder
+          }
+
+          .data-r {
+            flex 1
+            color #202020
+            font-size 12px
+            text-align right
+            padding-right 15px
+            font-weight bolder
+
+            b:first-child {
+              vertical-align 1px
+              margin-right 2px
+            }
+
+            b:last-child {
+              margin-left 2px
+            }
+          }
+
+          .data-r.red {
+            color #E14123
+          }
+        }
+      }
+    }
+  }
+}

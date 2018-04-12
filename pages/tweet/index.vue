@@ -20,7 +20,6 @@ import axios from '~/plugins/axios'
 export default {
   async asyncData () {
     let { data } = await axios.get('/api/users')
-    console.log(12)
     return { users: data }
   },
   head () {

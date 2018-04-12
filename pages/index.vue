@@ -1,42 +1,36 @@
 <template>
   <section class="container">
-    <img src="~assets/img/logo.png" alt="Nuxt.js Logo" class="logo" />
-    <h1 class="title">
-      USERSsss
-    </h1>
-    <ul class="users">
-      <li v-for="(user, index) in users" :key="index" class="user">
-        <nuxt-link :to="{ name: 'id', params: { id: index }}">
-          {{ user.name }}
-        </nuxt-link>
-      </li>
-    </ul>
-    <data-list></data-list>
+    <nv-header></nv-header>
+    <nuxt-child/>
+    <nv-footer></nv-footer>
   </section>
 </template>
 
 <script>
-import axios from '~/plugins/axios'
-import dataList from '../components/DataList'
+import nvHeader from './Header.vue'
+import nvFooter from './HomeFooter.vue'
 
 export default {
-  async asyncData () {
-    let { data } = await axios.get('/api/users')
-    console.log(12)
-    return { users: data }
-  },
+  asyncData: ({ req }) => ({
+    userAgent: (req ? req.headers['user-agent'] : (typeof navigator !== 'undefined' ? navigator.userAgent : 'No user agent (generated)'))
+  }),
   head () {
     return {
-      title: 'Usersasdfasdf'
+      title: '首页'
     }
   },
   components: {
-    dataList
+    nvHeader,
+    nvFooter
   }
 }
 </script>
 
 <style scoped>
+  .container {
+    padding: 0;
+    text-align: left;
+  }
 .title
 {
   margin: 30px 0;

@@ -1,0 +1,34 @@
+@import "./base";
+    
+.person-menu
+    background-color #fff
+    width 248px
+    border color-border
+    
+.person-menu-cell
+    padding-bottom 50px
+    h3
+        height 40px
+        line-height 40px
+        font-size size3
+        color color-base
+        text-indent 14px
+        cursor pointer
+        border-bottom color-border
+        background url('/public/person1.png') no-repeat 220px center
+
+        &.active
+            background-image url('/public/person2.png')
+
+    ul
+        transition 0.3s
+        overflow hidden
+        li 
+            height 40px
+            line-height 40px
+            text-indent 28px
+            border-bottom color-border
+            cursor pointer
+
+            &:hover,&.router-link-active,&.active
+                background-color #f1f1f1
