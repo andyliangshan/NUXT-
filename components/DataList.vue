@@ -1,97 +1,48 @@
 <template>
   <div class="datalist">
     <div class="tipsNews">5条新币文</div>
-    <div class="dataListCont">
+    <div class="dataListCont"  v-for="(item, index) in pushDataList" :key="index">
       <div class="list-top row">
-        <div class="list-top-profile col-2"><img src="../assets/img/profile-ho.png" alt="profile"/></div>
+        <div class="list-top-profile col-2"><img :src="item.tweetUser.avatarImage" alt="profile"/></div>
         <div class="list-top-info col-8">
-          <div class="list-top-info-title"><a href="/user/" class="backtoPage">Marix</a></div>
-          <div class="list-top-info-publishTime"><span>2018年3月8日</span></div>
+          <div class="list-top-info-title"><a :href="'/user/' + item.tweetUser.id" class="backtoPage">{{ item.tweetUser.nickName }}</a></div>
+          <div class="list-top-info-publishTime"><span>{{ item.createdAt | dynamicFormatTime }}</span></div>
         </div>
-        <div class="list-top-attent col-2">
-          <a href="javascript:void(0);" class="attention">关注Ta</a>
+        <div class="list-top-attent col-2" v-if="item.isfollow !== null">
+          <a href="javascript:void(0);" class="attention active">已关注</a>
+        </div>
+        <div class="list-top-attent col-2" v-else>
+          <a href="javascript:void(0);" class="attention">关注</a>
         </div>
       </div>
       <div class="list-mid">
         <div class="list-mid-publish-content">
-          <div class="contDesc" ref="contDesc">2017年7月15日 - 我觉得这个中式英语完全可以收录到字典里,虽然赞意思同称赞、赞同,但单字赞却是流行于网络,是网络语。 编辑于 2017-07-15 0添加评论 分享收藏感谢收起...</div>
-          <div class="queryDetail"><a href="javascript:void(0)" class="backtoPage">&nbsp;</a></div>
+          <div class="contDesc" ref="contDesc">{{ item.content }}</div>
+          <div class="queryDetail"><a :href="'/detail/' + item.id" class="backtoPage">&nbsp;</a></div>
           <p>查看详情</p>
         </div>
         <div class="list-mid-publish-img">
-          <span><img src="../assets/img/profile-ho.png" alt="profile-ho"/></span>
+          <span v-for="(tem, ind) in (JSON.parse(item.images) || '')" :key="ind"><img :src=tem[ind] alt="profile-ho"/></span>
         </div>
       </div>
       <div class="list-bot row">
-        <div class="dianzan col-2" ><span>&nbsp;</span><em>20</em></div>
-        <div class="sendmsg col-2"><span>&nbsp;</span>5</div>
-        <div class="share col-6"><span>&nbsp;</span>3.2K</div>
-        <div class="attenPop col-2">...</div>
-        <tip-pop :customClass="'showAttentPop'" ref="showAttentPop" v-show="showTipPop"></tip-pop>
-      </div>
-    </div>
-    <div class="dataListCont">
-      <div class="list-top row">
-        <div class="list-top-profile col-2"><img src="../assets/img/profile-ho.png" alt="profile"/></div>
-        <div class="list-top-info col-8">
-          <div class="list-top-info-title"><a href="/user/" class="backtoPage">Marix</a></div>
-          <div class="list-top-info-publishTime"><span>2018年3月8日</span></div>
-        </div>
-        <div class="list-top-attent col-2">
-          <a href="javascript:void(0);" class="attention">关注Ta</a>
-        </div>
-      </div>
-      <div class="list-mid">
-        <div class="list-mid-publish-content">
-          <div class="contDesc" ref="contDesc">2017年7月15日 - 我觉得这个中式英语完全可以收录到字典里,虽然赞意思同称赞、赞同,但单字赞却是流行于网络,是网络语。 编辑于 2017-07-15 0添加评论 分享收藏感谢收起...</div>
-          <div class="queryDetail"><a href="javascript:void(0)" class="backtoPage">&nbsp;</a></div>
-          <p>查看详情</p>
-        </div>
-        <div class="list-mid-publish-img">
-          <span><img src="../assets/img/profile-ho.png" alt="profile-ho"/></span>
-        </div>
-      </div>
-      <div class="list-bot row">
-        <div class="dianzan col-2" ><span>&nbsp;</span><em>20</em></div>
-        <div class="sendmsg col-2"><span>&nbsp;</span>5</div>
-        <div class="share col-6"><span>&nbsp;</span>3.2K</div>
-        <div class="attenPop col-2">...</div>
-        <tip-pop :customClass="'showAttentPop'" ref="showAttentPop" v-show="showTipPop"></tip-pop>
-      </div>
-    </div>
-    <div class="dataListCont">
-      <div class="list-top row">
-        <div class="list-top-profile col-2"><img src="../assets/img/profile-ho.png" alt="profile"/></div>
-        <div class="list-top-info col-8">
-          <div class="list-top-info-title"><a href="/user/" class="backtoPage">Marix</a></div>
-          <div class="list-top-info-publishTime"><span>2018年3月8日</span></div>
-        </div>
-        <div class="list-top-attent col-2">
-          <a href="javascript:void(0);" class="attention">关注Ta</a>
-        </div>
-      </div>
-      <div class="list-mid">
-        <div class="list-mid-publish-content">
-          <div class="contDesc" ref="contDesc">2017年7月15日 - 我觉得这个中式英语完全可以收录到字典里,虽然赞意思同称赞、赞同,但单字赞却是流行于网络,是网络语。 编辑于 2017-07-15 0添加评论 分享收藏感谢收起...</div>
-          <div class="queryDetail"><a href="javascript:void(0)" class="backtoPage">&nbsp;</a></div>
-          <p>查看详情</p>
-        </div>
-        <div class="list-mid-publish-img">
-          <span><img src="../assets/img/profile-ho.png" alt="profile-ho"/></span>
-        </div>
-      </div>
-      <div class="list-bot row">
-        <div class="dianzan col-2" ><span>&nbsp;</span><em>20</em></div>
-        <div class="sendmsg col-2"><span>&nbsp;</span>5</div>
-        <div class="share col-6"><span>&nbsp;</span>3.2K</div>
-        <div class="attenPop col-2">...</div>
-        <tip-pop :customClass="'showAttentPop'" ref="showAttentPop" v-show="showTipPop"></tip-pop>
+        <div class="coin"><span>&nbsp;</span><em>{{ item.currentScoreWorth }}</em></div>
+        <div class="dianzan col-2" ><span>&nbsp;</span><em>{{ item.zanCount }}</em></div>
+        <div class="sendmsg col-2"><span>&nbsp;</span>{{ item.collectCount }}</div>
+        <div class="share col-6"><span>&nbsp;</span>{{ item.shareCount }}</div>
       </div>
     </div>
   </div>
 </template>
 <script>
+  import Vue from 'vue'
+  // import axios from '~/plugins/axios'
+  import * as filters from '../server/tools/filters'
+  import ReportList from '../components/ReportList.vue'
   import TipPop from './TipPop.vue'
+  Object.keys(filters).forEach(key => {
+    Vue.filter(key, filters[key])
+  })
 
   export default {
     data () {
@@ -102,9 +53,15 @@
         limit: 10
       }
     },
-    props: {},
+    props: {
+      pushDataList: {
+        type: Array,
+        default: []
+      }
+    },
     components: {
-      TipPop
+      TipPop,
+      ReportList
     },
     methods: {},
     mounted () {
@@ -196,7 +153,7 @@
         text-align: center;
       }
 
-      a.gray {
+      a.active {
         color: #939393;
         border: 1px solid #939393;
       }
@@ -242,15 +199,14 @@
 
     .list-mid-publish-img {
       clear: both;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
+      overflow hidden
+      width 100%;
 
       span {
         display: inline-block;
         margin-right: 5px;
         margin-top: 10px;
+        float left
 
         img {
           width: 100px;
@@ -267,9 +223,28 @@
     position: relative;
     height: 24px;
     line-height: 24px;
+    display flex
+    justify-content space-between
 
     em {
       font-style: normal;
+    }
+
+    .coin {
+      display: inline-block;
+      color: #939393;
+      font-size 12px;
+      padding: 0;
+
+      span {
+        display: inline-block;
+        width 15px;
+        height 15px;
+        margin-right 5px;
+        background: url(../assets/img/coin.png) no-repeat left center;
+        background-size: contain;
+        vertical-align: text-top;
+      }
     }
 
     .dianzan {

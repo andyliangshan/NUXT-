@@ -10,7 +10,7 @@
             <div class="version-list">
                 <a class="listcon row" href="/about">
                     <span class="col-md-12">关于知币</span>
-                    <em>&nbsp;</em>
+                    <em><img src="../assets/img/right-icon.png" alt="right-icon" /></em>
                 </a>
                 <a class="listcon row" href="/roast">
                     <span class="col-md-12">吐槽一下</span>

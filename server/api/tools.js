@@ -28,9 +28,21 @@ router.post('/tease', async (req, res) => {
   } else {
     userId = ''
   }
-  console.log(22, '........')
+  console.log(userId, '........')
   const content = validator.trim(req.body.content || '')
   const contact = validator.trim(req.body.contact || '')
+  if (!content) {
+    return res.status(500).json({
+      msg: '内容不能为空',
+      success: false
+    })
+  }
+  if (!contact) {
+    return res.status(500).json({
+      msg: '联系方式不能为空',
+      success: false
+    })
+  }
   console.log(111, '........', content, contact)
   const aesStr = userId ? `userId==${userId}&&content==${content}&&contact==${contact}` : `content==${content}&&contact==${contact}`
   const dba = SecretKey.aesEncrypt256(aesStr, aesKeys)
@@ -253,4 +265,15 @@ router.get('/version', async (req, res) => {
     })
   }
 })
+
+/**
+ * 白皮书
+ */
+router.get('/baipishu.pdf', async (req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, './book.pdf'));
+  } catch (err) {
+    next(err);
+  }
+});
 export default router

@@ -25,27 +25,31 @@
         currentCategoryVal: ''
       }
     },
+    // async asyncData () {
+    //   try {
+    //     let res = await axios.get('/api/categoryList?page=1&limit=10')
+    //     console.log(res, '//////////---')
+    //     if (res.success) {
+    //       this.currentCategoryVal = res.data.currentCategoryVal
+    //       return { result: res.data.data }
+    //     } else {
+    //       alert('数据加载失败')
+    //     }
+    //   } catch (err) {
+    //     console.log(err)
+    //   }
+    // },
     mounted () {
       this.findTabUserData()
+      // this.getCategoryListData(0)
     },
     methods: {
-      getQueryString (name) {
-        const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
-        const r = window.location.search.substr(1).match(reg)
-        if (r != null) return (r[2]); return null
-      },
       async getCategoryListData (item) {
-        window.location.search = '?category=' + item.name
         let categoryId
-        const category = window.location.search ? window.location.search.split('?')[1] : ''
-        if (category !== '' && category.indexOf('category') !== -1) {
-          const sname = this.getQueryString('category')
-          if (sname != null) {
-            categoryId = decodeURIComponent(sname)
-            console.log(category)
-          }
+        if (item.name !== '全部 ') {
+          categoryId = item.id
         } else {
-          categoryId = 0
+          categoryId = ''
         }
         const postData = {
           page: this.page,
@@ -55,9 +59,9 @@
         const bkData = await axios.post('/api/falls', postData, {
           credentials: true
         })
-        console.log(bkData, '......')
         if (!bkData.success) {
           this.result = bkData.data.data
+          this.$emit('tabList', this.result)
         } else {
           alert('获取分类数据列表失败')
         }

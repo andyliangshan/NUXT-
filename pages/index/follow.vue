@@ -9,7 +9,7 @@
       </div>
     </div>
     <!--已经有关注内容列表-->
-    <data-list v-show="showSharePop"></data-list>
+    <!-- <data-list v-show="showSharePop" :pushDataList="result"></data-list> -->
     <home-footer></home-footer>
   </div>
 </template>
@@ -22,7 +22,8 @@
     name: 'index-view',
     data () {
       return {
-        showSharePop: false
+        showSharePop: false,
+        result: []
       }
     },
     head () {
