@@ -12,9 +12,6 @@ import { Request } from '../tools/request';
 import { wrapper } from '../tools/wrapper';
 
 const router = new Router()
-const resApi = {
-  zhiBApi: 'http://apitest.zhib.net'
-}
 
 // 验证手机号是否被注册
 router.get('/valid/phone', wrapper(async (req, res) => {
@@ -30,13 +27,14 @@ router.get('/valid/phone', wrapper(async (req, res) => {
 
     const deviceId = fetchDeviceId(req);
     const phoneData = await new Request('/util/valid/phone', {phone}).get();
-  
+    console.log(phoneData, '-----')
     if (phoneData.success) {
       redis.set(`${deviceId}_store_phone`, phone, 60 * 5)
       redis.set(`${deviceId}_phoneData`, phoneData, 60 * 5)
       res.json({
         msg: '返回成功',
-        data: phoneData.data
+        data: phoneData.data,
+        success: true
       });
     } else {
       res.json({
@@ -45,42 +43,6 @@ router.get('/valid/phone', wrapper(async (req, res) => {
       });
     }
   }));
-
-/**
- * 根据手机号码判断当前用户是否设置过密码
- * /util/valid/phone
- * method: get
- * query
- * dba(必选) aes加密phone==xxxx&&from==ios/android/pc/h5
- * 所有参数必选
- */
-router.get('/valid/phone', async (req, res) => {
-  const phone = validator.trim(req.query.phone || '')
-  if (!validator.isMobilePhone(phone, 'zh-CN')) {
-    return res.json({
-      msg: '手机号码错误', success: true
-    })
-  }
-
-  const deviceId = fetchDeviceId(req)
-  const phoneData = new Request('/util/valid/phone', {phone}).get();
-  // console.log(phoneData, '....33333...')
-
-  if (phoneData.success) {
-    redis.set(`${deviceId}_store_phone`, phone, 60 * 5)
-    redis.set(`${deviceId}_phoneData`, phoneData, 60 * 5)
-    return res.json({
-      msg: '返回成功',
-      data: phoneData.data
-    })
-  } else {
-    return res.json({
-      msg: '返回错误',
-      success: false
-    })
-  }
-})
-
 
 // 用户登录
 router.post('/login', wrapper(async (req, res) => { // auth.detectTimespan
@@ -132,7 +94,7 @@ router.post('/phoneCode', wrapper(async (req, res) => {
     const deviceId = fetchDeviceId(req);
     const phone = await redis.get(`${deviceId}_store_phone`);
     const typeState = await redis.get(`${deviceId}_phoneData`);
-    const type = typeState.password === 'false' ? 'password' : 'update';
+    const type = !!typeState.password ? 'update' : 'password';
 
     const codeData = await new Request('/util/phoneCode', {
         phone,
@@ -159,16 +121,15 @@ router.post('/account/password', wrapper(async (req, res) => { // auth.detectTim
     const ip = requestIp.getClientIp(req);
     const deviceId = fetchDeviceId(req);
     const phone = await redis.get(`${deviceId}_store_phone`);
-
+    console.log(req.body);
     const phoneCode = req.body.phoneCode || '';
-    const password = validator.trim(req.body.password || '');
+    const password = req.body.password || '';
 
     if (password && password.length < 6) {
         res.status(500).json({
             msg: '密码长度不能少于6位',
             success: false
         });
-
         return;
     }
 
@@ -180,16 +141,18 @@ router.post('/account/password', wrapper(async (req, res) => { // auth.detectTim
         ip,
         type: 'password'
     }).post();
+    console.log(accountData, '----0000-----')
 
     if (accountData.success) {
-        res.status(200).json({
-            msg: '设置成功.',
+        return res.json({
+            msg: '设置密码成功.',
             timeout: 60,
-            phone: phone
+            success: true
         });
     } else {
-        res.status(500).json({
-            msg: '设置失败.'
+        return res.json({
+            msg: '设置密码失败.',
+            success: true
         });
     }
 }));
@@ -204,7 +167,7 @@ router.post('/account/password', wrapper(async (req, res) => { // auth.detectTim
  * phone,phoneCode,password
  * type: 修改密码时为 update
  */
-router.post('/account/password/update', async (req, res) => {
+router.post('/account/password/update', wrapper(async (req, res) => {
   console.log('ccccccccc')
   const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
   const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
@@ -243,7 +206,7 @@ router.post('/account/password/update', async (req, res) => {
       msg: '设置失败.'
     })
   }
-})
+}))
 
 /**
  * 登出

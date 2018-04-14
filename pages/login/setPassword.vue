@@ -3,14 +3,14 @@
         <div class="closeForm"><a href="javascript:history.back(-1);" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></a></div>
         <div class="yuyueForm">
             <div class="tit">设置密码</div>
-            <div class="subtit">验证码发送至<b>{{ phoneNumer }}</b>的手机上</div>
-            <form @submit.stop.prevent="submitSetLogin">
+            <div class="subtit">验证码发送至您<b></b>的手机上</div>
+            <form @submit.stop.prevent="submitSetLogin()">
                 <div class="cont username">
                     <input type="text" placeholder="请输入短信验证码" name="name" v-model="phoneCode" maxlength="4" autocomplete="off" />
                     <button type="button" class="btnCode" ref="btnCode" @click="sendPhoneCode">获取验证码</button>
                 </div>
                 <div class="cont phone">
-                    <input type="password" placeholder="请设置登录密码" name="phone" v-model="serPassword" maxlength="8" autocomplete="off" />
+                    <input type="password" placeholder="请设置登录密码" name="phone" v-model="serPassword" />
                 </div>
                 <div class="about-danger" role="alert">{{errTips}}</div>
                 <div class="submitBtn">
@@ -37,8 +37,8 @@
           serPassword: '',
           phoneCode: '',
           errTips: '',
-          phoneNumer: '',
-          isDoubleClick: false
+          isDoubleClick: false,
+          isRequesting: false
         }
       },
       mounted () {
@@ -46,24 +46,14 @@
       },
       methods: {
         async sendPhoneCode () {
-          // 防止重复点击
-          const _this = this; // eslint-disable-line
-          if (this.isDoubleClick) {
+          if (this.isRequesting) {
             return
           }
-          this.isDoubleClick = true
-          _this.$refs.btnCode.innerHTMl = 'loading'
-          const removeClick = () => {
-            setTimeout(() => {
-              _this.$refs.btnCode.innerHTMl = 'reset'
-              this.isDoubleClick = false
-            }, 1000)
-          }
           try {
-            const bkData = await axios.post('/api/phoneCode')
-            this.phoneNumer = bkData.phone
+            this.isRequesting = true
+            const phoneCodeData = await axios.post('/api/phoneCode')
             const btnCodeEle = this.$refs.btnCode
-            if (!bkData.success) {
+            if (!phoneCodeData.success) {
               let timeout = 60
               btnCodeEle.disabled = true
               const cc = setInterval(() => {
@@ -75,16 +65,18 @@
                   clearInterval(cc)
                 }
               }, 1000)
-              removeClick(_this)
             } else {
               alert('短信发送过于频繁，请稍后刷新页面重试')
             }
           } catch (err) {
-            removeClick(_this)
             alert('获取验证码失败')
           }
+          this.isRequesting = false
         },
         async submitSetLogin () {
+          if (this.isRequesting) {
+            return
+          }
           if (!this.serPassword) {
             alert('密码不能为空～')
             return
@@ -93,40 +85,27 @@
             alert('验证码不能为空～')
             return
           }
-          if (this.serPassword && this.serPassword.length !== 8) {
-            alert('密码只能为8位～')
+          if (this.serPassword && this.serPassword.length < 6) {
+            alert('密码不能少于6位～')
             return
-          }
-          // 防止重复点击
-          const _this = this; // eslint-disable-line
-          if (this.isDoubleClick) {
-            return
-          }
-          this.isDoubleClick = true
-          _this.$refs.loginBtn.innerHTMl = 'loading'
-          const removeClick = () => {
-            setTimeout(() => {
-              _this.$refs.loginBtn.innerHTMl = 'reset'
-              this.isDoubleClick = false
-            }, 1000)
           }
           const postData = {
             password: this.serPassword,
             phoneCode: this.phoneCode
           }
+          let bData
           try {
-            const bkData = await axios.post('/api/account/password', postData, { credentials: true })
-            console.log(bkData, '------/////////------')
-            if (bkData.data.success) {
+            bData = await axios.post('/api/account/password', postData, { credentials: true })
+            console.log(bData, '.......')
+            if (bData.data.success) {
               this.errTips = ''
-              window.location.href = `/recommend`
-            } else {
-              alert('密码设置过于频繁操作')
+              this.$router.push({ path: '/login/editorInfo' })
             }
-            removeClick(_this)
+            this.isRequesting = true
           } catch (err) {
-            alert('设置密码失败')
+            alert(bData.data.msg)
           }
+          this.isRequesting = false
         }
       }
     }

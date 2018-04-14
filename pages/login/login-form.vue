@@ -10,6 +10,7 @@
         <div class="about-danger" role="alert">{{errTips1}}</div>
         <div class="submitBtn">
           <button type="submit" class="btn btn-default about-btn" ref="btnCode">继续</button>
+        
         </div>
       </form>
     </div>
@@ -26,7 +27,8 @@
         },
         phone: '',
         errTips1: '',
-        isDoubleClick: false
+        isDoubleClick: false,
+        isRequesting: false
       }
     },
     head () {
@@ -43,7 +45,6 @@
         default: false
       }
     },
-    mounted () {},
     methods: {
       setErrTips1 (msg) {
         this.errTips1 = msg
@@ -60,33 +61,23 @@
           this.setErrTips1(this.validate.phoneError)
           return
         }
-        // 防止重复点击
-        const _this = this; // eslint-disable-line
-        if (this.isDoubleClick) {
+        if (this.isRequesting) {
           return
         }
-        this.isDoubleClick = true
-        _this.$refs.btnCode.innerHTMl = 'loading'
-        const removeClick = () => {
-          setTimeout(() => {
-            _this.$refs.btnCode.innerHTMl = 'reset'
-            this.isDoubleClick = false
-          }, 1000)
-        }
+        this.isRequesting = true
         const bkData = await axios.get(`/api/valid/phone?phone=${this.phone}`)
+        this.isRequesting = false
         console.log(bkData.data, '..000///////..')
-        if (bkData.data.data.success === true) {
+        if (bkData.success) {
           this.errTips1 = ''
-          if (bkData.data.data.password === true) {
-            window.location.href = '/login/password'
+          if (bkData.password) {
+            this.$router.push({ path: '/login/' })
           } else {
-            window.location.href = '/login/setPassword'
+            this.$router.push({ path: '/login/setPassword' })
           }
-          removeClick(_this)
         } else {
           this.setErrTips1(bkData.msg)
         }
-        removeClick(_this)
       }
     }
   }

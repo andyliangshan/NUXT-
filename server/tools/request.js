@@ -28,7 +28,7 @@ export const Request = function (api, raw) {
     }
     const aesStr = rawValues.join('&&');
     dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
-
+    console.log(aesStr, '*********', dba, '*********');
     const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys);
     const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
 
