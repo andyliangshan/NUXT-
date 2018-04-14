@@ -4,7 +4,6 @@
       <div class="submitBox row">
         <div class="backtoPage col-1"><a href="javascript:void(0)" class="backtoPage" @click="hideCrop"><img src="../../assets/img/back.png" alt="back"/></a></div>
         <div class="title col-9">裁剪头像</div>
-        <!--<div class="submitBtn col-2"><button type="submit" id="about-btn" class="btn btn-defaultabout-btn">保存</button></div>-->
       </div>
       <div id="demo">
         <!-- 遮罩层 -->
@@ -29,6 +28,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
   import Cropper from 'cropperjs'
 
   export default {
@@ -36,7 +36,6 @@
     data () {
       return {
         showFlag: false,
-        // headerImage: '',
         picValue: '',
         cropper: '',
         croppable: false,
@@ -89,8 +88,6 @@
       // 取消上传
       cancel () {
         this.panel = false
-        // const obj = document.getElementById('change');
-        // obj.outerHTML = obj.outerHTML;
       },
       // 创建url路径
       getObjectURL (file) {
@@ -185,7 +182,7 @@
             this.$emit('getHeaderImage', data.url)
           }
         })
-        request.open('POST', '/api/other/base642img')
+        request.open('POST', '/api/base642img')
         request.send(formData)
       }
     },

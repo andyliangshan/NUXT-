@@ -169,6 +169,7 @@
     margin: 0 auto;
     border: 1px solid #e6e6e6;
     border-radius: 4px;
+    box-sizing border-box
 
     &:focus {
       outline: none;

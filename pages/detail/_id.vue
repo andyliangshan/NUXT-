@@ -3,7 +3,7 @@
     <div class="detailTitle row">
       <div class="backtoPage col-1"><a href="javascript:history.go(-1);" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></a></div>
       <div class="title col-10">币文正文</div>
-      <button @click="$store.commit('increment')">{{ $store.state.counter }}</button>
+      <button @click="$store.commit('increment')">{{ counter }}</button>
       <div class="report">···</div>
     </div>
     <div class="dataListCont">
@@ -47,7 +47,8 @@
 </template>
 <script>
   import Vue from 'vue'
-  // import { mapState,  mapActions } from 'vuex'
+  // import Vuex from 'vuex'
+  import { mapState } from 'vuex' // mapActions
   import axios from '~/plugins/axios'
   import SharePop from '../../components/SharePop.vue'
   import * as filters from '../../server/tools/filters'
@@ -79,6 +80,7 @@
       }
     },
     computed: {
+      ...mapState(['counter'])
       // ...mapState(['repalyData', 'tweetList'])
     },
     mounted () {
