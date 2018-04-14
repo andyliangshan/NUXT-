@@ -2,7 +2,7 @@
   <div class="index-datalist" id="wrapper">
     <div class="datalist" id="myScrollbar">
       <div class="tipsNews">5条新币文</div>
-      <div class="dataListCont" v-if="recommedList.essence.length > 0" v-for="(item, index) in recommedList.essence">
+      <div class="dataListCont" v-for="(item, index) in recommedList.essence" :key="index">
         <div class="list-top row">
           <div class="list-top-profile col-2"><img :src="item.essenceTweet.tweetUser.avatarImage" alt="profile"/></div>
           <div class="list-top-info col-8">
@@ -12,7 +12,7 @@
           <div class="list-top-attent col-2" v-if="item.essenceTweet.isfollow !== null"></div>
           <div class="list-top-attent col-2" v-else>
             <!--<a href="javascript:void(0)" class="delete" ref="deleteBtn">删除</a>-->
-            <a href="javascript:void(0)" class="attention" ref="attentBtn">关注</a>
+            <a href="javascript:void(0)" class="attention" ref="attentBtn" @click="changeStateAttent(item, $event)">关注</a>
             <!--<a href="javascript:void(0)" class="report">×</a>-->
           </div>
         </div>
@@ -33,19 +33,19 @@
           <div class="share col-7"><span>&nbsp;</span>{{ item.essenceTweet.shareCount }}</div>
         </div>
       </div>
-      <div class="dataListCont" v-if="recommedList.tweet.length > 0" v-for="(items, ind) in recommedList.tweet">
+      <div class="dataListCont" v-for="(items, ind) in recommedList.tweet" :key="ind">
         <div class="list-top row">
           <div class="list-top-profile col-2"><img :src="items.tweetUser.avatarImage" alt="profile"/></div>
           <div class="list-top-info col-8">
             <div class="list-top-info-title"><nuxt-link :to="'/masterState/' + items.tweetUser.id" class="backtoPage">{{ items.tweetUser.nickName }}</nuxt-link></div>
             <div class="list-top-info-publishTime"><span>{{ items.createdAt | dynamicFormatTime }}</span></div>
           </div>
-          <div class="list-top-attent col-2" v-if="items.isfollow !== null">
-            <a href="javascript:void(0)" class="attention" ref="attentBtn">已关注</a>
+          <div class="list-top-attent col-2" v-if="items.isfollow !== null" v-show="items.id !== items.tweetUser.id">
+            <a href="javascript:void(0)" class="attention" ref="attentBtn" @click="changeStateAttent(items, $event)">已关注</a>
           </div>
-          <div class="list-top-attent col-2" v-else>
+          <div class="list-top-attent col-2" v-else  v-show="items.id !== items.tweetUser.id">
             <!--<a href="javascript:void(0)" class="delete" ref="deleteBtn">删除</a>-->
-            <a href="javascript:void(0)" class="attention" ref="attentBtn">关注</a>
+            <a href="javascript:void(0)" class="attention" ref="attentBtn" @click="changeStateAttent(items, $event)">关注</a>
             <!--<a href="javascript:void(0)" class="report">×</a>-->
           </div>
         </div>
@@ -74,6 +74,7 @@
 
 <script>
   import Vue from 'vue'
+  import axios from '~/plugins/axios'
   import * as filters from '../../server/tools/filters'
   import ReportList from '../../components/ReportList.vue'
   Object.keys(filters).forEach(key => {
@@ -92,14 +93,14 @@
     props: {
       recommedList: {
         type: Object,
-        default: []
+        default: {}
       }
     },
     components: {
       ReportList
     },
     mounted () {
-      this.limitSize()
+      // this.limitSize()
     },
     methods: {
       limitSize () {
@@ -110,6 +111,31 @@
           } else {
             instroduce = this.recommedList.essence[i].content
           }
+        }
+      },
+      async changeStateAttent (item, evt) {
+        const selt = evt.currentTarget
+        if (item.isfollow === null) {
+          this.action = 1
+          selt.innerHTML = '已关注'
+          selt.style.border = '1px solid #939393'
+          selt.style.color = '#939393'
+        } else {
+          this.action = -1
+          selt.innerHTML = '关注Ta'
+          selt.style.border = '1px solid #138FF2'
+          selt.style.color = '#138FF2'
+        }
+        const postdata = {
+          toFollowUserId: item.tweetUser.id,
+          action: this.action
+        }
+        const bkData = await axios.post('/api/action/follow', postdata, { credentials: true })
+        console.log(bkData, '.....')
+        if (bkData.data.success) {
+          alert(bkData.data.msg)
+        } else {
+          alert(bkData.data.msg)
         }
       }
     }

@@ -39,7 +39,8 @@
         validate: {
           contentError: '建议内容不能为空',
           contactError: '联系方式错误'
-        }
+        },
+        isDoubleClick: false
       }
     },
     methods: {
@@ -84,13 +85,13 @@
           credentials: true
         })
         console.log(bkData, '.....')
-        if (!bkData.success) {
+        if (!bkData.data.success) {
           removeClick(_this)
           this.errTips = ''
-          alert(bkData.msg)
-          window.location.href = '/user'
+          alert(bkData.data.msg)
+          window.history.back(-1)
         } else {
-          alert(bkData.msg)
+          alert(bkData.data.msg)
         }
       }
     }

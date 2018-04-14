@@ -61,3 +61,7 @@ export const serverPort = {
  * 服务器接到请求的时间和参数中的时间戳是否相差很长一段时间
  */
 export const timespanGapSeconds = 15; // /s
+
+export const resApi = {
+  zhiBApi: 'http://apitest.zhib.net'
+}

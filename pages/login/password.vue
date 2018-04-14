@@ -5,7 +5,7 @@
             <div class="tit">输入密码</div>
             <form @submit.stop.prevent="submitLogin">
                 <div class="cont phone">
-                    <input type="password" placeholder="请输入密码" name="phone" v-model="password" />
+                    <input type="password" maxlength="8" autocomplete="off" placeholder="请输入密码" name="phone" v-model="password" />
                 </div>
                 <div class="about-danger" role="alert">{{errTips}}</div>
                 <div class="submitBtn">
@@ -55,18 +55,18 @@
             }, 1000)
           }
           const postData = {
-            phone: '',
             password: this.password,
             isValidateRegister: 1
           }
-          const bkData = await axios.post(`/api/login?tsp=${Date.now()}`, postData, {
+          const bkData = await axios.post('/api/login', postData, {
             credentials: true
           })
-          if (!bkData.success) {
+          if (bkData.data.success) {
+            removeClick(_this)
             this.errTips1 = ''
-            window.location.href = `/user/${bkData.data.id}`
+            window.location.href = '/user'
           } else {
-            this.setErrTips1(bkData.data.msg)
+            alert(bkData.data.msg)
           }
           removeClick(_this)
         }
@@ -89,10 +89,13 @@
         clear: both;
         overflow: hidden;
         padding-top: 10px;
-        color: #202020;
         font-size: 14px;
         text-align: right;
         padding-right: 12px;
+    
+        a {
+            color #939393
+        }
     }
 
     .closeForm {

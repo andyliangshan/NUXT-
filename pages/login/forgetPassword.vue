@@ -1,54 +1,51 @@
 <template>
-    <div class="accountCourse">
+    <div class="setPassword">
         <div class="closeForm"><a href="javascript:history.back(-1);" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></a></div>
         <div class="yuyueForm">
             <div class="tit">修改密码</div>
-            <div class="subtit">验证码发送至<b>15010294675</b>的手机上</div>
-            <form @submit.stop.prevent="submitLogin">
+            <div class="subtit">验证码发送至<b>{{ phoneNumer }}</b>的手机上</div>
+            <form @submit.stop.prevent="submitSetLogin">
                 <div class="cont username">
-                    <input type="text" placeholder="请输入短信验证码" name="name" v-model="phoneCode" />
-                    <button type="button" class="btnCode" ref="btnCode" disabled="disabled">获取验证码</button>
+                    <input type="text" placeholder="请输入短信验证码" name="name" v-model="phoneCode" maxlength="4" autocomplete="off" />
+                    <button type="button" class="btnCode" ref="btnCode" @click="sendPhoneCode">获取验证码</button>
                 </div>
                 <div class="cont phone">
-                    <input type="password" placeholder="请设置新的登录密码" name="phone" v-model="loginPassword" />
+                    <input type="password" placeholder="请设置登录密码" name="phone" v-model="serPassword" maxlength="8" autocomplete="off" />
                 </div>
                 <div class="about-danger" role="alert">{{errTips}}</div>
                 <div class="submitBtn">
-                    <button type="submit" id="about-btn1" class="btn btn-default about-btn">登录</button>
+                    <button type="submit" class="btn btn-default about-btn" ref="loginBtn">进入</button>
                 </div>
             </form>
         </div>
     </div>
 </template>
 <script>
+    import axios from '~/plugins/axios'
     export default{
-      name: 'accountCourse',
+      name: 'setPassword',
       head () {
         return {
-          title: '修改密码',
+          title: '设置密码',
           meta: [
-            { hid: 'description', name: 'description', content: '修改密码' }
+            { hid: 'description', name: 'description', content: '设置密码' }
           ]
         }
       },
       data () {
         return {
-          loginPassword: '',
+          serPassword: '',
           phoneCode: '',
-          errTips: ''
+          errTips: '',
+          phoneNumer: '',
+          isDoubleClick: false
         }
       },
-      mouthed () {
+      mounted () {
         this.sendPhoneCode()
       },
       methods: {
         async sendPhoneCode () {
-          const regPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|16[0-9]|17[0-9]|18[0-9]|19[0-9]|14[57])[0-9]{8}$/
-          if (!regPhone.test(this.phone)) {
-            this.setErrTips1(this.validate.phoneError)
-            return
-          }
-          // 防止重复点击
           const _this = this; // eslint-disable-line
           if (this.isDoubleClick) {
             return
@@ -62,9 +59,10 @@
             }, 1000)
           }
           try {
-            const bkData = await this.$http.post(`/api/phoneCode?tsp=${Date.now()}`, { phone: this.phone }, { credentials: true })
+            const bkData = await axios.post('/api/phoneCode')
+            this.phoneNumer = bkData.phone
             const btnCodeEle = this.$refs.btnCode
-            if (!bkData.body.errcode) {
+            if (!bkData.success) {
               let timeout = 60
               btnCodeEle.disabled = true
               const cc = setInterval(() => {
@@ -78,21 +76,65 @@
               }, 1000)
               removeClick(_this)
             } else {
-              removeClick(_this)
               alert('短信发送过于频繁，请稍后刷新页面重试')
             }
           } catch (err) {
+            removeClick(_this)
             alert('获取验证码失败')
+          }
+        },
+        async submitSetLogin () {
+          if (!this.serPassword) {
+            alert('密码不能为空～')
+            return
+          }
+          if (!this.phoneCode) {
+            alert('验证码不能为空～')
+            return
+          }
+          if (this.serPassword && this.serPassword.length !== 8) {
+            alert('密码只能为8位～')
+            return
+          }
+          // 防止重复点击
+          const _this = this; // eslint-disable-line
+          if (this.isDoubleClick) {
+            return
+          }
+          this.isDoubleClick = true
+          _this.$refs.loginBtn.innerHTMl = 'loading'
+          const removeClick = () => {
+            setTimeout(() => {
+              _this.$refs.loginBtn.innerHTMl = 'reset'
+              this.isDoubleClick = false
+            }, 1000)
+          }
+          const postData = {
+            password: this.serPassword,
+            phoneCode: this.phoneCode
+          }
+          try {
+            const bkData = await axios.post('/api/account/password', postData, { credentials: true })
+            console.log(bkData, '------/////////------')
+            if (bkData.data.success) {
+              this.errTips = ''
+              window.location.href = `/recommend`
+            } else {
+              alert('密码设置过于频繁操作')
+            }
+            removeClick(_this)
+          } catch (err) {
+            alert('设置密码失败')
           }
         }
       }
     }
 </script>
 <style lang="stylus">
-    .accountCourse {
+    .setPassword {
         width: 100%;
         z-index: 1111;
-        height: 175%;
+        height: 100%;
         background: #fff;
         max-width: 750px;
         margin: 0 auto;
@@ -169,6 +211,10 @@
         width: 100%;
         border: none;
         border-bottom: 1px solid #0D0D0D;
+
+        &:focus {
+        outline: none;
+         }
     }
 
     .btnCode {
@@ -178,7 +224,7 @@
         font-size 12px
         height 42px
         line-height 42px
-        color: #939393;
+        color: #138ff2;
         display: inline-block;
         text-decoration: none;
         background: none;
@@ -225,6 +271,9 @@
         padding: 0;
         display: inline-block;
 
+        &:focus {
+          outline: none;
+        }
     }
     }
     }

@@ -5,6 +5,7 @@ import connectRedis from 'connect-redis'
 import cors from 'cors'
 import { redisConfigFunc } from './config'
 import auth from './middlewares/auth'
+import bodyParser from 'body-parser'
 
 import api from './api'
 
@@ -13,6 +14,8 @@ const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3001
 
 app.set('port', port)
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 const RedisStore = connectRedis(session)
 const redisSessionStore = new RedisStore({
   port: redisConfigFunc().port,

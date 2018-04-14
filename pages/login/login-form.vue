@@ -2,8 +2,7 @@
   <div class="accountCourse">
     <div class="closeForm" @click="linkhref">×</div>
     <div class="yuyueForm">
-      <div class="tit">登录知币社区</div>
-      <div class="subtit">投资机会早知道</div>
+      <div class="tit">登录知币社区，投资机会早知道</div>
       <form @submit.stop.prevent="submitLogin">
         <div class="cont phone">
           <input type="text" placeholder="请输入你的手机号" name="phone" v-model="phone" maxlength="11" autocomplete="off" />
@@ -75,16 +74,17 @@
           }, 1000)
         }
         const bkData = await axios.get(`/api/valid/phone?phone=${this.phone}`)
-        console.log(bkData, '....')
-        if (!bkData.success) {
+        console.log(bkData.data, '..000///////..')
+        if (bkData.data.data.success === true) {
           this.errTips1 = ''
-          if (bkData.password === 'true') {
+          if (bkData.data.data.password === true) {
             window.location.href = '/login/password'
           } else {
             window.location.href = '/login/setPassword'
           }
+          removeClick(_this)
         } else {
-          this.setErrTips1(bkData.data.msg)
+          this.setErrTips1(bkData.msg)
         }
         removeClick(_this)
       }
@@ -129,10 +129,11 @@
 
   .tit {
     color: #0D0D0D;
-    font-size 26px
+    font-size 10px
     width: 100%;
     text-align: center;
     line-height: 1;
+    font-weight: bolder;
   }
 
   .subtit {
@@ -216,7 +217,6 @@
     width: 100%;
 
   button {
-    background: #138ff2;
     background-size: contain;
     font-size 17px
     border-radius 4px
@@ -227,6 +227,7 @@
     color: #fff;
     padding: 0;
     display: inline-block;
+    background: #2B9FFB;
 
     &:focus {
       outline: none;

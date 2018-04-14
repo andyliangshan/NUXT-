@@ -37,7 +37,8 @@
           serPassword: '',
           phoneCode: '',
           errTips: '',
-          phoneNumer: ''
+          phoneNumer: '',
+          isDoubleClick: false
         }
       },
       mounted () {
@@ -45,6 +46,19 @@
       },
       methods: {
         async sendPhoneCode () {
+          // 防止重复点击
+          const _this = this; // eslint-disable-line
+          if (this.isDoubleClick) {
+            return
+          }
+          this.isDoubleClick = true
+          _this.$refs.btnCode.innerHTMl = 'loading'
+          const removeClick = () => {
+            setTimeout(() => {
+              _this.$refs.btnCode.innerHTMl = 'reset'
+              this.isDoubleClick = false
+            }, 1000)
+          }
           try {
             const bkData = await axios.post('/api/phoneCode')
             this.phoneNumer = bkData.phone
@@ -61,10 +75,12 @@
                   clearInterval(cc)
                 }
               }, 1000)
+              removeClick(_this)
             } else {
               alert('短信发送过于频繁，请稍后刷新页面重试')
             }
           } catch (err) {
+            removeClick(_this)
             alert('获取验证码失败')
           }
         },
@@ -99,13 +115,13 @@
             phoneCode: this.phoneCode
           }
           try {
-            const bkData = await axios.post(`/api/account/password`, postData, { credentials: true })
-            console.log(bkData, '00000000000')
-            if (!bkData.success) {
-              this.errTips1 = ''
+            const bkData = await axios.post('/api/account/password', postData, { credentials: true })
+            console.log(bkData, '------/////////------')
+            if (bkData.data.success) {
+              this.errTips = ''
               window.location.href = `/recommend`
             } else {
-              this.setErrTips1(bkData.data.msg)
+              alert('密码设置过于频繁操作')
             }
             removeClick(_this)
           } catch (err) {

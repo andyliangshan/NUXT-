@@ -1,7 +1,7 @@
 import { Router } from 'express'
+import validator from 'validator'
 import SecretKey from '../utils/encry/cryptoer'
 import agent from '../utils/fetch/superAgent'
-import validator from 'validator'
 import {aesKeys} from '../config'
 import {fetchDeviceId} from '../common/remote'
 
@@ -22,14 +22,15 @@ const resApi = {
 router.get('/categoryList', async (req, res) => {
   const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
   const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
-  const page = req.query.page || ''
-  const limit = req.query.limit || ''
-  let category = null
-  if (req.query.category) {
-    category = req.query.category
-  } else {
-    category = '新闻'
-  }
+  const page = req.query.page || 1
+  const limit = req.query.limit || 10
+  // let category = null
+  // if (req.query.category) {
+  //   category = req.query.category
+  // } else {
+  //   category = '新闻'
+  // }
+  console.log('11111')
   if (!validator.isInt(page)) {
     return res.status(500).json({
       msg: '页数应该是整数',
@@ -46,31 +47,31 @@ router.get('/categoryList', async (req, res) => {
   const aesStr = `limit==${limit}&&page==${page}&&deviceId==${deviceId}`
   const dba = SecretKey.aesEncrypt256(aesStr, aesKeys)
   const categoryListData = await agent.get(`${resApi.zhiBApi}/category/list`, { timespan, raid, dba })
-  // console.log(categoryListData, '.......')
-  const resetSubNav = function (str = '新闻') {
-    let activeObj
-    const res = categoryListData.data.filter(item => {
-      if (item.name !== str) {
-        return true
-      } else {
-        activeObj = item
-        return false
-      }
-    })
-    res.unshift(activeObj)
-    return res
-  }
-  const currentCategoryVal = resetSubNav(category)
+  console.log(categoryListData, '....0000...')
+  // const resetSubNav = function (str = '新闻') {
+  //   let activeObj
+  //   const res = categoryListData.data.filter((item, index)=> {
+  //     if (item.name !== str) {
+  //       return true
+  //     } else {
+  //       activeObj = item
+  //       return false
+  //     }
+  //   })
+  //   res.unshift(activeObj)
+  //   return res
+  // }
+  // const currentCategoryVal = resetSubNav(category)
 
   if (categoryListData.success) {
-    return res.json({
+    res.json({
       msg: '分类获取成功',
       success: true,
-      data: categoryListData.data,
-      currentCategoryVal: currentCategoryVal
+      data: categoryListData.data
+      // currentCategoryVal: currentCategoryVal
     })
   } else {
-    return res.json({
+    res.json({
       msg: '分类获取失败',
       success: false
     })
