@@ -142,5 +142,5 @@
   }
 </script>
 <style lang="stylus">
-@import "./Datalist.styl";
+@import "./DataList.styl";
 </style>
