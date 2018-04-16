@@ -1,0 +1,494 @@
+@import './base.styl'
+
+.compatible {
+    width 100%
+    top 0
+    background #fff
+    z-index 10;
+    position fixed
+}
+
+.nav-container {
+    background: #fff;
+    height 55px
+    padding: 0 15%
+    max-width 1920px
+    margin 0 auto
+    display flex
+    border-bottom 1px solid #E0E0E0
+
+    .min-container {
+        display flex
+    }
+
+    .login {
+        width 108px
+        height 38px
+
+        a {
+            display block
+            width 108px
+            height 38px
+            padding-top 9px
+
+            img {
+                width 100%
+                height 100%
+            }
+        }
+    }
+
+  .menu {
+    margin: 0;
+    height: 28px;
+    display inline-block
+    flex 1
+
+    .zhiB-list {
+      padding: 0;
+      text-align: center;
+      height 55px
+
+      a {
+        display: inline-block;
+        font-size: 20px;
+        color: #939393;
+        font-weight: normal;
+        line-height: 28px;
+        position relative
+        height 100%
+        padding 0 10px
+
+        em {
+          font-style: normal;
+          display: inline-block;
+          width: 100%;
+          padding-top 15px
+        }
+
+        span {
+          position absolute
+          bottom 0
+          left 50%
+          margin-left -10px
+          display: inline-block;
+          width: 21px;
+          height: 4px;
+          background: none;
+          border-radius: 2px;
+        }
+      }
+
+      a.nuxt-link-active {
+        color: #138FF2;
+        font-weight: bolder;
+
+        span {
+          background: #138FF2;
+        }
+      }
+    }
+
+    .zhiB-search {
+      height: 24px;
+      text-align: center;
+      padding: 0;
+      width: 24px;
+      float left
+
+      a {
+        display: block;
+        width: 100%;
+        height: 100%;
+
+        img {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+
+    .zhiB-msg {
+      padding: 0;
+      height: 28px;
+      width: 24px;
+      float left
+
+      a {
+        display: block;
+        width: 100%;
+        position: relative;
+        text-align: right;
+
+        img {
+          width: 24px;
+          height: 24px;
+          display: inline-block;
+          vertical-align: super;
+        }
+
+        em {
+          position: absolute;
+          top: -4px;
+          right: 0;
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          text-align: center;
+          font-size: 9px;
+          line-height: 14px;
+          background: #E14123;
+          font-style: normal;
+          display: block;
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .loginbox {
+      min-width 200px
+      height 38px
+      padding 8px 0
+
+    .loginModel {
+       display inline-block
+       float left
+       position relative
+       margin-right 20px
+
+       .loginTag {
+           font-size 14px
+           text-align center
+           line-height 38px
+           height 38px
+           display none
+
+           a {
+               display block
+               color #000
+           }
+       }
+
+       .showLoginState {
+          display none
+          width 38px
+          height 38px
+          
+          .successLogin {
+            width 38px
+            height 38px
+
+            img {
+                width 100%
+                height 100%
+            }    
+          } 
+
+          .successBox {
+              padding-top 20px
+              position relative
+              width 170px
+              left -75px
+
+              .triangle {
+                 position absolute
+                 width 0
+                 height 0
+                 border 20px solid #fff
+                 top -12px
+                 left 50%
+                 margin-left -10px
+                 z-index 2
+                 border-top-color transparent
+                 border-bottom-color #fff
+                 border-right-color transparent
+                 border-left-color transparent
+              }  
+
+            .logout {
+                width 170px
+                background #fff
+                border-radius 4px
+                box-shadow 0 2px 4px #ccc
+
+                a {
+                    display inline-block
+                    width 100%
+                    text-align center 
+                    height 40px
+                    line-height 40px
+                    color #9B9B9B
+                    font-size 20px
+                }
+            }
+          }  
+       }
+    }
+
+    .search {
+        width 24px
+        height 24px
+        text-align center
+        float left
+        margin-right 20px
+        padding-top 4px
+
+        a {
+            display block
+            width 100%
+        }
+
+        img {
+            width 24px
+        }        
+    }
+
+    .zhiB-msg {
+      padding: 3px 0 0;
+      height: 28px;
+      width: 24px;
+      float left
+      margin-right 20px
+
+      a {
+        display: block;
+        width: 100%;
+        position: relative;
+        text-align: right;
+        padding-top 5px
+
+        img {
+          width: 24px;
+          height: 24px;
+          display: inline-block;
+          vertical-align: super;
+        }
+
+        em {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          text-align: center;
+          font-size: 9px;
+          line-height: 14px;
+          background: #E14123;
+          font-style: normal;
+          display: block;
+          color: #fff;
+        }
+      }
+    }
+
+    .release {
+        float left
+        width 114px
+        height 36px
+        line-height 36px
+
+        a {
+            display inline-block
+            width 100%
+            line-height 38px
+            text-align center
+            color #0B77FA
+            border 1px solid #0b77fa
+            border-radius 20px
+            -webkit-border-radius 20px
+            -moz-border-radius 20px
+            font-size 20px
+
+            img {
+                display inline-block
+                vertical-align -2px
+            }
+
+            em {
+                display inline-block
+                font-style normal
+            }
+        }
+    }
+  }
+}
+
+.h5NavMeum {
+    width 100%
+    max-width 750px
+    margin 0 auto
+
+    .loginModel {   
+        float left
+
+        .loginTag {
+            width 100%
+            display none
+
+            a {
+                display block
+                width 100%
+                font-size 16px
+                padding 10px 15px
+                color #4a4a4a
+            }
+        }
+
+        .showLoginState {
+            display block
+            width 100%
+            position relative
+            padding 8px 15px
+
+            .successLogin {
+              font-size 16px
+              color #4a4a4a
+
+              img {
+                  width 16px
+                  height 8px
+                  display inline-block
+                  margin-left 2px
+              }      
+            }
+
+            .logoutBox {
+                display none 
+                position absolute
+                left 15px
+                top 40px
+                width 110px
+
+                .triangle {
+                    width 0
+                    height 0
+                    border 10px solid #000
+                    border-top-color transparent
+                    border-bottom-color #000
+                    border-right-color transparent
+                    border-left-color transparent
+                    position absolute
+                    top -20px
+                    left: 50%;
+                    margin-left: -8px;
+                    opacity: 0.83;
+                }
+
+                .logout {
+                    width 110px
+                    background #000
+                    background rgba(0, 0, 0, 0.83)
+                    border-radius 4px
+
+                    .notice, .logout {
+                       display block
+                       width 100%
+                       height 40px
+                       line-height 40px
+                       text-align center
+                       color #fff
+                       font-size 16px 
+
+                       &:first-child {
+                           border-bottom 1px solid #e6e6e6
+                       }
+                    }
+                }
+            }
+        }
+    }
+
+    .editorArea {
+        float right
+        padding 10px 15px
+
+        .release, .search, .reloadPage {
+            display inline-block
+            float left
+
+            a {
+                display block
+            }
+        }
+
+        .release {
+           width 17px
+           height 18px
+           margin-right 5px
+
+           img {
+               width 100%
+               height 100%
+           }  
+        }
+
+        .search {
+           width 15px
+           height 19px
+           margin-right 5px
+
+           img {
+               width 100%
+               height 100%
+           }  
+        }
+
+        .reloadPage {
+           width 20px
+           height 16px
+
+           img {
+               width 100%
+               height 100%
+           }  
+        }
+    }
+
+    .mobileMeum {
+        clear both
+        overflow hidden
+        padding 15px
+        display flex
+        justify-content space-between
+
+        a {
+            display block
+            flex 1
+            text-align center
+            color #4a4a4a
+            font-size 16px
+            
+            em {
+                display inline-block
+                width 100%
+                font-style normal
+            }
+        }
+
+        a.active {
+            color #0273FF
+        }
+    }
+}
+
+@media screen and (max-width:767px) {
+    .h5NavMeum {
+        display block
+    }
+
+    .nav-container {
+        display none
+    }
+}
+
+@media screen and (min-width:768px) {
+    .h5NavMeum {
+        display none
+    }
+
+    .nav-container {
+        display block
+    }
+}

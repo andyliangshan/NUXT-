@@ -1,5 +1,5 @@
 <template>
-  <div class="follow">
+  <div class="follow" ref="follow">
     <!--没有关注内容显示-->
     <div class="noFollow">
       <div class="cont">
@@ -10,88 +10,94 @@
     </div>
     <!--已经有关注内容列表-->
     <!-- <data-list v-show="showSharePop" :pushDataList="result"></data-list> -->
-    <home-footer></home-footer>
+    <common-footer></common-footer>
   </div>
 </template>
 
 <script>
-  import DataList from '../../components/DataList.vue'
-  import HomeFooter from '../HomeFooter.vue'
+import DataList from '../../components/DataList.vue';
+import commonFooter from '../HomeFooter.vue';
 
-  export default {
-    name: 'index-view',
-    data () {
-      return {
-        showSharePop: false,
-        result: []
-      }
-    },
-    head () {
-      return {
-        title: '关注'
-      }
-    },
-    components: {
-      DataList,
-      HomeFooter
-    }
-  }
+export default {
+  name: 'index-view',
+  data() {
+    return {
+      showSharePop: false,
+      result: [],
+    };
+  },
+  mounted() {
+    this.$refs.follow.style.minHeight = window.screen.height - 141 + 'px';
+  },
+  head() {
+    return {
+      title: '关注',
+    };
+  },
+  components: {
+    DataList,
+    commonFooter,
+  },
+};
 </script>
 
 
 <style lang="stylus">
-  @import '../../assets/styl/home.styl';
-  .follow {
+@import '../../assets/styl/home.styl';
+
+.follow {
+  width: 100%;
+  background: #fff;
+  max-width: 750px;
+  margin: 0 auto;
+
+  .noFollow {
+    position: relative;
     width: 100%;
-    background: #fff;
+    height: 100%;
 
-    .noFollow {
-      position: relative;
+    .cont {
+      position: absolute;
+      top: 100px;
       width: 100%;
-      height: 100%;
+      text-align: center;
 
-      .cont {
-        position: absolute;
-        top: 100px;
-        width: 100%;
-        text-align: center;
+      .img {
+        width: 93px;
+        height: 93px;
+        margin: 0 auto;
 
-        .img {
-          width: 93px;
-          height: 93px;
-          margin: 0 auto;
-
-          img {
-            width: 100%;
-          }
-        }
-
-        .desc {
-          clear: both;
-          color: #939393;
-          font-size: 16px;
+        img {
           width: 100%;
         }
+      }
 
-        .find {
-          clear: both;
-          padding-top: 20px;
-          width: 74px;
+      .desc {
+        clear: both;
+        color: #939393;
+        font-size: 16px;
+        width: 100%;
+      }
+
+      .find {
+        clear: both;
+        padding-top: 20px;
+        width: 74px;
+        height: 30px;
+        margin: 0 auto;
+
+        a {
+          display: block;
+          width: 100%;
+          border: 1px solid #138FF2;
+          border-radius: 3px;
+          text-align: center;
           height: 30px;
-          margin: 0 auto;
-
-          a {
-            display: block;
-            width: 100%;
-            border: 1px solid #138FF2;
-            border-radius: 3px;
-            text-align: center;
-            height: 30px;
-            line-height: 30px;
-            color: #138FF2;
-          }
+          line-height: 30px;
+          color: #138FF2;
         }
       }
     }
   }
+}
 </style>

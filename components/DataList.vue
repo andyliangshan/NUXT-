@@ -35,295 +35,300 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue'
-  // import axios from '~/plugins/axios'
-  import * as filters from '../server/tools/filters'
-  import ReportList from '../components/ReportList.vue'
-  import TipPop from './TipPop.vue'
-  Object.keys(filters).forEach(key => {
-    Vue.filter(key, filters[key])
-  })
+import Vue from 'vue';
+// import axios from '~/plugins/axios'
+import * as filters from '../server/tools/filters';
+import ReportList from '../components/ReportList.vue';
+import TipPop from './TipPop.vue';
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key]);
+});
 
-  export default {
-    data () {
-      return {
-        showTipPop: false,
-        result: [],
-        page: 1,
-        limit: 10
-      }
+export default {
+  data() {
+    return {
+      showTipPop: false,
+      result: [],
+      page: 1,
+      limit: 10,
+    };
+  },
+  props: {
+    pushDataList: {
+      type: Array,
+      default: [],
     },
-    props: {
-      pushDataList: {
-        type: Array,
-        default: []
-      }
-    },
-    components: {
-      TipPop,
-      ReportList
-    },
-    methods: {},
-    mounted () {
-    }
-  }
+  },
+  components: {
+    TipPop,
+    ReportList,
+  },
+  methods: {},
+  mounted() {},
+};
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .datalist {
-    width: 100%;
-    background: #fff;
-    padding-bottom: 60px;
+.datalist {
+  width: 100%;
+  background: #fff;
+  padding-bottom: 60px;
 
-    .tipsNews {
-      clear: both;
-      width: 100%;
-      text-align: center;
-      color: #fff;
-      font-size: 12px;
-      height: 28px;
-      line-height: 28px;
-      background: #138FF2;
-    }
+  .tipsNews {
+    clear: both;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+    height: 28px;
+    line-height: 28px;
+    background: #138FF2;
+  }
 
   .dataListCont {
-    padding 15px
+    padding: 15px;
     border-bottom: 1px solid #e6e6e6;
     clear: both;
 
-  .list-top {
-    margin: 0;
-    display: flex;
+    .list-top {
+      margin: 0;
+      display: flex;
 
-    .list-top-profile {
-      display: inline-block;
-      width: 32px;
-      height: 32px;
-      max-width: 42px;
-      border-radius: 50%;
-      padding-left: 0;
-      padding-right: 0;
-
-      img {
+      .list-top-profile {
+        display: inline-block;
         width: 32px;
         height: 32px;
-        vertical-align: middle;
+        max-width: 42px;
+        border-radius: 50%;
+        padding-left: 0;
+        padding-right: 0;
+
+        img {
+          width: 32px;
+          height: 32px;
+          vertical-align: middle;
+        }
       }
-    }
 
-    .list-top-info {
-      padding-left: 10px;
-      line-height: 1;
-      flex: 1;
+      .list-top-info {
+        padding-left: 10px;
+        line-height: 1;
+        flex: 1;
 
-      .list-top-info-title {
-        font-size: 14px;
-        padding-top: 2px;
+        .list-top-info-title {
+          font-size: 14px;
+          padding-top: 2px;
+
+          a {
+            display: block;
+            width: 100%;
+            font-weight: bold;
+            color: #0d0d0d;
+          }
+        }
+
+        .list-top-info-publishTime {
+          clear: both;
+          margin-top: 5px;
+          font-size: 12px;
+          color: #939393;
+        }
+      }
+
+      .list-top-attent {
+        display: inline-block;
+        padding: 0;
+        max-width: 70px;
 
         a {
           display: block;
-          width: 100%;
-          font-weight: bold;
+          border: 1px solid #138FF2;
+          border-radius: 4px;
+          color: #138FF2;
+          font-size: 12px;
+          width: 70px;
+          height: 28px;
+          line-height: 28px;
+          margin-top: 2px;
+          text-align: center;
+        }
+
+        a.active {
+          color: #939393;
+          border: 1px solid #939393;
+        }
+      }
+    }
+
+    .list-mid {
+      clear: both;
+      margin-top: 20px;
+
+      .list-mid-publish-content {
+        position: relative;
+
+        .contDesc {
           color: #0d0d0d;
+          font-size: 16px;
+          line-height: 28px;
+        }
+
+        .queryDetail {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          z-index: 1;
+
+          a {
+            display: block;
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        p {
+          clear: both;
+          padding-top: 5px;
+          font-size: 12px;
+          margin: 0;
+          color: #507DAF;
         }
       }
 
-      .list-top-info-publishTime {
+      .list-mid-publish-img {
         clear: both;
-        margin-top: 5px;
-        font-size: 12px;
-        color: #939393;
-      }
-    }
-
-    .list-top-attent {
-      display: inline-block;
-      padding: 0;
-      max-width: 70px;
-
-      a {
-        display: block;
-        border: 1px solid #138FF2;
-        border-radius: 4px;
-        color: #138FF2;
-        font-size: 12px;
-        width: 70px;
-        height: 28px;
-        line-height: 28px;
-        margin-top: 2px;
-        text-align: center;
-      }
-
-      a.active {
-        color: #939393;
-        border: 1px solid #939393;
-      }
-    }
-  }
-
-  .list-mid {
-    clear: both;
-    margin-top: 20px;
-
-  .list-mid-publish-content {
-    position: relative;
-
-    .contDesc {
-      color: #0d0d0d;
-      font-size: 16px;
-      line-height: 28px;
-    }
-
-    .queryDetail {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: 1;
-
-      a {
-        display: block;
+        overflow: hidden;
         width: 100%;
-        height: 100%;
-      }
-    }
 
-    p {
-      clear: both;
-      padding-top: 5px;
-      font-size: 12px;
-      margin: 0;
-      color: #507DAF;
-    }
-  }
+        span {
+          display: inline-block;
+          margin-right: 5px;
+          margin-top: 10px;
+          float: left;
 
-    .list-mid-publish-img {
-      clear: both;
-      overflow hidden
-      width 100%;
-
-      span {
-        display: inline-block;
-        margin-right: 5px;
-        margin-top: 10px;
-        float left
-
-        img {
-          width: 100px;
-          height: 100px;
-          border-radius: 2px;
+          img {
+            width: 100px;
+            height: 100px;
+            border-radius: 2px;
+          }
         }
       }
     }
-  }
 
-  .list-bot {
-    clear: both;
-    margin: 15px 0 0;
-    position: relative;
-    height: 24px;
-    line-height: 24px;
-    display flex
-    justify-content space-between
-
-    em {
-      font-style: normal;
-    }
-
-    .coin {
-      display: inline-block;
-      color: #939393;
-      font-size 12px;
-      padding: 0;
-
-      span {
-        display: inline-block;
-        width 15px;
-        height 15px;
-        margin-right 5px;
-        background: url(../assets/img/coin.png) no-repeat left center;
-        background-size: contain;
-        vertical-align: text-top;
-      }
-    }
-
-    .dianzan {
-      display: inline-block;
-      color: #939393;
-      font-size: 12px;
-      padding: 0;
-      margin-right: 10px;
-      float: left;
-
-      span {
-        display: inline-block;
-        width: 15px;
-        height: 15px;
-        margin-right: 5px;
-        background: url(../assets/img/zan.png) no-repeat left center;
-        background-size: contain;
-        vertical-align: text-top;
-      }
-    }
-
-    .dianzan.active {
-      color: #138FF2;
-
-      span {
-        background: url(../assets/img/zan-Hover.png) no-repeat left center;
-        background-size: contain;
-      }
-    }
-
-    .sendmsg {
-      display: inline-block;
-      color: #939393;
-      font-size: 12px;
-      padding: 0;
-      margin-right: 10px;
-      float: left;
-
-      span {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        margin-right: 5px;
-        background: url(../assets/img/commitNumers.png) no-repeat left center;
-        background-size: contain;
-        vertical-align: text-top;
-      }
-    }
-
-    .share {
-      display: inline-block;
-      color: #939393;
-      font-size: 12px;
-      padding: 0;
-      margin-right: 10px;
-      float: left;
-
-      span {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        margin-right: 5px;
-        background: url(../assets/img/shareIcon.png) no-repeat left center;
-        background-size: contain;
-        vertical-align: text-top;
-      }
-    }
-
-    .attenPop {
-      float: right;
-      color: #939393;
-      padding: 0;
-      text-align: right;
-      font-size: 20px;
-      line-height: 17px;
+    .list-bot {
+      clear: both;
+      margin: 15px 0 0;
+      position: relative;
       height: 24px;
-      font-weight: bolder;
+      line-height: 24px;
+      display: flex;
+      justify-content: space-between;
+
+      em {
+        font-style: normal;
+      }
+
+      .coin {
+        display: inline-block;
+        color: #939393;
+        font-size: 12px;
+        padding: 0;
+
+        span {
+          display: inline-block;
+          width: 15px;
+          height: 15px;
+          margin-right: 5px;
+          background: url('../assets/img/coin.png') no-repeat left center;
+          background-size: contain;
+          vertical-align: text-top;
+        }
+      }
+
+      .dianzan {
+        display: inline-block;
+        color: #939393;
+        font-size: 12px;
+        padding: 0;
+        margin-right: 10px;
+        float: left;
+
+        span {
+          display: inline-block;
+          width: 15px;
+          height: 15px;
+          margin-right: 5px;
+          background: url('../assets/img/zan.png') no-repeat left center;
+          background-size: contain;
+          vertical-align: text-top;
+        }
+      }
+
+      .dianzan.active {
+        color: #138FF2;
+
+        span {
+          background: url('../assets/img/zan-Hover.png') no-repeat left center;
+          background-size: contain;
+        }
+      }
+
+      .sendmsg {
+        display: inline-block;
+        color: #939393;
+        font-size: 12px;
+        padding: 0;
+        margin-right: 10px;
+        float: left;
+
+        span {
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          margin-right: 5px;
+          background: url('../assets/img/commitNumers.png') no-repeat left center;
+          background-size: contain;
+          vertical-align: text-top;
+        }
+      }
+
+      .share {
+        display: inline-block;
+        color: #939393;
+        font-size: 12px;
+        padding: 0;
+        margin-right: 10px;
+        float: left;
+
+        span {
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          margin-right: 5px;
+          background: url('../assets/img/shareIcon.png') no-repeat left center;
+          background-size: contain;
+          vertical-align: text-top;
+        }
+      }
+
+      .attenPop {
+        float: right;
+        color: #939393;
+        padding: 0;
+        text-align: right;
+        font-size: 20px;
+        line-height: 17px;
+        height: 24px;
+        font-weight: bolder;
+      }
     }
   }
+}
+
+@media screen and (max-width: 767px) {
+  .datalist {
+    padding-bottom: 30px;
   }
-  }
+}
 </style>

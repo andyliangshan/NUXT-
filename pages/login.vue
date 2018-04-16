@@ -1,5 +1,6 @@
 <template>
     <div class="login-view">
+        <nv-header></nv-header>
         <!--登录前-->
         <div class="prev-login">
             <div class="profile">
@@ -26,51 +27,48 @@
         </div>
         <nuxt-child/>
         <login-form v-show="showLoginState"></login-form>
-        <!--HomeFooter-->
-        <home-footer></home-footer>
     </div>
 </template>
 
 <script>
-    import LoginForm from './login/login-form.vue'
-    import HomeFooter from './HomeFooter.vue'
-    export default {
-      name: 'login-view',
-      data () {
-        return {
-          showLoginState: false
-        }
-      },
-      head () {
-        return {
-          title: '登录/注册知币社区',
-          meta: [
-            { hid: 'description', name: 'description', content: '登录/注册知币社区' }
-          ]
-        }
-      },
-      components: {
-        LoginForm,
-        HomeFooter
-      },
-      methods: {
-        showLogin () {
-          this.showLoginState = !this.showLoginState
-        }
-      }
-    }
+import LoginForm from './login/login-form.vue';
+import nvHeader from './Header.vue';
+export default {
+  name: 'login-view',
+  data() {
+    return {
+      showLoginState: false,
+    };
+  },
+  head() {
+    return {
+      title: '登录/注册知币社区',
+      meta: [{ hid: 'description', name: 'description', content: '登录/注册知币社区' }],
+    };
+  },
+  components: {
+    LoginForm,
+    nvHeader,
+  },
+  methods: {
+    showLogin() {
+      this.showLoginState = !this.showLoginState;
+    },
+  },
+};
 </script>
 
 <style lang="stylus">
-    @import '../assets/styl/login.styl';
-    .login-view .footer .bottomBar .b-term a.index {
-        .underline {
-            display: none;
-        }
+@import '../assets/styl/login.styl';
 
-        .gps {
-            background: url(../assets/img/icon1-black.png) no-repeat;
-            background-size: contain;
-        }
+.login-view .footer .bottomBar .b-term a.index {
+    .underline {
+        display: none;
     }
+
+    .gps {
+        background: url('../assets/img/icon1-black.png') no-repeat;
+        background-size: contain;
+    }
+}
 </style>

@@ -21,7 +21,10 @@ module.exports = {
             'arrays': 'ignore',
             'objects': 'ignore'
         }],
-        'semi': 0 //['error', 'always']
+        'semi': 0, //['error', 'always'],
+        'indent': ['off', 4],
+        'eol-last': 0,
+        'no-unused-vars': ['warn']
     },
     globals: {}
 }

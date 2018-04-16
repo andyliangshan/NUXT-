@@ -1,53 +1,50 @@
 <template>
-  <div class="index-view">
+  <div class="homeView">
     <pel-list></pel-list>
     <data-list :recommedList="result"></data-list>
-    <home-footer></home-footer>
+    <common-footer></common-footer>
   </div>
 </template>
 
 <script>
-  /* eslint-disable */
-  import axios from '~/plugins/axios'
-  import DataList from '../../components/DataList/DataList.vue'
-  import PelList from './pelList.vue'
-  import HomeFooter from '../HomeFooter.vue'
+import axios from '~/plugins/axios';
+import DataList from '../../components/DataList/DataList.vue';
+import PelList from './pelList.vue';
+import commonFooter from '../HomeFooter.vue';
 
-  export default {
-    name: 'index-view',
-    data () {
-      return {
-        showSharePop: false,
-        page: 1,
-        limit: 10,
-        result: {},
-        recommedList: {}
-      }
-    },
-    head () {
-      return {
-        title: '推荐'
-      }
-    },
-    async asyncData () {
-      try {
-        let res = await axios.post('/api/tweet/rcd')
-        return { result: res.data.rcdData.data }
-      }
-      catch(err) {
-        console.log(err);
-      }
-    },
-    components: {
-      DataList,
-      PelList,
-      HomeFooter
-    },
-    methods: { }
-  }
+export default {
+  name: 'homeView',
+  data() {
+    return {
+      showSharePop: false,
+      page: 1,
+      limit: 10,
+      result: {},
+      recommedList: {},
+    };
+  },
+  head() {
+    return {
+      title: '推荐',
+    };
+  },
+  async asyncData() {
+    try {
+      let res = await axios.post('/api/tweet/rcd');
+      return { result: res.data.rcdData.data };
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  components: {
+    DataList,
+    PelList,
+    commonFooter,
+  },
+  methods: {},
+};
 </script>
 
 <style lang="stylus">
-  @import '../../assets/styl/home.styl';
-
+@import '../../assets/styl/home.styl';
 </style>

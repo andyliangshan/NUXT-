@@ -2,44 +2,38 @@
   <section class="container">
     <nv-header></nv-header>
     <nuxt-child/>
-    <nv-footer></nv-footer>
   </section>
 </template>
 
 <script>
-import nvHeader from './Header.vue'
-import nvFooter from './HomeFooter.vue'
+import nvHeader from './Header.vue';
 
 export default {
-  head () {
+  head() {
     return {
-      title: '首页'
-    }
+      title: '首页',
+    };
   },
   components: {
     nvHeader,
-    nvFooter
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
-  .container {
-    padding: 0;
-    text-align: left;
-  }
-.title
-{
+.container {
+  padding: 0;
+  text-align: left;
+}
+.title {
   margin: 30px 0;
 }
-.users
-{
+.users {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.user
-{
+.user {
   margin: 10px 0;
 }
 </style>

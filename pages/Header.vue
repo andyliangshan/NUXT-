@@ -1,147 +1,93 @@
 <template>
-  <div class="nav-container">
-    <div class="menu">
-      <div class="zhiB-msg">
-        <a href="/notice" class="message" >
-          <img src="../assets/img/Info.png" alt="Group"/>
-          <em ref="showFlagIcon">3</em>
-        </a>
+  <div class="compatible" ref="compatible">
+    <!--PC版本-->
+    <div class="nav-container">
+      <div class="min-container">
+        <div class="login"><nuxt-link to="/recommed" class="login"><img src="../assets/img/logo.png" /></nuxt-link></div>
+        <div class="menu">      
+          <div class="zhiB-list">
+            <nuxt-link :to="{path: 'follow'}" class="active"><em>关注</em><span class="underline"></span></nuxt-link>
+            <nuxt-link :to="{path: 'recommend'}"><em>推荐</em><span class="underline"></span></nuxt-link>
+            <nuxt-link :to="{path: 'find'}"><em>发现</em><span class="underline"></span></nuxt-link>
+            <nuxt-link to="http://www.baidu.com" class="download" ><em>下载APP</em></nuxt-link>
+          </div>
+        </div>
+        <div class="loginbox">
+            <div class="loginModel">
+              <!--登录前-->
+              <div class="loginTag"><nuxt-link to="/login">登录</nuxt-link></div>
+              <!--登录后-->
+              <div class="showLoginState">
+                <div class="successLogin"><img src="../assets/img/pelProfile.png" alt="pelProfile"/></div>
+                <div class="successBox">
+                  <span class="triangle"></span>
+                  <div class="logout">
+                    <nuxt-link to="/user" class="user" >个人中心</nuxt-link>
+                    <nuxt-link to="/logout" class="logout" >退出登录</nuxt-link>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="search"><nuxt-link to="/search" class="search" ><img src="../assets/img/search-b.png" alt="search"/></nuxt-link></div>
+            <div class="zhiB-msg">
+              <nuxt-link to="/notice" class="message" >
+                <img src="../assets/img/Info.png" alt="Group"/>
+                <em ref="showFlagIcon">3</em>
+              </nuxt-link>
+            </div>
+            <div class="release">
+              <nuxt-link to="/release">
+                <img src="../assets/img/pencil.png" alt="Group"/>
+                <em>发文</em>
+              </nuxt-link>
+            </div>
+          </div>
       </div>
-      <div class="zhiB-list">
-        <nuxt-link :to="{path: 'follow'}" class="active"><em>关注</em><span class="underline"></span></nuxt-link>
-        <nuxt-link :to="{path: 'recommend'}"><em>推荐</em><span class="underline"></span></nuxt-link>
-        <nuxt-link :to="{path: 'find'}"><em>发现</em><span class="underline"></span></nuxt-link>
+    </div>
+    <!--移动端-->
+    <div class="h5NavMeum">
+      <div class="loginModel">
+        <!--登录前-->
+        <div class="loginTag"><nuxt-link to="/login">登录</nuxt-link></div>
+        <!--登录后-->
+        <div class="showLoginState">
+          <div class="successLogin">
+            一剑飘絮<img src="../assets/img/triangle.png" alt="Group" />
+          </div>
+          <div class="logoutBox">
+            <em class="triangle"></em>
+            <div class="logout">
+              <nuxt-link to="/notice" class="notice">消息列表</nuxt-link>
+              <nuxt-link to="/logout" class="logout">退出登录</nuxt-link>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="zhiB-search">
-        <a href="/search" id="search" class="search" ><img src="../assets/img/search-b.png" alt="search"/></a>
+      <div class="editorArea">
+         <div class="release"><nuxt-link to="/release"><img src="../assets/img/zb-icon6.png" alt="release"/></nuxt-link></div>
+         <div class="search"><nuxt-link to="/search"><img src="../assets/img/zb-icon7.png" alt="search"/></nuxt-link></div>
+         <div class="reloadPage"><a href="javascript:void(0)"><img src="../assets/img/zb-icon5.png" alt="reloadPage"/></a></div> 
+      </div>
+      <div class="mobileMeum">
+        <nuxt-link :to="{path: 'follow'}" class="active"><em>关注</em></nuxt-link>
+        <nuxt-link :to="{path: 'recommend'}"><em>推荐</em></nuxt-link>
+        <nuxt-link :to="{path: 'find'}"><em>发现</em></nuxt-link>
+        <nuxt-link to="/user"><em>我</em></nuxt-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        results: {}
-      }
-    },
-    props: {
-      customClass: {
-        type: String,
-        default: ''
-      }
-    },
-    mounted () { },
-    methods: {}
-  }
+export default {
+  data() {
+    return {};
+  },
+  mounted() {},
+  methods: {},
+};
 </script>
 
 <style lang="stylus">
-  .nav-container {
-    background: #FAFAFA;
-    padding: 11px 15px 5px;
-
-    .menu {
-      margin: 0;
-      width: 100%;
-      height: 28px;
-      display: flex;
-
-      .zhiB-list {
-        padding: 0;
-        width: 24px;
-        height: 24px;
-        flex: 1;
-        text-align: center;
-
-        a {
-          display: inline-block;
-          font-size: 16px;
-          color: #939393;
-          font-weight: normal;
-          line-height: 10px;
-          margin-top: 7px;
-
-          em {
-            font-style: normal;
-            display: inline-block;
-            width: 100%;
-          }
-
-          span {
-            display: inline-block;
-            width: 14px;
-            height: 4px;
-            background: none;
-            border-radius: 2px;
-          }
-        }
-
-        a.nuxt-link-active {
-          color: #138FF2;
-          font-weight: bolder;
-          font-size: 18px;
-
-          span {
-            background: #138FF2;
-          }
-        }
-      }
-
-      .zhiB-search {
-        height: 24px;
-        text-align: center;
-        padding: 0;
-        width: 24px;
-
-        a {
-          display: block;
-          width: 100%;
-          height: 100%;
-
-          img {
-            width: 24px;
-            height: 24px;
-          }
-        }
-      }
-
-      .zhiB-msg {
-        padding: 0;
-        height: 28px;
-        width: 24px;
-
-        a {
-          display: block;
-          width: 100%;
-          position: relative;
-          text-align: right;
-
-          img {
-            width: 24px;
-            height: 24px;
-            display: inline-block;
-            vertical-align: super;
-          }
-
-          em {
-            position: absolute;
-            top: -4px;
-            right: 0;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            text-align: center;
-            font-size: 9px;
-            line-height: 14px;
-            background: #E14123;
-            font-style: normal;
-            display: block;
-            color: #fff;
-          }
-        }
-      }
-    }
-  }
+@import '../assets/styl/head.styl';
 </style>
