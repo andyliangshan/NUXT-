@@ -1,10 +1,27 @@
+import redis from '../utils/redis/redisCache';
+
 /**
  * 一个封装 expressjs router 异步函数的函数
- * @param {Function} fn 
+ * @param {boolean | function} accessCheck 如果此参数为 boolean 类型，并且为true，则验证当前用户是否登录，此时第二个参数为必传
+ * @param {function} fn 要封装的 express router 处理方法
  */
-export const wrapper = function (fn) {
+export const wrapper = function (accessCheck, fn) {
+    fn = fn || accessCheck;
+    accessCheck = accessCheck === true;
+
     return function (req, res, next) {
-        // const ret = fn.call(null, req, res, next);
+        if (accessCheck) {
+            // TODO: check session，要素：登录之后发行 access token，在此检查 access token，提取用户
+            let canAccess = Boolean(req.session.loginData);
+            // 如果用户没有登录（从 redis 里取不到用户数据），则禁止访问
+            if (!canAccess) {
+                res.json({
+                    msg: '请先登录',
+                    success: false
+                });
+                return;
+            }
+        }
         const ret = fn.apply(undefined, arguments);
         if (ret instanceof Promise) {
             ret.then(() => {
