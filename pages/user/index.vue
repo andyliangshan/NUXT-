@@ -111,6 +111,7 @@ export default {
     },
     async getUserInfo () {
       const userInfo = await axios.post('/api/userInfo')
+      console.log(userInfo, '.......');
       if (userInfo.data.success === true) {
         this.result = userInfo.data.data
       }

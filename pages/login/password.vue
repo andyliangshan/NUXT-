@@ -5,7 +5,7 @@
             <div class="tit">输入密码</div>
             <form @submit.stop.prevent="submitLogin">
                 <div class="cont phone">
-                    <input type="password" maxlength="8" autocomplete="off" placeholder="请输入密码" name="phone" v-model="password" />
+                    <input type="password" placeholder="请输入密码" name="phone" v-model="password" />
                 </div>
                 <div class="about-danger" role="alert">{{errTips}}</div>
                 <div class="submitBtn">

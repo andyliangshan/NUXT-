@@ -4,8 +4,7 @@
             <img src="/public/404.png">
             <p>抱歉，没有找到你请求的页面</p>
             <p>Sorry,don't find the page you request</p>
-
-            <router-link to="/" tag="a">回到主页</router-link>
+            <nuxt-link to="/recommed">回到主页</nuxt-link>
         </div>
     </div>
 </template>

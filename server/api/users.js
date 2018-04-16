@@ -83,7 +83,7 @@ router.post('/login', wrapper(async (req, res) => { // auth.detectTimespan
         return res.json({
             msg: '登录成功',
             success: true,
-            data: loginData.data.user.id
+            id: loginData.data.user.id
         });
     } else {
         return res.json({
@@ -251,6 +251,19 @@ router.post('/updateUserInfo', async (req, res, next) => { // auth.requireUser
     next(err);
   }
 });
+
+// 获取用户信息
+// /user/info?timespan=xx&raid=xx
+// method: post
+// body
+// dba(必须) aes 加密的 aes(userId==xxx)
+router.post('', wrapper(async(req, res) => {
+  const userId = req.session.loginData;
+  if (!userId) {
+    res.redirect('/login');
+  }
+
+}))
 
 //  base64转图片
 router.post('/base642img', async (req, res) => {
