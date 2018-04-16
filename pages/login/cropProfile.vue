@@ -180,6 +180,7 @@
             alert(data.msg)
           } else {
             this.$emit('getHeaderImage', data.url)
+            console.log(data.url, '---ulululullu---')
           }
         })
         request.open('POST', '/api/base642img')

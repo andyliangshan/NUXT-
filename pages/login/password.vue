@@ -24,7 +24,8 @@
         return {
           password: '',
           errTips: '',
-          isDoubleClick: false
+          isDoubleClick: false,
+          isRequesting: false
         }
       },
       head () {
@@ -41,34 +42,26 @@
             alert('密码不能为空')
             return
           }
-          // 防止重复点击
-          const _this = this; // eslint-disable-line
-          if (this.isDoubleClick) {
-            return
-          }
-          this.isDoubleClick = true
-          _this.$refs.btnCode.innerHTMl = 'loading'
-          const removeClick = () => {
-            setTimeout(() => {
-              _this.$refs.btnCode.innerHTMl = 'reset'
-              this.isDoubleClick = false
-            }, 1000)
+          if (this.isRequesting) {
+            return;
           }
           const postData = {
             password: this.password,
             isValidateRegister: 1
           }
+          this.isRequesting = true;
           const bkData = await axios.post('/api/login', postData, {
             credentials: true
           })
+          console.log(bkData, 'denglu')
+          this.isRequesting = false;
           if (bkData.data.success) {
-            removeClick(_this)
+            console.log('11')
             this.errTips1 = ''
-            window.location.href = '/user'
+            this.$router.push({ path: '/user' });
           } else {
             alert(bkData.data.msg)
           }
-          removeClick(_this)
         }
       }
     }

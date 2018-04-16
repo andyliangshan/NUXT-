@@ -67,11 +67,10 @@
         this.isRequesting = true
         const bkData = await axios.get(`/api/valid/phone?phone=${this.phone}`)
         this.isRequesting = false
-        console.log(bkData.data, '..000///////..')
-        if (bkData.success) {
+        if (bkData.data.success) {
           this.errTips1 = ''
-          if (bkData.password) {
-            this.$router.push({ path: '/login/' })
+          if (bkData.data.data.password === true) {
+            this.$router.push({ path: '/login/password' })
           } else {
             this.$router.push({ path: '/login/setPassword' })
           }

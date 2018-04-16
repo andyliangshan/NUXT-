@@ -6,12 +6,14 @@ import cors from 'cors'
 import { redisConfigFunc } from './config'
 import auth from './middlewares/auth'
 import bodyParser from 'body-parser'
+import busboy from 'connect-busboy'
+import bytes from 'bytes'
 
 import api from './api'
 
 const app = express()
 const host = process.env.HOST || '127.0.0.1'
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 3000
 
 app.set('port', port)
 app.use(bodyParser.json({ limit: '10mb' }));
@@ -33,6 +35,14 @@ app.use(session({
   saveUninitialized: true
 }))
 
+/**
+ * files upload limits
+ */
+app.use(busboy({
+  limits: {
+    fileSize: bytes('20MB')  //  1M
+  }
+}));
 // custom middleware
 app.use(auth.authUser)
 

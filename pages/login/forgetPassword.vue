@@ -10,7 +10,7 @@
                     <button type="button" class="btnCode" ref="btnCode" @click="sendPhoneCode">获取验证码</button>
                 </div>
                 <div class="cont phone">
-                    <input type="password" placeholder="请设置登录密码" name="phone" v-model="serPassword" maxlength="8" autocomplete="off" />
+                    <input type="password" placeholder="请设置登录密码" name="phone" v-model="serPassword" />
                 </div>
                 <div class="about-danger" role="alert">{{errTips}}</div>
                 <div class="submitBtn">
@@ -92,8 +92,8 @@
             alert('验证码不能为空～')
             return
           }
-          if (this.serPassword && this.serPassword.length !== 8) {
-            alert('密码只能为8位～')
+          if (this.serPassword && this.serPassword.length < 6) {
+            alert('密码不能小于6位～')
             return
           }
           // 防止重复点击
@@ -118,7 +118,7 @@
             console.log(bkData, '------/////////------')
             if (bkData.data.success) {
               this.errTips = ''
-              window.location.href = `/recommend`
+              this.$router.push({ path: '/recommend' });
             } else {
               alert('密码设置过于频繁操作')
             }

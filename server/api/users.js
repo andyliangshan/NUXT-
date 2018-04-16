@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+import util from 'util';
 import { Router } from 'express'
 import SecretKey from '../utils/encry/cryptoer'
 import agent from '../utils/fetch/superAgent'
@@ -6,6 +9,7 @@ import { aesKeys, cookieConf } from '../config'
 import { fetchDeviceId } from '../common/remote'
 import redis from '../utils/redis/redisCache'
 import requestIp from 'request-ip'
+import qnStore from "../common/qnStore";
 import auth from '../middlewares/auth'
 
 import { Request } from '../tools/request';
@@ -33,7 +37,7 @@ router.get('/valid/phone', wrapper(async (req, res) => {
       redis.set(`${deviceId}_phoneData`, phoneData, 60 * 5)
       res.json({
         msg: '返回成功',
-        data: phoneData.data,
+        data: phoneData,
         success: true
       });
     } else {
@@ -58,6 +62,7 @@ router.post('/login', wrapper(async (req, res) => { // auth.detectTimespan
         deviceId
     }).post();
 
+    console.log(loginData, '...----555555----')
     if (loginData && loginData.success) {
         // { signature, user: {} }
         req.session.loginData = loginData.data;
@@ -75,14 +80,14 @@ router.post('/login', wrapper(async (req, res) => { // auth.detectTimespan
             path: '/',
             httpOnly: false
         });
-        res.status(200).json({
-            msg: 'ok',
+        return res.json({
+            msg: '登录成功',
             success: true,
             data: loginData.data.user.id
         });
     } else {
-        res.status(500).json({
-            msg: loginData.message,
+        return res.json({
+            msg: '登录失败',
             success: false
         });
     }
@@ -173,9 +178,7 @@ router.post('/account/password/update', wrapper(async (req, res) => {
   const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
   const deviceId = fetchDeviceId(req)
   const phone = await redis.get(`${deviceId}_store_phone`)
-  console.log('333', phone)
   const phoneCode = validator.trim(req.body.phoneCode || '')
-  console.log('55', phoneCode)
   const password = validator.trim(req.body.password || '')
   if (phoneCode && validator.isNumeric(phoneCode)) {
     return res.status(500).json({
@@ -183,13 +186,12 @@ router.post('/account/password/update', wrapper(async (req, res) => {
       success: false
     })
   }
-  if (password && password.length !== 8) {
+  if (password && password.length < 6) {
     return res.status(500).json({
-      msg: '密码错误',
+      msg: '密码长度小于6',
       success: false
     })
   }
-  console.log('22222222', password)
   const aesStr = `phone==${phone}&&password==${password}&&type==update&&phoneCode==${phoneCode}`
 
   const dba = SecretKey.aesEncrypt256(aesStr, aesKeys)
@@ -199,7 +201,6 @@ router.post('/account/password/update', wrapper(async (req, res) => {
     return res.status(200).json({
       msg: '设置成功.',
       timeout: 60,
-      phone: phone
     })
   } else {
     return res.status(500).json({
@@ -207,6 +208,88 @@ router.post('/account/password/update', wrapper(async (req, res) => {
     })
   }
 }))
+
+// 编辑用户信息
+router.post('/updateUserInfo', async (req, res, next) => { // auth.requireUser
+  const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys);
+  const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys);
+  const nickName = validator.trim(req.body.nickName || '');
+  const avatarImage = req.body.avatarImage || '';
+  const introduce = req.body.introduce || '';
+
+  const userId = req.session.loginData.user.id;
+  const phone = req.session.loginData.user.phone;
+  const signature = req.session.loginData.signature;
+
+  if (!nickName) {
+    return res.status(500).json({
+      msg: '昵称不为空',
+      errcode: -1,
+    });
+  }
+  const deviceId = fetchDeviceId(req);
+  const pubStr = `phone==${phone}&&signature==${signature}&&deviceId==${deviceId}`;
+  const aesStr = `nickName==${nickName}&&avatarImage==${avatarImage}&&introduce==${introduce}&&userId==${userId}`;
+  const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
+  const token = SecretKey.nodeRSAEncryptWithPubKey(pubStr, pubKeys);
+
+  try {
+    const infoData = await agent.post(`${resApi.zhiBApi}/user/updateInfo`, { timespan, raid }, { dba, token });
+    if (infoData.success) {
+      return res.json({
+        msg: '信息更新成功',
+        success: true,
+        data: infoData
+      });
+    } else {
+      return res.json({
+        msg: '信息更新失败',
+        success: false,
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+//  base64转图片
+router.post('/base642img', async (req, res) => {
+  req.busboy.on('field', function (key, value, keyTruncated, valueTruncated) {
+    const base64Data = value.replace(/^data:image\/\w+;base64,/, '');
+    const dataBuffer = new Buffer(base64Data, 'base64');
+    fs.writeFile(path.join(__dirname, `../upload/holeImg.png`), dataBuffer, function (err) {
+      if (err) {
+        res.json({
+          code: -1,
+          msg: err,
+        });
+      } else {
+        // ../upload/a5f70019ad238d0cf5ef3a2eb4d7763c.jpg
+        qnStore.upload(fs.createReadStream(path.join(__dirname, '../upload/holeImg.png')), function(err, result) {
+          if (err) {
+            logger.error('骑牛上传图片失败,错误信息:' + util.inspect(err));
+            console.log('upload qn error', err);
+            res.json({
+              code: -1,
+              msg: err,
+            });
+          } else {
+            console.log('地址为: ', result);
+            res.json({
+              error: 0,
+              success: true,
+              url: result.url,
+            });
+          }
+        });
+      }
+    });
+  });
+  req.busboy.on('finish', function () {
+    console.log('Done parsing form!');
+  });
+  req.pipe(req.busboy);
+});
 
 /**
  * 登出
