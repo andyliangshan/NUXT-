@@ -9,7 +9,7 @@
             <span class="col-md-12">修改密码</span>
             <em><img src="../../assets/img/right-icon.png" alt="right-icon" /></em>
         </a>
-        <a class="listcon row" href="/about">
+        <a class="listcon row" href="/about_us">
             <span class="col-md-12">关于知币</span>
             <em><img src="../../assets/img/right-icon.png" alt="right-icon" /></em>
         </a>

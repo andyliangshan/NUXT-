@@ -9,7 +9,8 @@ import agent from '../utils/fetch/superAgent'
 import validator from 'validator'
 import {
     aesKeys,
-    cookieConf
+    cookieConf,
+    pubKeys
 } from '../config'
 import {
     fetchDeviceId
@@ -18,6 +19,7 @@ import redis from '../utils/redis/redisCache'
 import requestIp from 'request-ip'
 import qnStore from "../common/qnStore";
 import auth from '../middlewares/auth'
+import { resApi } from '../config'
 
 import {
     Request
@@ -80,6 +82,7 @@ router.post('/login', wrapper(async (req, res) => { // auth.detectTimespan
     if (loginData && loginData.success) {
         // { signature, user: {} }
         req.session.loginData = loginData.data;
+        console.log(req.session.loginData, '...登录信息存入session....')
         const encDid = SecretKey.aesEncrypt256(deviceId, aesKeys);
         redis.set(encDid, loginData.data, cookieConf.timeout / 1000);
         // generate cookie
@@ -205,24 +208,23 @@ router.post('/account/password/update', wrapper(true, async (req, res) => {
             success: false
         })
     }
-    const aesStr = `phone==${phone}&&password==${password}&&type==update&&phoneCode==${phoneCode}`
-
-    const dba = SecretKey.aesEncrypt256(aesStr, aesKeys)
-    const accountData = await agent.post(`${resApi.zhiBApi}/account/password/update`, {
-        timespan,
-        raid
-    }, {
-        dba
-    })
-    console.log(accountData, '.......11.......')
-    if (accountData.success) {
+    const updateData = await new Request('/account/password/update', {
+        phone,
+        phoneCode,
+        password,
+        type: 'update'
+    }).post();
+    console.log(updateData, '.......1001.......')
+    if (updateData.success) {
         return res.status(200).json({
             msg: '设置成功.',
             timeout: 60,
+            success: true
         })
     } else {
         return res.status(500).json({
-            msg: '设置失败.'
+            msg: '设置失败.',
+            success: false
         })
     }
 }))
@@ -341,6 +343,103 @@ router.post('/base642img', async (req, res) => {
     });
     req.pipe(req.busboy);
 });
+
+/**  赞只能赞
+ * user/action/zan
+ * token(必须) 公钥加密的 deviceId, phone, signature
+ * dba(必须) aes 加密的 userId,targetUserId,tweetId,topReplyId,subReplyId
+ * userId(必选) login user
+ * targetUserId(必选) 被点赞的 博文所属用户
+ * tweetId(必选) 点赞的 博文
+ * topReplyId(可选) 点赞的 顶级回复
+ * subReplyId(可选) 点赞的 二级回复
+ */
+router.post('/action/zan', auth.requireUser, async (req, res, next) => {
+    const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys);
+    const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys);
+    const userId = req.session.loginData.user.id;
+    const phone = req.session.loginData.user.phone;
+    const signature = req.session.loginData.signature;
+
+    const targetUserId = req.body.targetUserId || '';
+    const tweetId = req.body.tweetId || '';
+    const topReplyId = req.body.topReplyId || '';
+    const subReplyId = req.body.subReplyId || '';
+
+    const deviceId = fetchDeviceId(req);
+    const pubStr = `phone==${phone}&&signature==${signature}&&deviceId==${deviceId}`;
+    const aesStr = `userId==${userId}&&targetUserId==${targetUserId}&&tweetId==${tweetId}&&topReplyId==${topReplyId}&&subReplyId==${subReplyId}`;
+    const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
+    const token = SecretKey.nodeRSAEncryptWithPubKey(pubStr, pubKeys);
+
+    try {
+        const zanData = await agent.post(`${resApi.zhiBApi}/user/action/zan`, {
+            timespan,
+            raid
+        }, {
+            dba,
+            token
+        });
+        console.log(zanData, '===========');
+
+        if (zanData.success) {
+            return res.json({
+                msg: '点赞 ok',
+                success: true,
+                data: zanData,
+            });
+        } else {
+            return res.json({
+                msg: 'ZIB不足，赶快分享到朋友圈吧～',
+                success: false,
+            });
+        }
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * 关注_取消关注某个用户
+ * token(必须) 公钥加密的 deviceId, phone, signature
+ dba(必须) aes 加密的 userId,toFollowUserId，action
+ action 1 关注，-1 取消关注
+ */
+router.post('/action/follow', auth.requireUser, async (req, res, next) => {
+    const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys);
+    const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys);
+    const userId = req.session.loginData.user.id;
+    const phone = req.session.loginData.user.phone;
+    const signature = req.session.loginData.signature;
+    const toFollowUserId = req.body.toFollowUserId || '';
+    const action = req.body.action || '';
+  
+    const deviceId = fetchDeviceId(req);
+    const pubStr = `phone==${phone}&&signature==${signature}&&deviceId==${deviceId}`;
+    const aesStr = `toFollowUserId==${toFollowUserId}&&action==${action}&&userId==${userId}`;
+  
+    try {
+      const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
+      const token = SecretKey.nodeRSAEncryptWithPubKey(pubStr, pubKeys);
+      const followData = await agent.post(`${resApi.zhiBApi}/user/action/follow`, { timespan, raid }, { dba, token });
+      console.log(followData, '===========');
+  
+      if (followData.success) {
+        return res.json({
+          msg: '关注_取消 ok',
+          success: true,
+          data: followData.data,
+        });
+      } else {
+        return res.json({
+          msg: '关注失败',
+          success: false,
+        });
+      }
+    } catch (err) {
+      next(err);
+    }
+  });
 
 /**
  * 登出

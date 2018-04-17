@@ -5,12 +5,14 @@
         <div class="profile">
           <div class="profile-wp"><img src="../../assets/img/nt.png" alt="loginbg"/></div>
           <div class="profileInfo">
-            <div class="profilebg"><img :src="result.avatarImage" alt="profile" ref="avatarImg" /></div>
+            <div class="profilebg">
+              <img :src="result.avatarImage" alt="profile" ref="avatarImg" />
+              <a href="javascript:void(0)" class="accoutFreeze"><i><img src="../../assets/img/tan.png" alt="editor" /></i>账号冻结</a>
+            </div>
             <div class="profile-r">
               <div class="loginbox">
                 <a href="javascript:void(0)" id="logout" class="logout" >{{ result.nickName }}</a>
                 <a href="/editorPeInfo" class="editor" ><img src="../../assets/img/editor.png" alt="editor" /></a>
-                <a href="javascript:void(0)" class="accoutFreeze"><i><img src="../../assets/img/tan.png" alt="editor" /></i>账号冻结</a>
               </div>
               <div class="editorInfo">{{ result.introduce }}</div>
             </div>
@@ -66,13 +68,11 @@
             <em><img src="../../assets/img/right-gray-icon.png" alt="right-icon" /></em>
           </a>
         </div>
-      </div>
-      <home-footer></home-footer>          
+      </div>        
     </div>  
 </template>
 <script>
 import axios from '~/plugins/axios'
-import HomeFooter from '../HomeFooter.vue'
 
 export default {
   name: 'homepage',
@@ -88,7 +88,6 @@ export default {
     }
   },
   components: {
-    HomeFooter
   },
   // async asyncData () {
   //   try {

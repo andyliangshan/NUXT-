@@ -92,6 +92,7 @@ export default {
     .list-top {
       margin: 0;
       display: flex;
+      overflow visibility
 
       .list-top-profile {
         display: inline-block;

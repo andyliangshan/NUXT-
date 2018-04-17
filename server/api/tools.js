@@ -1,10 +1,23 @@
-import { Router } from 'express'
+import {
+  Router
+} from 'express'
 import SecretKey from '../utils/encry/cryptoer'
 import agent from '../utils/fetch/superAgent'
 import validator from 'validator'
-import {aesKeys, pubKeys} from '../config'
-import {fetchDeviceId} from '../common/remote'
+import {
+  aesKeys,
+  pubKeys
+} from '../config'
+import {
+  fetchDeviceId
+} from '../common/remote'
 import auth from '../middlewares/auth'
+import {
+    Request
+} from '../tools/request';
+import {
+  wrapper
+} from '../tools/wrapper';
 
 const router = new Router()
 
@@ -46,7 +59,12 @@ router.post('/tease', async (req, res) => {
   console.log(111, '........', content, contact)
   const aesStr = userId ? `userId==${userId}&&content==${content}&&contact==${contact}` : `content==${content}&&contact==${contact}`
   const dba = SecretKey.aesEncrypt256(aesStr, aesKeys)
-  const teaseData = await agent.post(`${resApi.zhiBApi}/util/feedback`, { timespan, raid }, { dba })
+  const teaseData = await agent.post(`${resApi.zhiBApi}/util/feedback`, {
+    timespan,
+    raid
+  }, {
+    dba
+  })
   console.log(teaseData, '........')
   if (teaseData.success) {
     res.json({
@@ -94,7 +112,11 @@ router.get('/locating', async (req, res) => {
   const aesStr = userId ? `limit==${limit}&&page==${page}&&userId==${userId}&&locating==${locating}` : `limit==${limit}&&page==${page}&&locating==${locating}`
   const dba = SecretKey.aesEncrypt256(aesStr, aesKeys)
 
-  const locatingData = await agent.get(`${resApi.zhiBApi}/util/locating`, { timespan, raid, dba })
+  const locatingData = await agent.get(`${resApi.zhiBApi}/util/locating`, {
+    timespan,
+    raid,
+    dba
+  })
   if (locatingData.success) {
     return res.json({
       msg: '搜索成功',
@@ -123,7 +145,11 @@ router.get('/rcd', async (req, res) => {
   const deviceId = fetchDeviceId(req)
   const aesStr = userId ? `userId==${userId}&&deviceId==${deviceId}` : `deviceId==${deviceId}`
   const dba = SecretKey.aesEncrypt256(aesStr, aesKeys)
-  const rcdData = await agent.get(`${resApi.zhiBApi}/util/locating/rcd`, { timespan, raid, dba })
+  const rcdData = await agent.get(`${resApi.zhiBApi}/util/locating/rcd`, {
+    timespan,
+    raid,
+    dba
+  })
   // console.log(rcdData, '===========')
   if (rcdData.success) {
     return res.json({
@@ -174,7 +200,13 @@ router.post('/complaint', auth.requireUser, async (req, res) => {
   const dba = SecretKey.aesEncrypt256(aesStr, aesKeys)
   const token = SecretKey.nodeRSAEncryptWithPubKey(pubStr, pubKeys)
 
-  const complaintData = await agent.post(`${resApi.zhiBApi}/user/complaint`, { timespan, raid }, { token, dba })
+  const complaintData = await agent.post(`${resApi.zhiBApi}/user/complaint`, {
+    timespan,
+    raid
+  }, {
+    token,
+    dba
+  })
   // console.log(complaintData, '===========')
   if (complaintData.success) {
     return res.json({
@@ -220,7 +252,11 @@ router.get('/ru/rcd', async (req, res) => {
   }
   const aesStr = userId ? `userId==${userId}&&page==${page}&&limit==${limit}&&deviceId==${deviceId}` : `page==${page}&&limit==${limit}&&deviceId==${deviceId}`
   const dba = SecretKey.aesEncrypt256(aesStr, aesKeys)
-  const ruData = await agent.get(`${resApi.zhiBApi}/util/ru/rcd`, { timespan, raid, dba })
+  const ruData = await agent.get(`${resApi.zhiBApi}/util/ru/rcd`, {
+    timespan,
+    raid,
+    dba
+  })
   console.log(ruData, '....')
   if (ruData.success) {
     return res.json({
@@ -251,7 +287,11 @@ router.get('/version', async (req, res) => {
   const type = req.query.type || ''
   const aesStr = `type==${type}&&page==${version}&&limit==${version}&&deviceId==${deviceId}`
   const dba = SecretKey.aesEncrypt256(aesStr, aesKeys)
-  const versionData = await agent.get(`${resApi.zhiBApi}/util/version/up`, { timespan, raid, dba })
+  const versionData = await agent.get(`${resApi.zhiBApi}/util/version/up`, {
+    timespan,
+    raid,
+    dba
+  })
   // console.log(versionData, '===========')
   if (versionData.success) {
     return res.json({
@@ -276,4 +316,173 @@ router.get('/baipishu.pdf', async (req, res) => {
     next(err);
   }
 });
+
+/**
+ * 个人账单
+ * /user/bill?timespan=xx&raid=xx
+ * method: post
+ * body:
+ * token
+ * dba userId==xxx&&page==x&&limit==20
+ * userId 必须
+ */
+router.post('/bill', wrapper(true, async (req, res) => {
+  console.log('......./////...')
+  const page = req.body.page || 1;
+  const limit = req.body.limit ||20;
+  const userId = req.session.loginData.user.id;
+
+  const billData = await new Request('/user/bill', {
+    page,
+    limit,
+    userId,
+  }).post();
+  console.log(billData, '.......11.......')
+  if (billData.success) {
+    return res.json({
+      msg: '账单获取成功.',
+      success: true,
+      data: billData.data
+    })
+  } else {
+    return res.json({
+      msg: '账单获取失败.',
+      success: false
+    })
+  }
+}))
+
+/**
+ * 用户持有资产价值
+/user/assets?timespan=xx&raid=xx
+method: post
+body
+token
+dba(必须) aes 加密的 userId==xxxx
+返回说明
+ */
+router.post('/assets', wrapper(true, async (req, res) => { // token 用true字段来校验
+  const userId = req.session.loginData.user.id;
+
+  const assetsData = await new Request('/user/assets', {
+    userId,
+  }).post();
+  console.log(assetsData, '.......11.......')
+  if (assetsData.success) {
+    return res.status(200).json({
+      msg: '持有资产获取成功.',
+      success: true,
+      data: assetsData.data
+    })
+  } else {
+    return res.status(500).json({
+      msg: '持有资产获取失败.',
+      success: false
+    })
+  }
+}))
+
+/**
+ * 用户资产详细信息
+/user/assets/info?timespan=xx&raid=xx
+method: post
+body
+token
+dba(必须) aes 加密的 userId==xxxx
+返回说明
+ */
+router.post('/assets/info', wrapper(true, async (req, res) => { // token 用true字段来校验
+  const userId = req.session.loginData.user.id;
+
+  const assetsInfoData = await new Request('/user/assets/info', {
+    userId,
+  }).post();
+  console.log(assetsInfoData, '.......11.......')
+  if (assetsInfoData.success) {
+    return res.json({
+      msg: '用户资产详细信息获取成功.',
+      success: true,
+      data: assetsInfoData.data
+    })
+  } else {
+    return res.json({
+      msg: '用户资产详细信息获取失败.',
+      success: false
+    })
+  }
+}))
+
+/**
+ * 获取用户的所有粉丝
+/user/fans?timespan=xx&raid=xx
+method: post
+body
+dba(必须) aes 加密的 page, limit, userId, otherUserId
+1 登录用户 用户查看自己的粉丝 userId
+2 登录用户 查看别人的粉丝 userId, otherUserId
+3 未登录查看 otherUserId
+ */
+router.post('/fans', wrapper(async(req, res) => {
+  const page = req.body.page || 1;
+  const limit = req.body.limit || 20
+  const otherUserId = req.body.otherUserId || ''
+  const userId = req.session.loginData && req.session.loginData.user.id;
+
+  const fansData = await new Request('/user/fans', {
+    userId,
+    page,
+    limit,
+    otherUserId
+  }).post();
+  console.log(fansData, '.......11.......')
+  if (fansData.success) {
+    return res.json({
+      msg: '粉丝获取成功.',
+      success: true,
+      data: fansData.data
+    })
+  } else {
+    return res.json({
+      msg: '粉丝获取失败.',
+      success: false
+    })
+  }
+}))
+
+/**
+ * 获取用户的关注列表
+/user/follow?timespan=x&raid=xx
+method: post
+body
+dba(必须) aes 加密的 page, limit, otherUserId, userId
+1 登录用户 查看自己所关注的人 参数userId
+2 登录用户 查看其他用户所关注的人 参数userId，otherUserId
+3 未登录查看 otherUserId
+ */
+router.post('/user/follow', wrapper(async(req, res) => {
+  const page = req.body.page || 1;
+  const limit = req.body.limit || 20
+  const otherUserId = req.body.otherUserId || ''
+  const userId = req.session.loginData && req.session.loginData.user.id;
+
+  const followData = await new Request('/user/follow', {
+    userId,
+    page,
+    limit,
+    otherUserId
+  }).post();
+  console.log(followData, '.......11.......')
+  if (followData.success) {
+    return res.json({
+      msg: '粉丝获取成功.',
+      success: true,
+      data: followData.data
+    })
+  } else {
+    return res.json({
+      msg: '粉丝获取失败.',
+      success: false
+    })
+  }
+}))
 export default router

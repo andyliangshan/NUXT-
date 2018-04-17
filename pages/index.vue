@@ -17,6 +17,9 @@ export default {
   components: {
     nvHeader,
   },
+  mounted() {
+    this.$router.push({ path: '/recommend' });
+  },
 };
 </script>
 

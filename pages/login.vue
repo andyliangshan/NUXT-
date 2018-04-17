@@ -1,6 +1,6 @@
 <template>
     <div class="login-view">
-        <nv-header></nv-header>
+        <!-- <nv-header></nv-header> -->
         <!--登录前-->
         <div class="prev-login">
             <div class="profile">
@@ -32,7 +32,7 @@
 
 <script>
 import LoginForm from './login/login-form.vue';
-import nvHeader from './Header.vue';
+// import nvHeader from './Header.vue';
 export default {
   name: 'login-view',
   data() {
@@ -48,7 +48,7 @@ export default {
   },
   components: {
     LoginForm,
-    nvHeader,
+    // nvHeader,
   },
   methods: {
     showLogin() {

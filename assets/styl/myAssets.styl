@@ -132,12 +132,13 @@ body, html
           width 100%
         }
 
-        span {
+        p {
           font-size 14px
           color #939393
+          margin 0
         }
 
-        em {
+        p.value {
           font-size 24px
           color #202020
           clear both
@@ -189,17 +190,18 @@ body, html
       .unget, .get {
         flex 1
 
-        span, em {
+        p {
           display inline-block
           width 100%
         }
 
-        span {
+        p {
           font-size 14px
           color #939393
+          margin 0
         }
 
-        em {
+        p.value {
           font-size 24px
           color #202020
           clear both
@@ -215,8 +217,9 @@ body, html
 
         i {
           display inline-block
-          width 42px
+          width 60px
           height 15px
+          line-height 15px
           font-size 9px
           text-align center
           color #fff
@@ -226,7 +229,7 @@ body, html
           position absolute
           top -15px
           left 50%
-          margin-left -21px
+          margin-left -30px
         }
       }
     }
@@ -271,13 +274,14 @@ body, html
       color #939393
       flex 1
 
-      span, em {
+      p, em {
         display inline-block
         float left
+        margin 0
       }
 
       em {
-        width 42px
+        width 60px
         height 15px
         text-align center
         line-height 15px
@@ -296,6 +300,10 @@ body, html
       font-size 12px
       color #939393
       flex 1
+
+      p {
+        margin 0
+      }
 
       b {
         display inline-block
@@ -409,6 +417,25 @@ body, html
             font-size 14px
             flex 1
             font-weight bolder
+
+            span, em {
+              display inline-block
+              width 100%
+              font-style normal
+              line-height 1   
+            }
+
+            span {
+              color #202020
+              font-size 14px
+            }
+
+            em {
+              clear both
+              margin-top 5px
+              font-size 12px
+              color #999
+            }
           }
 
           .data-r {
@@ -418,6 +445,7 @@ body, html
             text-align right
             padding-right 15px
             font-weight bolder
+            line-height 40px
 
             b:first-child {
               vertical-align 1px
