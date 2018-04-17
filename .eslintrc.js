@@ -25,7 +25,8 @@ module.exports = {
         'indent': ['off', 4],
         'eol-last': 0,
         'no-unused-vars': ['warn'],
-        'space-before-function-paren': 'off'
+        'space-before-function-paren': 'off',
+        'operator-linebreak': ['error', 'after']
     },
     globals: {}
 }

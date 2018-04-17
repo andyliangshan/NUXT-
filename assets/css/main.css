@@ -1,22 +1,24 @@
-html, body
-{
+html,
+body {
   background-color: #fff;
   color: #000;
   letter-spacing: 0.5px;
   font-family: "Source Sans Pro", Arial, sans-serif;
   height: 100vh;
   margin: 0;
+  font-size: 16px;
 }
 
-footer
-{
+footer {
   padding: 20px;
   text-align: center;
   border-top: 1px solid #ddd;
 }
 
-a, a:hover, a:focus, a:visited
-{
+a,
+a:hover,
+a:focus,
+a:visited {
   color: #000;
   text-decoration: none;
 }
@@ -28,28 +30,46 @@ a, a:hover, a:focus, a:visited
   max-height: 289px;
 }
 
-.page-enter-active, .page-leave-active {
+.page-enter-active,
+.page-leave-active {
   transition: opacity .5s
 }
-.page-enter, .page-leave-active {
+
+.page-enter,
+.page-leave-active {
   opacity: 0
 }
 
 .bounce-enter-active {
   animation: bounce-in .8s;
 }
+
 .bounce-leave-active {
   animation: bounce-out .5s;
 }
+
 @keyframes bounce-in {
-  0% { transform: scale(0) }
-  50% { transform: scale(1.5) }
-  100% { transform: scale(1) }
+  0% {
+    transform: scale(0)
+  }
+  50% {
+    transform: scale(1.5)
+  }
+  100% {
+    transform: scale(1)
+  }
 }
+
 @keyframes bounce-out {
-  0% { transform: scale(1) }
-  50% { transform: scale(1.5) }
-  100% { transform: scale(0) }
+  0% {
+    transform: scale(1)
+  }
+  50% {
+    transform: scale(1.5)
+  }
+  100% {
+    transform: scale(0)
+  }
 }
 
 .slide-left-enter,
@@ -57,6 +77,7 @@ a, a:hover, a:focus, a:visited
   opacity: 0;
   transform: translate(30px, 0);
 }
+
 .slide-left-leave-active,
 .slide-right-enter {
   opacity: 0;

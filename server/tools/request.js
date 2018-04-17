@@ -2,11 +2,9 @@ import agent from '../utils/fetch/superAgent';
 import SecretKey from '../utils/encry/cryptoer';
 
 import {
-    aesKeys
+    aesKeys,
+    resApi
 } from '../config';
-
-
-const API_BASE = 'http://apitest.zhib.net';
 
 /**
  * 通用 API 调用方法，用法示例：
@@ -16,15 +14,15 @@ const API_BASE = 'http://apitest.zhib.net';
  * @param {string} api 要访问的API，以 / 开头的绝对URL
  * @param {object} raw 要提交的数据对象
  */
-export const Request = function (api, raw) {
+export const Request = function (api, data) {
     let dba;
-    raw = raw || {};
-    raw.from = 'pc';
+    data = data || {};
+    data.from = 'pc';
 
-    const keys = Object.keys(raw);
+    const keys = Object.keys(data);
     const rawValues = [];
     for (let key of keys) {
-        rawValues.push(`${key}==${raw[key]}`);
+        rawValues.push(`${key}==${data[key]}`);
     }
     const aesStr = rawValues.join('&&');
     dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
@@ -32,21 +30,20 @@ export const Request = function (api, raw) {
     const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys);
     const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
 
-    const data = {
+    const _data = {
         timespan,
         raid
     };
 
-    const url = API_BASE + api;
+    const url = resApi.zhiBApi + api;
 
     this.get = function () {
-        data.dba = dba;
-        return agent.get(url, data);
+        _data.dba = dba;
+        return agent.get(url, _data);
     }
 
     this.post = function () {
-
-        return agent.post(url, data, {
+        return agent.post(url, _data, {
             dba
         });
     }

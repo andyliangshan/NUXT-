@@ -6,6 +6,7 @@ import classfiy from './classfiy'
 import tweet from './tweet'
 import message from './message'
 import replay from './replay'
+import qiniu from './qiniu'
 
 const router = Router()
 
@@ -16,5 +17,6 @@ router.use(classfiy)
 router.use(tweet)
 router.use(message)
 router.use(replay)
+router.use(qiniu)
 
 export default router
