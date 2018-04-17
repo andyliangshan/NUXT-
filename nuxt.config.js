@@ -51,6 +51,7 @@ module.exports = {
           loader: 'eslint-loader',
           exclude: /(node_modules)/
         })
+        config.devtool = 'eval-source-map'
         // 添加 alias 配置
         Object.assign(config.resolve.alias, {
           'utils': path.resolve(__dirname, 'utils'),

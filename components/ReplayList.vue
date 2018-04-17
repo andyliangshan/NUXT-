@@ -84,12 +84,6 @@
 
 export default {
   name: 'news-item',
-  props: {
-    name: {
-      type: Object,
-      default: {}
-    }
-  },
   methods: {
   }
 }

@@ -17,66 +17,70 @@
     </div>
 </template>
 <script>
-    import axios from '~/plugins/axios'
-    export default{
-      name: 'accountCourse',
-      data () {
-        return {
-          password: '',
-          errTips: '',
-          isDoubleClick: false,
-          isRequesting: false
-        }
-      },
-      head () {
-        return {
-          title: '输入密码',
-          meta: [
-            { hid: 'description', name: 'description', content: '输入密码' }
-          ]
-        }
-      },
-      methods: {
-        async submitLogin () {
-          if (!this.password) {
-            alert('密码不能为空')
-            return
-          }
-          if (this.isRequesting) {
-            return;
-          }
-          const postData = {
-            password: this.password,
-            isValidateRegister: 1
-          }
-          this.isRequesting = true;
-          const bkData = await axios.post('/api/login', postData, {
-            credentials: true
-          })
-          console.log(bkData, 'denglu')
-          this.isRequesting = false;
-          if (bkData.data.success) {
-            console.log('11')
-            this.errTips1 = ''
-            this.$router.push({ path: '/user' });
-          } else {
-            alert(bkData.data.msg)
-          }
-        }
+// import { mapState } from 'vuex';
+import axios from '~/plugins/axios'
+export default {
+  name: 'accountCourse',
+  data() {
+    return {
+      password: '',
+      errTips: '',
+      isDoubleClick: false,
+      isRequesting: false,
+    };
+  },
+  head() {
+    return {
+      title: '输入密码',
+      meta: [{ hid: 'description', name: 'description', content: '输入密码' }],
+    };
+  },
+//   computed: {
+//     ...mapState(['userInfo']),
+//   },
+  methods: {
+    async submitLogin() {
+      if (!this.password) {
+        alert('密码不能为空');
+        return;
       }
-    }
+      if (this.isRequesting) {
+        return;
+      }
+      const postData = {
+        password: this.password,
+        isValidateRegister: 1,
+      };
+      //   const data = this.userLoginInfo({ postData: postData });
+      //   console.log(this, data, '........./////.......')
+      this.isRequesting = true;
+      const bkData = await axios.post('/api/login', postData, {
+        credentials: true,
+      });
+      console.log(bkData, 'denglu');
+      this.isRequesting = false;
+      if (bkData.data.success) {
+        console.log('11');
+        this.errTips1 = '';
+        this.$router.push({ path: '/user' });
+      } else {
+        alert(bkData.data.msg);
+      }
+    },
+  },
+};
 </script>
 <style lang="stylus">
-    .passwordFrom {
-        width: 100%;
-        z-index: 1111;
-        height: 100%;
-        background: #fff;
-        max-width: 750px;
-        margin: 0 auto;
-        position absolute
-        top 0
-        left 0
+.passwordFrom {
+    width: 100%;
+    z-index: 1111;
+    height: 100%;
+    background: #fff;
+    max-width: 750px;
+    margin: 0 auto;
+    position: absolute;
+    top: 0;
+    left: 0;
 
     .forgetPwd {
         clear: both;
@@ -85,18 +89,18 @@
         font-size: 14px;
         text-align: right;
         padding-right: 12px;
-    
+
         a {
-            color #939393
+            color: #939393;
         }
     }
 
     .closeForm {
         position: absolute;
-        top 20px
-        left 20px
-        width 12px
-        height 20px
+        top: 20px;
+        left: 20px;
+        width: 12px;
+        height: 20px;
 
         a {
             display: block;
@@ -111,7 +115,7 @@
     }
 
     .yuyueForm {
-        padding 30px 0
+        padding: 30px 0;
         background: #fff;
         border-radius: 5px;
         width: 82%;
@@ -120,7 +124,7 @@
 
     .tit {
         color: #0D0D0D;
-        font-size 26px
+        font-size: 26px;
         width: 100%;
         text-align: center;
         line-height: 1;
@@ -128,8 +132,8 @@
 
     .subtit {
         clear: both;
-        margin-top 20px
-        font-size 12px
+        margin-top: 20px;
+        font-size: 12px;
         overflow: hidden;
         color: #939393;
         width: 100%;
@@ -139,113 +143,112 @@
 
     form {
         clear: both;
-        margin-top 40px
+        margin-top: 40px;
         overflow: hidden;
 
-    .cont {
-        clear: both;
-        margin-bottom 15px
-        width: 100%;
-        position: relative;
+        .cont {
+            clear: both;
+            margin-bottom: 15px;
+            width: 100%;
+            position: relative;
 
-    input {
-        display: inline-block;
-        padding 12px 0 12px 12px
-        font-size 12px
-        background: #fff;
-        color: #0D0D0D;
-        width: 100%;
-        border-radius: 4px;
-        margin: 0 auto;
-        border: 1px solid #e6e6e6;
-        box-sizing: border-box;
+            input {
+                display: inline-block;
+                padding: 12px 0 12px 12px;
+                font-size: 12px;
+                background: #fff;
+                color: #0D0D0D;
+                width: 100%;
+                border-radius: 4px;
+                margin: 0 auto;
+                border: 1px solid #e6e6e6;
+                box-sizing: border-box;
 
-        &:focus {
-        outline: none;
-         }
-    }
+                &:focus {
+                    outline: none;
+                }
+            }
 
-    .btnCode {
-        position: absolute;
-        right 10px
-        top 0
-        font-size 12px
-        height 42px
-        line-height 42px
-        color: #939393;
-        display: inline-block;
-        text-decoration: none;
-        background: none;
-        z-index: 2;
-        border: none;
+            .btnCode {
+                position: absolute;
+                right: 10px;
+                top: 0;
+                font-size: 12px;
+                height: 42px;
+                line-height: 42px;
+                color: #939393;
+                display: inline-block;
+                text-decoration: none;
+                background: none;
+                z-index: 2;
+                border: none;
 
-    &:focus {
-         text-decoration: none;
-     }
-    }
+                &:focus {
+                    text-decoration: none;
+                }
+            }
 
-    .btnCode.gray {
-        color: #939393;
-    }
-    }
+            .btnCode.gray {
+                color: #939393;
+            }
+        }
 
-    .about-danger {
-        clear: both;
-        overflow: hidden;
-        width: 100%;
-        text-align: center;
-        color: #f00;
-        padding-top 10px
-        font-size 12px
-    }
+        .about-danger {
+            clear: both;
+            overflow: hidden;
+            width: 100%;
+            text-align: center;
+            color: #f00;
+            padding-top: 10px;
+            font-size: 12px;
+        }
 
-    .submitBtn {
-        clear: both;
-        overflow: hidden;
-        margin-top 10px
-        text-align: center;
-        width: 100%;
+        .submitBtn {
+            clear: both;
+            overflow: hidden;
+            margin-top: 10px;
+            text-align: center;
+            width: 100%;
 
-    button {
-        background: #138ff2;
-        background-size: contain;
-        font-size 17px
-        border-radius 4px
-        width 100%
-        height 40px
-        line-height 40px
-        border: none;
-        color: #fff;
-        padding: 0;
-        display: inline-block;
-
-    }
-    }
+            button {
+                background: #138ff2;
+                background-size: contain;
+                font-size: 17px;
+                border-radius: 4px;
+                width: 100%;
+                height: 40px;
+                line-height: 40px;
+                border: none;
+                color: #fff;
+                padding: 0;
+                display: inline-block;
+            }
+        }
     }
 
     .logoZhib {
         clear: both;
-        padding-top 70px
+        padding-top: 70px;
         width: 100%;
         text-align: center;
 
-    img {
-        width 86px
-        vertical-align: middle;
+        img {
+            width: 86px;
+            vertical-align: middle;
+        }
     }
-    }
-    }
+}
 
-    .login-swiper {
-        position: relative;
-        margin: 0 auto 18px;
-        width: 300px;
-        height: 40px;
-        line-height: 40px;
-        background: #f2f2f2;
-        text-align: center;
-        font-size: 16px;
-        color: #939393;
+.login-swiper {
+    position: relative;
+    margin: 0 auto 18px;
+    width: 300px;
+    height: 40px;
+    line-height: 40px;
+    background: #f2f2f2;
+    text-align: center;
+    font-size: 16px;
+    color: #939393;
 
     span {
         position: relative;
@@ -268,37 +271,37 @@
         left: 1px;
         width: 38px;
         height: 38px;
-        background: url(/public/img/range.png) no-repeat;
+        background: url('/public/img/range.png') no-repeat;
         transition: left 0.5s;
         background-size: contain;
         color: #939393;
 
-    &.end {
-         background: #fff;
+        &.end {
+            background: #fff;
 
-    em {
-        display: inline-block;
-        background: url(/public/img/ok.png) no-repeat #fff right center;
+            em {
+                display: inline-block;
+                background: url('/public/img/ok.png') no-repeat #fff right center;
+                color: #fff;
+                width: 16px;
+                height: 16px;
+                background-size: contain;
+            }
+        }
+    }
+
+    &.end {
         color: #fff;
-        width: 16px;
-        height: 16px;
-        background-size: contain;
     }
-    }
-    }
+}
 
-    &.end {
-         color: #fff;
-     }
-    }
-
-    @media screen and (max-width:374px){
-        .accountCourse {
+@media screen and (max-width: 374px) {
+    .accountCourse {
         .yuyueForm {
             margin-left: 10px;
             margin-right: 10px;
             width: auto;
         }
     }
-    }
+}
 </style>

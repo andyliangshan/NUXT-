@@ -1,5 +1,5 @@
 <template>
-  <div class="myAssets">
+  <div class="myAssets" v-if="userAessetsInfo">
     <div class="assetsHead">
       <div class="assetsBg"><img src="../../assets/img/my-assets.png" alt="my-assets"/></div>
       <div class="assets-top">
@@ -9,35 +9,35 @@
       </div>
       <div class="incomeSelf">
         <div class="self-tit">昨日收益</div>
-        <div class="self-assets">782.00</div>
-        <div class="total-assets">总资产 6082.93 ZIB</div>
+        <div class="self-assets">{{ userAessetsInfo.yesterdayAdded }}</div>
+        <div class="total-assets">总资产 {{ ( Math.round(userAessetsInfo.presentCoin + userAessetsInfo.lockCoin - userAessetsInfo.alreadRecevieCoin) * 100 / 100) }} ZIB</div>
       </div>
     </div>
     <div class="assetsOne">
-      <div class="assets-title">已赠送<b>2000.00 ZIB</b>，每日登录领取<b>20 ZIB</b></div>
+      <div class="assets-title">已赠送<b>{{ userAessetsInfo.presentCoin }} ZIB</b>，每日登录领取<b>{{ userAessetsInfo.receiveCoinEveryDay }} ZIB</b></div>
       <div class="assets-zib">
         <div class="unget">
-          <span>待领取</span>
-          <em>1600.00</em>
+          <p>待领取</p>
+          <p class="value">{{ (userAessetsInfo.presentCoin - userAessetsInfo.alreadRecevieCoin) }}</p>
         </div>
         <div class="get">
-          <span>已领取</span>
-          <em>400.00</em>
+          <p>已领取</p>
+          <p class="value">{{ userAessetsInfo.alreadRecevieCoin }}</p>
         </div>
       </div>
     </div>
     <div class="fill"></div>
     <div class="assetsTwo">
-      <div class="assets-title">锁定状态资产 <b>2000.00 ZIB</b></div>
+      <div class="assets-title">锁定状态资产 <b>{{ userAessetsInfo.lockCoin }} ZIB</b></div>
       <div class="assets-zib">
         <div class="unget">
           <i>收益翻倍</i>
-          <span>已锁定</span>
-          <em>1600.00</em>
+          <p>已锁定</p>
+          <p class="value">{{ (userAessetsInfo.lockCoin - userAessetsInfo.delockingCoin) }}</p>
         </div>
         <div class="get">
-          <span>解锁中</span>
-          <em>400.00</em>
+          <p>解锁中</p>
+          <p class="value">{{ userAessetsInfo.delockingCoin }}</p>
         </div>
       </div>
       <div class="lockBtn">
@@ -46,8 +46,8 @@
       </div>
     </div>
     <div class="cash">
-      <div class="canCash"><span>可提现</span><em>敬请期待</em></div>
-      <div class="cashTotal"><span>89306.33<b>ZIB</b></span></div>
+      <div class="canCash"><p>可提现</p><em>敬请期待</em></div>
+      <div class="cashTotal"><p>{{ userAessetsInfo.coinCount }}<b>ZIB</b></p></div>
     </div>
     <!--敬请期待-->
     <div class="expect" v-show="showExpect">
@@ -56,20 +56,34 @@
   </div>
 </template>
 <script>
+  import axios from '~/plugins/axios'
+  import { mapActions, mapGetters } from 'vuex'
   export default {
     name: 'myAssets',
     data () {
       return {
-        showExpect: false
+        showExpect: false,
       }
     },
+    head() {
+      return {
+        title: '个人资产信息'
+      }
+    },
+    mounted() {
+      this.GET_USER_ASSETS_INFO_DATA();
+    },
+    computed: {
+      ...mapGetters(['userAessetsInfo'])
+    },
     methods: {
+      ...mapActions(['GET_USER_ASSETS_INFO_DATA']),
       expect () {
         this.showExpect = true
         setTimeout(() => {
           this.showExpect = false
         }, 2000)
-      }
+      },
     }
   }
 </script>

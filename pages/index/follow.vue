@@ -1,7 +1,7 @@
 <template>
-  <div class="follow" ref="follow">
+  <div class="follow">
     <!--没有关注内容显示-->
-    <div class="noFollow">
+    <div class="noFollow" ref="follow">
       <div class="cont">
         <div class="img"><img src="../../assets/img/attent.png" alt="Group"/></div>
         <div class="desc">还没有关注账号哟</div>
@@ -50,6 +50,7 @@ export default {
   background: #fff;
   max-width: 750px;
   margin: 0 auto;
+  margin-top 91px
 
   .noFollow {
     position: relative;

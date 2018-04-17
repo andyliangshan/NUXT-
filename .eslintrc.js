@@ -24,7 +24,8 @@ module.exports = {
         'semi': 0, //['error', 'always'],
         'indent': ['off', 4],
         'eol-last': 0,
-        'no-unused-vars': ['warn']
+        'no-unused-vars': ['warn'],
+        'space-before-function-paren': 'off'
     },
     globals: {}
 }

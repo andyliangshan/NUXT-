@@ -115,7 +115,7 @@ export default {
   max-width 750px
   margin 0 auto
   background #fff
-  margin-top 40px
+  margin-top 91px
 }
 
 .findList {

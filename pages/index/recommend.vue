@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 import axios from '~/plugins/axios';
 import DataList from '../../components/DataList/DataList.vue';
 import PelList from './pelList.vue';

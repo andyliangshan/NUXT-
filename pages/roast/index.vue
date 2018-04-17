@@ -65,18 +65,7 @@
           return
         }
         // 防止重复点击
-        const _this = this; // eslint-disable-line
-        if (this.isDoubleClick) {
-          return
-        }
-        this.isDoubleClick = true
-        _this.$refs.btnCode.innerHTMl = 'loading'
-        const removeClick = () => {
-          setTimeout(() => {
-            _this.$refs.btnCode.innerHTMl = 'reset'
-            this.isDoubleClick = false
-          }, 1000)
-        }
+        this.isDoubleClick = true;
         const postData = {
           content: this.content,
           contact: this.contact
@@ -84,12 +73,12 @@
         const bkData = await axios.post('/api/tease', postData, {
           credentials: true
         })
+        this.isDoubleClick = false;
         console.log(bkData, '.....')
-        if (!bkData.data.success) {
-          removeClick(_this)
+        if (bkData.data.success) {
           this.errTips = ''
           alert(bkData.data.msg)
-          window.history.back(-1)
+          this.$router.push({ path: '/user' });
         } else {
           alert(bkData.data.msg)
         }

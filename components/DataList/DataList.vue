@@ -19,7 +19,7 @@
         <div class="list-mid">
           <div class="list-mid-publish-content">
             <div class="contDesc" ref="contDesc">{{ item.essenceTweet.content }}</div>
-            <div class="queryDetail"><nuxt-link :to="'/detail/' + item.TweetId" class="backtoPage">&nbsp;</nuxt-link></div>
+            <div class="queryDetail"><nuxt-link :to="'/detail/' + item.TweetId" class="backtoPage"></nuxt-link></div>
             <p>查看详情</p>
           </div>
           <div class="list-mid-publish-img">
@@ -27,10 +27,10 @@
           </div>
         </div>
         <div class="list-bot">
-          <div class="coin"><span>&nbsp;</span><em>{{ item.essenceTweet.currentCoinWorth }}</em></div>
-          <div class="dianzan col-2 active"><span>&nbsp;</span><em>{{ item.essenceTweet.zanCount }}</em></div>
-          <div class="sendmsg col-2"><span>&nbsp;</span>{{ item.essenceTweet.collectCount }}</div>
-          <div class="share col-7"><span>&nbsp;</span>{{ item.essenceTweet.shareCount }}</div>
+          <div class="coin"><span></span><em>{{ item.essenceTweet.currentCoinWorth }}</em></div>
+          <div :class="[item.essenceTweet.iszan === null ? 'dianzan col-2' : 'dianzan col-2 active']" @click="userDianZanFlag(item, $event)"><span></span><em>{{ item.essenceTweet.zanCount }}</em></div>
+          <div class="sendmsg col-2"><span></span>{{ item.essenceTweet.collectCount }}</div>
+          <div class="share col-7"><span></span>{{ item.essenceTweet.shareCount }}</div>
         </div>
       </div>
       <div class="dataListCont" v-for="(items, ind) in recommedList.tweet" :key="ind">
@@ -52,7 +52,7 @@
         <div class="list-mid">
           <div class="list-mid-publish-content">
             <div class="contDesc" ref="contDesc">{{ items.content }}</div>
-            <div class="queryDetail"><nuxt-link :to="'/detail/' + items.id" class="backtoPage">&nbsp;</nuxt-link></div>
+            <div class="queryDetail"><nuxt-link :to="'/detail/' + items.id" class="backtoPage"></nuxt-link></div>
             <p>查看详情</p>
           </div>
           <div class="list-mid-publish-img">
@@ -60,10 +60,10 @@
           </div>
         </div>
         <div class="list-bot">
-          <div class="coin"><span>&nbsp;</span><em>{{ items.collectCount }}</em></div>
-          <div class="dianzan col-2 active"><span>&nbsp;</span><em>{{ items.zanCount }}</em></div>
-          <div class="sendmsg col-2"><span>&nbsp;</span>{{ items.viewCount }}</div>
-          <div class="share col-7"><span>&nbsp;</span>{{ items.shareCount }}</div>
+          <div class="coin"><span></span><em>{{ items.collectCount }}</em></div>
+          <div :class="[items.iszan === null ? 'dianzan col-2' : 'dianzan col-2 active']" @click="userDianZanFlag(items, $event)"><span></span><em>{{ items.zanCount }}</em></div>
+          <div class="sendmsg col-2"><span></span>{{ items.viewCount }}</div>
+          <div class="share col-7"><span></span>{{ items.shareCount }}</div>
         </div>
       </div>
       <div class="pullUp"></div>
@@ -73,74 +73,93 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import axios from '~/plugins/axios'
-  import * as filters from '../../server/tools/filters'
-  import ReportList from '../../components/ReportList.vue'
-  Object.keys(filters).forEach(key => {
-    Vue.filter(key, filters[key])
-  })
+import Vue from 'vue';
+import axios from '~/plugins/axios';
+import * as filters from '../../server/tools/filters';
+import ReportList from '../../components/ReportList.vue';
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key]);
+});
 
-  export default {
-    name: 'index-datalist',
-    data () {
-      return {
-        reportListPop: false,
-        maxLen: 60,
-        instroduce: ''
-      }
+export default {
+  name: 'index-datalist',
+  data() {
+    return {
+      reportListPop: false,
+      maxLen: 60,
+      instroduce: '',
+    };
+  },
+  props: {
+    recommedList: {
+      type: Object,
+      default: {},
     },
-    props: {
-      recommedList: {
-        type: Object,
-        default: {}
-      }
-    },
-    components: {
-      ReportList
-    },
-    mounted () {
-      // this.limitSize()
-    },
-    methods: {
-      limitSize () {
-        for (let i = 0, len = this.recommedList.essence.length; i < len; i++ ) { //  eslint-disable-line
-          let instroduce = this.recommedList.essence[i].essenceTweet.content
-          if (instroduce.length > this.maxLen) {
-            instroduce = instroduce.slice(0, this.maxLen) + '...'; //  eslint-disable-line
-          } else {
-            instroduce = this.recommedList.essence[i].content
-          }
-        }
-      },
-      async changeStateAttent (item, evt) {
-        const selt = evt.currentTarget
-        if (item.isfollow === null) {
-          this.action = 1
-          selt.innerHTML = '已关注'
-          selt.style.border = '1px solid #939393'
-          selt.style.color = '#939393'
+  },
+  components: {
+    ReportList,
+  },
+  mounted() {
+    // this.limitSize()
+  },
+  methods: {
+    limitSize() {
+      for (let i = 0, len = this.recommedList.essence.length; i < len; i++) {
+        //  eslint-disable-line
+        let instroduce = this.recommedList.essence[i].essenceTweet.content;
+        if (instroduce.length > this.maxLen) {
+          instroduce = instroduce.slice(0, this.maxLen) + '...'; //  eslint-disable-line
         } else {
-          this.action = -1
-          selt.innerHTML = '关注Ta'
-          selt.style.border = '1px solid #138FF2'
-          selt.style.color = '#138FF2'
+          instroduce = this.recommedList.essence[i].content;
         }
+      }
+    },
+    async changeStateAttent(item, evt) {
+      const selt = evt.currentTarget;
+      if (item.isfollow === null) {
+        this.action = 1;
+        selt.innerHTML = '已关注';
+        selt.style.border = '1px solid #939393';
+        selt.style.color = '#939393';
+      } else {
+        this.action = -1;
+        selt.innerHTML = '关注Ta';
+        selt.style.border = '1px solid #138FF2';
+        selt.style.color = '#138FF2';
+      }
+      const postdata = {
+        toFollowUserId: item.tweetUser.id,
+        action: this.action,
+      };
+      const bkData = await axios.post('/api/action/follow', postdata, { credentials: true });
+      if (bkData.data.success) {
+        alert(bkData.data.msg);
+      } else {
+        alert(bkData.data.msg);
+      }
+    },
+    async userDianZanFlag(item, evt) {
+      const selt = evt.currentTarget;
+      if (item.iszan !== null) {
+        alert('你已经点过赞啦～');
+      } else {
         const postdata = {
-          toFollowUserId: item.tweetUser.id,
-          action: this.action
-        }
-        const bkData = await axios.post('/api/action/follow', postdata, { credentials: true })
-        console.log(bkData, '.....')
-        if (bkData.data.success) {
-          alert(bkData.data.msg)
+          targetUserId: item.tweetUser.id,
+          tweetId: item.id,
+        };
+        const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
+        console.log(bkData, '-----')
+        if (!bkData.data.success) {
+          alert(bkData.data.msg);
+          selt.children[1].innerText = bkData.data.data;
         } else {
-          alert(bkData.data.msg)
+          alert(bkData.data.msg);
         }
       }
-    }
-  }
+    },
+  },
+};
 </script>
 <style lang="stylus">
-@import "./Datalist.styl";
+@import './Datalist.styl';
 </style>
