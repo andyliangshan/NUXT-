@@ -1,5 +1,7 @@
 // import axios from '~/plugins/axios'
-import { unsetToken } from '~/utils/auth';
+import {
+    unsetToken
+} from '~/utils/auth';
 
 export default {
     // 获取用户信息
@@ -47,17 +49,28 @@ export default {
         state.userMainInfoData = data;
     },
     // ------------------
-    SET_USER (state, loggedUser) {
+    SET_USER(state, loggedUser) {
         state.userInfo = loggedUser || null
     },
-    SET_LOGIN_PHONE (state, phone) {
+    SET_LOGIN_PHONE(state, phone) {
         state.loginPhone = phone
     },
-    SET_USER_NEW (state, isNew) {
+    SET_USER_NEW(state, isNew) {
         state.isUserNew = isNew;
     },
     LOGINOUT: state => {
         state.userInfo = null;
         unsetToken();
     },
+    SET_ZAN(state, zanCount, userId) {
+        state.tweetInfoData.zanCount = zanCount;
+        state.tweetInfoData.iszan = {
+            userId
+        };
+    },
+    SET_FOLLOWED(state, followUserId) {
+        state.tweetInfoData.isfollow = {
+            followUserId
+        };
+    }
 }
