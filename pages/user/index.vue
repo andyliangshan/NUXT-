@@ -13,7 +13,7 @@
             <div class="profile-r">
               <div class="loginbox">
                 <a href="javascript:void(0)" id="logout" class="logout" >{{ userInfo.nickName }}</a>
-                <a href="/editorPelnfo" class="editor" ><img src="../../assets/img/editor.png" alt="editor" /></a>
+                <a :href="'/editorPelnfo/' + userInfo.id" class="editor" ><img src="../../assets/img/editor.png" alt="editor" /></a>
               </div>
               <div class="editorInfo">{{ userInfo.introduce }}</div>
             </div>

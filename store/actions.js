@@ -103,7 +103,7 @@ export default {
     // 获取其他用户个人主页数据
     GET_OTHER_USER_INFO_DATA: async({ commit }, userId) => {
         try {
-            const otherUserInfoData = await axios.post('/api/otherUserInfo', { userId: userId });
+            const otherUserInfoData = await axios.post('/api/userInfo', { userId: userId });
             if (otherUserInfoData.data.success) {
                commit('GET_OTHER_USER_INFO_ALL_DATA', otherUserInfoData.data.data)
             }
@@ -112,9 +112,9 @@ export default {
         }
     },
     // 获取主人用户个人主页数据
-    GET_MASTER_INFO_DATA: async({ commit }) => {
+    GET_MASTER_INFO_DATA: async({ commit }, userId) => {
         try {
-            const masterInfoData = await axios.post('/api/userInfo');
+            const masterInfoData = await axios.post('/api/userInfo', { userId: userId });
             if (masterInfoData.data.success) {
                commit('SET_USER', masterInfoData.data.data)
             }

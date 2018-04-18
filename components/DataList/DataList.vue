@@ -6,7 +6,7 @@
         <div class="list-top row">
           <div class="list-top-profile col-2"><img :src="items.tweetUser.avatarImage" alt="profile"></div>
           <div class="list-top-info col-8">
-            <div class="list-top-info-title"><nuxt-link :to="'/masterState/' + items.tweetUser.id" class="backtoPage">{{ items.tweetUser.nickName }}</nuxt-link></div>
+            <div class="list-top-info-title"><nuxt-link :to="'/user/' + items.tweetUser.id" class="backtoPage">{{ items.tweetUser.nickName }}</nuxt-link></div>
             <div class="list-top-info-publishTime"><span>{{ items.createdAt | dynamicFormatTime }}</span></div>
           </div>
           <div class="list-top-attent col-2" v-if="items.isfollow !== null" v-show="items.id !== items.tweetUser.id">
@@ -36,6 +36,7 @@
       </div>
       <div class="pullUp"></div>
     </div>
+    <el-button :plain="true" @click="open">打开消息提示</el-button>
     <report-list v-show="reportListPop"></report-list>
   </div>
 </template>
@@ -43,11 +44,13 @@
 <script>
 import Vue from 'vue';
 import axios from '~/plugins/axios';
+import { Message } from 'element-ui';
 import * as filters from '../../server/tools/filters';
 import ReportList from '../../components/ReportList.vue';
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
+Vue.use(Message);
 
 export default {
   name: 'index-datalist',
@@ -82,6 +85,12 @@ export default {
         }
       }
     },
+    open() {
+      this.$message({
+          message: '你已经点过赞啦～',
+          center: true,
+        });
+    },
     async changeStateAttent(item, evt) {
       const selt = evt.currentTarget;
       if (item.isfollow === null) {
@@ -109,7 +118,11 @@ export default {
     async userDianZanFlag(item, evt) {
       const selt = evt.currentTarget;
       if (item.iszan !== null) {
-        alert('你已经点过赞啦～');
+        // alert('你已经点过赞啦～');
+        this.$message({
+          message: '你已经点过赞啦～',
+          center: true,
+        });
       } else {
         const postdata = {
           targetUserId: item.tweetUser.id,
@@ -119,9 +132,17 @@ export default {
         console.log(bkData, '-----');
         if (bkData.data.success) {
           alert(bkData.data.msg);
+          this.$message({
+            message: bkData.data.msg,
+            center: true,
+          });
           selt.children[1].innerText = bkData.data.data;
         } else {
-          alert(bkData.data.msg);
+          // alert(bkData.data.msg);
+          this.$message({
+            message: bkData.data.msg,
+            center: true,
+          });
         }
       }
     },

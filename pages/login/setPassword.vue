@@ -118,7 +118,7 @@ export default {
     margin: 0 auto;
     position: absolute;
     top: 0;
-    left: 0;
+    left: 50%;
 
     .closeForm {
         position: absolute;
@@ -333,6 +333,18 @@ export default {
             margin-right: 10px;
             width: auto;
         }
+    }
+}
+
+@media screen and (min-width 768px) {
+    .setPassword {
+        margin-left -375px
+    }
+}
+
+@media screen and (max-width 767px) {
+    .setPassword {
+        margin-left -50%
     }
 }
 </style>
