@@ -36,7 +36,6 @@
       </div>
       <div class="pullUp"></div>
     </div>
-    <el-button :plain="true" @click="open">打开消息提示</el-button>
     <report-list v-show="reportListPop"></report-list>
   </div>
 </template>
@@ -44,13 +43,11 @@
 <script>
 import Vue from 'vue';
 import axios from '~/plugins/axios';
-import { Message } from 'element-ui';
 import * as filters from '../../server/tools/filters';
 import ReportList from '../../components/ReportList.vue';
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
-Vue.use(Message);
 
 export default {
   name: 'index-datalist',
