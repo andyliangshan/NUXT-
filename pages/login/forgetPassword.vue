@@ -89,97 +89,50 @@
             alert('获取验证码失败')
           }
         },
-        async submitSetLogin () {
-          if (!this.serPassword) {
-            alert('密码不能为空～')
-            return
-          }
-          if (!this.phoneCode) {
-            alert('验证码不能为空～')
-            return
-          }
-          if (this.serPassword && this.serPassword.length < 6) {
-            alert('密码不能小于6位～')
-            return
-          }
-          // 防止重复点击
-          const _this = this; // eslint-disable-line
-          if (this.isDoubleClick) {
-            return
-          }
-          this.isDoubleClick = true
-          _this.$refs.loginBtn.innerHTMl = 'loading'
-          const removeClick = () => {
-            setTimeout(() => {
-              _this.$refs.loginBtn.innerHTMl = 'reset'
-              this.isDoubleClick = false
-            }, 1000)
-          }
-          const postData = {
-            password: this.serPassword,
-            phoneCode: this.phoneCode
-          }
-          try {
-            const bkData = await axios.post('/api/account/password', postData, { credentials: true })
-            console.log(bkData, '------/////////------')
-            if (bkData.data.success) {
-              this.errTips = ''
-              localStorage.setItem('user', JSON.stringify(bkData.data.user));
-             localStorage.setItem('token', JSON.stringify(bkData.data.token));
-              this.$router.push({ path: '/recommend' });
-            } else {
-              alert('密码设置过于频繁操作')
+        async submitSetLogin() {
+            if (!this.serPassword) {
+                alert('密码不能为空～');
+                return;
             }
-            removeClick(_this);
-            } catch (err) {
+            if (!this.phoneCode) {
+                alert('验证码不能为空～');
+                return;
+            }
+            if (this.serPassword && this.serPassword.length < 6) {
+                alert('密码不能小于6位～');
+                return;
+            }
+            // 防止重复点击
+            const _this = this; // eslint-disable-line
+            if (this.isDoubleClick) {
+                return;
+            }
+            this.isDoubleClick = true;
+            _this.$refs.loginBtn.innerHTMl = 'loading';
+            const removeClick = () => {
+                setTimeout(() => {
+                _this.$refs.loginBtn.innerHTMl = 'reset';
+                this.isDoubleClick = false;
+                }, 1000);
+            };
+            const postData = {
+                password: this.serPassword,
+                phoneCode: this.phoneCode,
+            };
+            try {
+                const bkData = await axios.post('/api/account/password', postData, { credentials: true });
+                console.log(bkData, '------/////////------');
+                if (bkData.data.success) {
+                this.errTips = '';
+                this.$router.push({ path: '/recommend' });
+                } else {
+                alert('密码设置过于频繁操作');
+                }
                 removeClick(_this);
-                alert('获取验证码失败');
+            } catch (err) {
+                alert('设置密码失败');
             }
-    },
-    async submitSetLogin() {
-      if (!this.serPassword) {
-        alert('密码不能为空～');
-        return;
-      }
-      if (!this.phoneCode) {
-        alert('验证码不能为空～');
-        return;
-      }
-      if (this.serPassword && this.serPassword.length < 6) {
-        alert('密码不能小于6位～');
-        return;
-      }
-      // 防止重复点击
-      const _this = this; // eslint-disable-line
-      if (this.isDoubleClick) {
-        return;
-      }
-      this.isDoubleClick = true;
-      _this.$refs.loginBtn.innerHTMl = 'loading';
-      const removeClick = () => {
-        setTimeout(() => {
-          _this.$refs.loginBtn.innerHTMl = 'reset';
-          this.isDoubleClick = false;
-        }, 1000);
-      };
-      const postData = {
-        password: this.serPassword,
-        phoneCode: this.phoneCode,
-      };
-      try {
-        const bkData = await axios.post('/api/account/password', postData, { credentials: true });
-        console.log(bkData, '------/////////------');
-        if (bkData.data.success) {
-          this.errTips = '';
-          this.$router.push({ path: '/recommend' });
-        } else {
-          alert('密码设置过于频繁操作');
-        }
-        removeClick(_this);
-      } catch (err) {
-        alert('设置密码失败');
-      }
-    },
+        },
   },
 };
 </script>
