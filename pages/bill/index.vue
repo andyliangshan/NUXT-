@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import axios from '~/plugins/axios';
+// import axios from '~/plugins/axios';
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'bill',
@@ -35,8 +35,12 @@ export default {
       title: '个人账单',
     };
   },
-  mounted() {
-    this.GET_BILL_INFO_DATA()
+  async mounted() {
+    const flag = await this.GET_BILL_INFO_DATA()
+    if (flag) {
+      alert('网络异常，请稍后再试！');
+      this.$router.push({ path: '/myAssets' })
+    }
   },
   computed: {
     ...mapGetters(['userBilldata'])

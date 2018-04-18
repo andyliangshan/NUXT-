@@ -9,11 +9,10 @@ export const wrapper = function (accessCheck, fn) {
     accessCheck = accessCheck === true;
 
     return function (req, res, next) {
-        console.log(req.session.loginData, '.....登录信息检验是否人session....')
         if (accessCheck) {
             // TODO: check session，要素：登录之后发行 access token，在此检查 access token，提取用户
             let canAccess = Boolean(req.session.loginData);
-            console.log(req.session.loginData, '.....3333....')
+            // console.log(req.session.loginData, '.....3333....')
             // 如果用户没有登录（从 redis 里取不到用户数据），则禁止访问
             if (!canAccess) {
                 res.json({

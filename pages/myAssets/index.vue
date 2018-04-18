@@ -3,7 +3,9 @@
     <div class="assetsHead">
       <div class="assetsBg"><img src="../../assets/img/my-assets.png" alt="my-assets"/></div>
       <div class="assets-top">
-        <div class="backpage"><a href="javascript:history.back(-1);" class="backtoPagse"><img src="../../assets/img/backWhite.png" alt="backWhite"/></a></div>
+        <div class="backpage">
+          <nuxt-link to="/user" class="backtoPagse"><img src="../../assets/img/backWhite.png" alt="backWhite"/></nuxt-link>
+        </div>
         <div class="myTitle">我的资产</div>
         <div class="myBill"><a href="/bill" class="bill"><img src="../../assets/img/bill.png" alt="bill"/></a></div>
       </div>
@@ -51,7 +53,7 @@
     </div>
     <!--敬请期待-->
     <div class="expect" v-show="showExpect">
-      <div class="expectCont">功能尚在开发中，敬请期待!</div>
+      <div class="expectCont">{{willMsg}}</div>
     </div>
   </div>
 </template>
@@ -64,6 +66,7 @@
     data () {
       return {
         showExpect: false,
+        willMsg: '功能尚在开发中，敬请期待!',
       }
     },
     head() {
@@ -71,18 +74,23 @@
         title: '个人资产信息'
       }
     },
-    mounted() {
-      this.GET_USER_ASSETS_INFO_DATA();
+    async mounted() {
+      const flag = await this.GET_USER_ASSETS_INFO_DATA();
+      if (!flag) {
+        this.willMsg = '网络异常，请稍后再试'
+        this.expect(true, '/user');
+      }
     },
     computed: {
       ...mapGetters(['userAessetsInfo'])
     },
     methods: {
       ...mapActions(['GET_USER_ASSETS_INFO_DATA']),
-      expect () {
+      expect (isBack, path) {
         this.showExpect = true
         setTimeout(() => {
           this.showExpect = false
+          isBack && this.$router.push({ path: path })
         }, 2000)
       },
     }

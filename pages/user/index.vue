@@ -74,6 +74,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import axios from '~/plugins/axios'
 import nvHeader from '../Header.vue'
 
 export default {
@@ -96,14 +97,14 @@ export default {
   methods: {
     ...mapActions(['GET_MASTER_INFO_DATA']),
   },
-  async asyncData () {
-    // TODO: fetch api
-    return { assets: { t: 100, c: 100 * 0.2 } }
-  },
   async mounted() {
     const data = await this.GET_MASTER_INFO_DATA();
     if (data.code === 403) {
       this.$route.push({ path: '/login' });
+    }
+    const assetsInfo = await axios.post('/api/assets')
+    if (assetsInfo.data.success) {
+      this.assets = assetsInfo.data.data;
     }
   },
   components: {
