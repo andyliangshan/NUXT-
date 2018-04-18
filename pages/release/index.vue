@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="post">
         <div class="post-page" :class="{submitting: isSubmitting}">
             <common-header title="发布币文" button-label="发布" v-on:tool="publish"></common-header>
             <div id="content" contenteditable="true" data-placeholder="输入内容" ref="content"
@@ -237,7 +237,64 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.post {
+  width: 100%;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
 .post-page {
+  font-size: 16px;
+  position: static;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  pointer-events: default;
+  min-height 500px
+
+  #content {
+    // height: calc(100% - 46px);
+    padding: 1em;
+    overflow-y: auto;
+    box-sizing: border-box;
+    flex: auto;
+    // margin-top: 50px;
+  }
+
+  [contentEditable=true] {
+    outline: none;
+    caret-color: #138FF2;
+  }
+
+  [contentEditable=true]:empty {
+    color: #aaa;
+  }
+
+  [contentEditable=true]:empty::before {
+    content: attr(data-placeholder);
+  }
+
+  .preview {
+    padding: 6px;
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        float: left;
+        width: calc(33% - 8px);
+        padding-top: calc(33% - 8px);
+        margin: 4px;
+        background-color: #eee;
+        border-radius: 3px;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+      }
     font-size: 16px;
     position: fixed;
     width: 100%;
@@ -395,5 +452,6 @@ export default {
 .submitting-dialog[open=open] {
     display: block;
 }
+}}
 </style>
 

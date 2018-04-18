@@ -12,6 +12,19 @@
       width: 100%;
       background: #fff;
 
+      .backtoPage {
+        position: absolute
+        top: 10px
+        left 8px
+        width: 12px
+        height 20px
+
+        img {
+          width: 12px
+          height 20px
+        }  
+      }
+
       .profile-wp {
         width: 100%;
         text-align: center;
@@ -96,10 +109,17 @@
         .editorInfo {
           clear: both;
           position: absolute;
-          top 200px
-          padding-bottom 35px
-          width: 100%;
+          top 180px
+          width: 80%;
           text-align: center;
+          color: #939393
+          font-size: 12px
+          left 50%
+          margin-left: -40%
+          overflow hidden
+          white-space: nowrap
+          text-overflow ellipsis
+
 
           a {
             display: inline-block;
@@ -110,6 +130,37 @@
             border-radius: 4px;
             color: #000;
             font-size 12px
+          }
+        }
+
+        .attentedBox {
+          position: absolute
+          top: 210px
+          width: 100%
+          text-align center
+
+          a {
+            display: inline-block
+            padding: 0 20px
+            text-align: center
+            font-size: 12px
+            color: #202020
+            border: 1px solid #202020
+            border-radius 4px
+            -webkit-border-radius 4px
+            -moz-border-radius 4px
+            height 24px
+            line-height: 24px
+          }
+
+          a.follow {
+            margin-right: 10px
+          }
+
+          a.active {
+            color: #fff
+            border: 1px solid #138FF2
+            background: #138FF2
           }
         }
       }

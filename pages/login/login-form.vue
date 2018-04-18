@@ -100,9 +100,10 @@
     background: #fff;
     max-width: 750px;
     margin: 0 auto;
-    position absolute
+    position fixed
     top 0
-    left 0
+    left 50%
+    margin-left -375px
 
   .closeForm {
     position: absolute;
@@ -314,6 +315,18 @@
         margin-right: 10px;
         width: auto;
       }
+    }
+  }
+
+  @media screen and (max-width 767px) {
+    .accountCourse {
+      margin-left -50%
+    }
+  }
+
+  @media screen and (min-width 768px) {
+    .accountCourse {
+      margin-left -375px
     }
   }
 </style>

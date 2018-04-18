@@ -13,7 +13,7 @@
             <div class="profile-r">
               <div class="loginbox">
                 <a href="javascript:void(0)" id="logout" class="logout" >{{ userInfo.nickName }}</a>
-                <a href="/editorPeInfo" class="editor" ><img src="../../assets/img/editor.png" alt="editor" /></a>
+                <a href="/editorPelnfo" class="editor" ><img src="../../assets/img/editor.png" alt="editor" /></a>
               </div>
               <div class="editorInfo">{{ userInfo.introduce }}</div>
             </div>
@@ -27,11 +27,11 @@
               <span class="title">获赞</span>
               <span class="number">{{ userInfo.zanCount }}</span>
             </a>
-            <a class="listcon col" href="/fans">
+            <a class="listcon col" :href="'/fans/' + userInfo.id">
               <span class="title">粉丝</span>
               <span class="number">{{ userInfo.fansCount }}</span>
             </a>
-            <a class="listcon col" href="/attent">
+            <a class="listcon col" :href="'/attent/' + userInfo.id">
               <span class="title">关注</span>
               <span class="number">{{ userInfo.followCount }}</span>
             </a>
@@ -43,7 +43,7 @@
         </div>
         <div class="fillline"></div>
         <div class="pelInfoCont">
-          <nuxt-link to="/myAssets" class="data">
+          <nuxt-link to="/user/myAssets" class="data">
             <div class="title">我的资产</div>
             <div class="earnings">
               <span>{{ assets.t }} <em>ZIB</em></span>
@@ -64,7 +64,7 @@
             <span class="col-md-12">吐槽一下</span>
             <em><img src="../../assets/img/right-gray-icon.png" alt="right-icon" /></em>
           </a>
-          <a class="listcon row" href="/settings">
+          <a class="listcon row" href="/user/settings">
             <span class="col-md-12">设置</span>
             <em><img src="../../assets/img/right-gray-icon.png" alt="right-icon" /></em>
           </a>

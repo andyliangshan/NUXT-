@@ -67,11 +67,11 @@
           toFollowUserId: item.id,
           action: this.action
         }
-        const bkData = await axios.post('/api/user/action/follow', postdata, { credentials: true })
-        if (!bkData.success) {
-          alert(bkData.msg)
+        const bkData = await axios.post('/api/action/follow', postdata, { credentials: true })
+        if (bkData.data.success) {
+          alert(bkData.data.msg)
         } else {
-          alert(bkData.msg)
+          alert(bkData.data.msg)
         }
       }
     }

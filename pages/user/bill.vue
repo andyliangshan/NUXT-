@@ -5,7 +5,7 @@
       <div class="myTitle">个人账单</div>
     </div>
     <div class="bill-list">
-      <div class="listdata" v-for="(item, index) in userBilldata">
+      <div class="listdata" v-for="(item, index) in userBilldata" :key="index">
         <!-- <div class="date-line">2018年3月25日</div> -->
         <div class="income-bill-list">
           <div class="data">

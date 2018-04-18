@@ -462,6 +462,22 @@ router.post('/action/follow', auth.requireUser, async (req, res, next) => {
   });
 
 /**
+ * 获取用户的博文
+ * 获取用户的博文
+登录用户查看自己的博文，就不需要显示 是否关注了（系统默认用户关注了自己）
+/user/tweet?timespan=xx&raid=xx
+method: post
+body
+dba(必须) aes 加密的 page, limit, userId, otherUserId
+1 登录用户 用户查看自己的所有博文 userId
+2 登录用户 查看别人的所有博文 userId, otherUserId
+3 未登录查看 otherUserId
+ */
+router.post('/user/tweet', wrapper(async(req, res) => {
+    
+}))
+
+/**
  * 登出
  /account/logout
  method: post

@@ -8,9 +8,9 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import DataList from '../../components/DataList/DataList.vue';
-import PelList from './pelList.vue';
-import commonFooter from '../HomeFooter.vue';
+import DataList from '../../components/DataList/DataList';
+import PelList from './pelList';
+import commonFooter from '../HomeFooter';
 
 export default {
   name: 'homeView',
