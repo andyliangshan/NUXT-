@@ -1,7 +1,8 @@
 <template>
     <div class="homepage">
+      <nv-header></nv-header>
     <!--登陆后-->
-      <div class="after-login">
+      <div class="after-login" v-if="userInfo">
         <div class="profile">
           <div class="profile-wp"><img src="../../assets/img/nt.png" alt="loginbg"/></div>
           <div class="profileInfo">
@@ -68,11 +69,12 @@
             <em><img src="../../assets/img/right-gray-icon.png" alt="right-icon" /></em>
           </a>
         </div>
-      </div>        
+      </div>     
     </div>  
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import nvHeader from '../Header.vue'
 
 export default {
   name: 'homepage',
@@ -80,7 +82,7 @@ export default {
   computed: mapGetters(['userInfo']),
   head () {
     return {
-      title: '个人中心'
+      title: '个人主页'
     }
   },
   data () {
@@ -94,6 +96,9 @@ export default {
   async asyncData () {
     // TODO: fetch api
     return { assets: { t: 100, c: 100 * 0.2 } }
+  },
+  components: {
+    nvHeader,
   },
 }
 </script>

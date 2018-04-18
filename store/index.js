@@ -14,12 +14,19 @@ const store = () => new Vuex.Store({
     state: {
         counter: 0,
         userInfo: null,
+        userAllInfoData: null,
         tweetInfoData: null,
         userAessetsInfo: null,
         userBilldata: [],
         fansData: [],
         attentedData: [],
+        recommedUserData: [],
+        tweetRcdData: null,
+        singleReplayListData: [],
+        otherUserMainInfoData: null,
+        userMainInfoData: null,
 
+        //--------------
         loginPhone: null,
     },
     mutations,

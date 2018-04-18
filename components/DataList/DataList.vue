@@ -1,5 +1,5 @@
 <template>
-  <div class="index-datalist" id="wrapper">
+  <div class="index-datalist" id="wrapper" v-if="recommedList">
     <div class="datalist" id="myScrollbar">
       <div class="tipsNews">5条新币文</div>
       <div class="dataListCont" v-for="(item, index) in recommedList.essence" :key="index">
@@ -41,7 +41,7 @@
             <div class="list-top-info-publishTime"><span>{{ items.createdAt | dynamicFormatTime }}</span></div>
           </div>
           <div class="list-top-attent col-2" v-if="items.isfollow !== null" v-show="items.id !== items.tweetUser.id">
-            <a href="javascript:void(0)" class="attention" ref="attentBtn" @click="changeStateAttent(items, $event)">已关注</a>
+            <a href="javascript:void(0)" class="attention active" ref="attentBtn" @click="changeStateAttent(items, $event)">已关注</a>
           </div>
           <div class="list-top-attent col-2" v-else  v-show="items.id !== items.tweetUser.id">
             <!--<a href="javascript:void(0)" class="delete" ref="deleteBtn">删除</a>-->
@@ -56,13 +56,13 @@
             <p>查看详情</p>
           </div>
           <div class="list-mid-publish-img">
-            <!--<span v-for="(val, idx) in items.images"><img src="../../assets/img/profile-ho.png" alt="profile-ho"/></span>-->
+            <span v-for="(val, idx) in JSON.parse(items.images)" :key="idx"><img :src=val[idx] alt="profile-ho"/></span>
           </div>
         </div>
         <div class="list-bot">
           <div class="coin"><span></span><em>{{ items.collectCount }}</em></div>
           <div :class="[items.iszan === null ? 'dianzan col-2' : 'dianzan col-2 active']" @click="userDianZanFlag(items, $event)"><span></span><em>{{ items.zanCount }}</em></div>
-          <div class="sendmsg col-2"><span></span>{{ items.viewCount }}</div>
+          <div class="sendmsg col-2"><nuxt-link :to="'/detail/' + items.id"><span></span>{{ items.viewCount }}</nuxt-link></div>
           <div class="share col-7"><span></span>{{ items.shareCount }}</div>
         </div>
       </div>
@@ -149,7 +149,7 @@ export default {
         };
         const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
         console.log(bkData, '-----')
-        if (!bkData.data.success) {
+        if (bkData.data.success) {
           alert(bkData.data.msg);
           selt.children[1].innerText = bkData.data.data;
         } else {
