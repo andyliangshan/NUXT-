@@ -1,6 +1,6 @@
 <template>
     <div class="setPassword">
-        <div class="closeForm"><a href="javascript:history.back(-1);" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></a></div>
+        <div class="closeForm"><nuxt-link to="/login" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></nuxt-link></div>
         <div class="yuyueForm">
             <div class="tit">设置密码</div>
             <div class="subtit">验证码发送至您<b></b>的手机上</div>
@@ -22,8 +22,13 @@
 </template>
 <script>
 import axios from '~/plugins/axios';
+import { mapState } from 'vuex';
 export default {
   name: 'setPassword',
+  middleware: 'anonymous',
+  computed: {
+    ...mapState(['loginPhone', 'isUserNew']),
+  },
   head() {
     return {
       title: '设置密码',
@@ -40,6 +45,9 @@ export default {
     };
   },
   mounted() {
+    if (!this.loginPhone) {
+        return this.$router.push({ path: '/login' })
+    }
     this.sendPhoneCode();
   },
   methods: {
@@ -49,7 +57,7 @@ export default {
       }
       try {
         this.isRequesting = true;
-        const phoneCodeData = await axios.post('/api/phoneCode');
+        const phoneCodeData = await axios.post('/api/phoneCode', { phone: this.loginPhone, type: 'password' });
         const btnCodeEle = this.$refs.btnCode;
         if (!phoneCodeData.success) {
           let timeout = 60;
@@ -91,17 +99,23 @@ export default {
         password: this.serPassword,
         phoneCode: this.phoneCode,
       };
-      let bData;
+      let bkData;
       try {
-        bData = await axios.post('/api/account/password', postData, { credentials: true });
-        console.log(bData, '.......');
-        if (bData.data.success) {
+        bkData = await axios.post('/api/account/password', postData, { credentials: true });
+        if (bkData.data.success) {
           this.errTips = '';
-          this.$router.push({ path: '/login/editorInfo' });
+          localStorage.setItem('user', JSON.stringify(bkData.data.user));
+          localStorage.setItem('token', JSON.stringify(bkData.data.token));
+          if (this.isUserNew) {
+            return this.$router.push({ path: '/login/editorInfo' });
+          }
+          this.$router.push({ path: '/user' });
+        } else {
+            alert(bkData.data.msg);
         }
         this.isRequesting = true;
       } catch (err) {
-        alert(bData.data.msg);
+        alert('网络异常');
       }
       this.isRequesting = false;
     },

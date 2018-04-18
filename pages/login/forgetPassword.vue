@@ -3,7 +3,7 @@
         <div class="closeForm"><a href="javascript:history.back(-1);" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></a></div>
         <div class="yuyueForm">
             <div class="tit">修改密码</div>
-            <div class="subtit">验证码发送至<b>{{ phoneNumer }}</b>的手机上</div>
+            <div class="subtit">验证码发送至<b>{{ loginPhone }}</b>的手机上</div>
             <form @submit.stop.prevent="submitSetLogin">
                 <div class="cont username">
                     <input type="text" placeholder="请输入短信验证码" name="name" v-model="phoneCode" maxlength="4" autocomplete="off" />
@@ -21,110 +21,118 @@
     </div>
 </template>
 <script>
-import axios from '~/plugins/axios';
-export default {
-  name: 'setPassword',
-  head() {
-    return {
-      title: '设置密码',
-      meta: [{ hid: 'description', name: 'description', content: '设置密码' }],
-    };
-  },
-  data() {
-    return {
-      serPassword: '',
-      phoneCode: '',
-      errTips: '',
-      phoneNumer: '',
-      isDoubleClick: false,
-    };
-  },
-  mounted() {
-    this.sendPhoneCode();
-  },
-  methods: {
-    async sendPhoneCode() {
-      const _this = this; // eslint-disable-line
-      if (this.isDoubleClick) {
-        return;
-      }
-      this.isDoubleClick = true;
-      _this.$refs.btnCode.innerHTMl = 'loading';
-      const removeClick = () => {
-        setTimeout(() => {
-          _this.$refs.btnCode.innerHTMl = 'reset';
-          this.isDoubleClick = false;
-        }, 1000);
-      };
-      try {
-        const bkData = await axios.post('/api/phoneCode');
-        this.phoneNumer = bkData.phone;
-        const btnCodeEle = this.$refs.btnCode;
-        if (!bkData.success) {
-          let timeout = 60;
-          btnCodeEle.disabled = true;
-          const cc = setInterval(() => {
-            btnCodeEle.innerHTML = `${timeout}s`;
-            --timeout; // eslint-disable-line
-            if (timeout <= 0) {
-              btnCodeEle.innerHTML = '获取验证码';
-              btnCodeEle.disabled = false;
-              clearInterval(cc);
+    import axios from '~/plugins/axios'
+    import { mapState } from 'vuex'
+    export default{
+      name: 'setPassword',
+      middleware: 'anonymous',
+      computed: {
+        ...mapState(['loginPhone']),
+      },
+      head () {
+        return {
+          title: '设置密码',
+          meta: [
+            { hid: 'description', name: 'description', content: '设置密码' }
+          ]
+        }
+      },
+      data () {
+        return {
+          serPassword: '',
+          phoneCode: '',
+          errTips: '',
+          isDoubleClick: false
+        }
+      },
+      mounted () {
+        if (!this.loginPhone) {
+            return this.$router.push({ path: '/login' })
+        }
+        this.sendPhoneCode()
+      },
+      methods: {
+        async sendPhoneCode () {
+          const _this = this; // eslint-disable-line
+          if (this.isDoubleClick) {
+            return
+          }
+          this.isDoubleClick = true
+          _this.$refs.btnCode.innerHTMl = 'loading'
+          const removeClick = () => {
+            setTimeout(() => {
+              _this.$refs.btnCode.innerHTMl = 'reset'
+              this.isDoubleClick = false
+            }, 1000)
+          }
+          try {
+            const bkData = await axios.post('/api/phoneCode', { phone: this.loginPhone, type: 'password' })
+            const btnCodeEle = this.$refs.btnCode
+            if (!bkData.success) {
+              let timeout = 60
+              btnCodeEle.disabled = true
+              const cc = setInterval(() => {
+                btnCodeEle.innerHTML = `${timeout}s`
+                --timeout;  // eslint-disable-line
+                if (timeout <= 0) {
+                  btnCodeEle.innerHTML = '获取验证码'
+                  btnCodeEle.disabled = false
+                  clearInterval(cc)
+                }
+              }, 1000)
+              removeClick(_this)
+            } else {
+              alert('短信发送过于频繁，请稍后刷新页面重试')
             }
-          }, 1000);
-          removeClick(_this);
-        } else {
-          alert('短信发送过于频繁，请稍后刷新页面重试');
-        }
-      } catch (err) {
-        removeClick(_this);
-        alert('获取验证码失败');
-      }
-    },
-    async submitSetLogin() {
-      if (!this.serPassword) {
-        alert('密码不能为空～');
-        return;
-      }
-      if (!this.phoneCode) {
-        alert('验证码不能为空～');
-        return;
-      }
-      if (this.serPassword && this.serPassword.length < 6) {
-        alert('密码不能小于6位～');
-        return;
-      }
-      // 防止重复点击
-      const _this = this; // eslint-disable-line
-      if (this.isDoubleClick) {
-        return;
-      }
-      this.isDoubleClick = true;
-      _this.$refs.loginBtn.innerHTMl = 'loading';
-      const removeClick = () => {
-        setTimeout(() => {
-          _this.$refs.loginBtn.innerHTMl = 'reset';
-          this.isDoubleClick = false;
-        }, 1000);
-      };
-      const postData = {
-        password: this.serPassword,
-        phoneCode: this.phoneCode,
-      };
-      try {
-        const bkData = await axios.post('/api/account/password', postData, { credentials: true });
-        console.log(bkData, '------/////////------');
-        if (bkData.data.success) {
-          this.errTips = '';
-          this.$router.push({ path: '/recommend' });
-        } else {
-          alert('密码设置过于频繁操作');
-        }
-        removeClick(_this);
-      } catch (err) {
-        alert('设置密码失败');
-      }
-    },
+          } catch (err) {
+            removeClick(_this)
+            alert('获取验证码失败')
+          }
+        },
+        async submitSetLogin() {
+            if (!this.serPassword) {
+                alert('密码不能为空～');
+                return;
+            }
+            if (!this.phoneCode) {
+                alert('验证码不能为空～');
+                return;
+            }
+            if (this.serPassword && this.serPassword.length < 6) {
+                alert('密码不能小于6位～');
+                return;
+            }
+            // 防止重复点击
+            const _this = this; // eslint-disable-line
+            if (this.isDoubleClick) {
+                return;
+            }
+            this.isDoubleClick = true;
+            _this.$refs.loginBtn.innerHTMl = 'loading';
+            const removeClick = () => {
+                setTimeout(() => {
+                _this.$refs.loginBtn.innerHTMl = 'reset';
+                this.isDoubleClick = false;
+                }, 1000);
+            };
+            const postData = {
+                password: this.serPassword,
+                phoneCode: this.phoneCode,
+            };
+            try {
+                const bkData = await axios.post('/api/account/password', postData, { credentials: true });
+                console.log(bkData, '------/////////------');
+                if (bkData.data.success) {
+                this.errTips = '';
+                this.$router.push({ path: '/recommend' });
+                } else {
+                alert('密码设置过于频繁操作');
+                }
+                removeClick(_this);
+            } catch (err) {
+                alert('设置密码失败');
+            }
+        },
   },
 };
 </script>

@@ -18,9 +18,13 @@ export default {
             const userAessetsInfo = await axios.post('/api/assets/info');
             if (userAessetsInfo.data.success) {
                commit('USER_AESSETS_INFO', userAessetsInfo.data.data)
+               return true;
+            } else {
+                return false;
             }
         } catch (err) {
             console.log(err)
+            return false;
         }
     },
     // 用户账单信息
@@ -29,9 +33,13 @@ export default {
             const billInfoData = await axios.post('/api/bill');
             if (billInfoData.data.success) {
                commit('USER_BILL_INFO', billInfoData.data.data)
+               return true;
+            } else {
+                return false;
             }
         } catch (err) {
             console.log(err)
+            return false;
         }
     },
     // 我的粉丝

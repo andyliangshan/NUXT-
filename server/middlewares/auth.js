@@ -30,6 +30,7 @@ const authUser = async (req, res, next) => {
 authUser.unless = unless;
 
 const requireUser = async (req, res, next) => {
+  console.log('requireUser');
   let loginData = req.session.loginData
   if (!loginData) {
     return res.json({
@@ -38,17 +39,7 @@ const requireUser = async (req, res, next) => {
       msg: 'Access is denied.',
     })
   }
-  req.user = req.session.loginData.user
-  next()
-}
-
-const filterActivityAction = async (req, res, next) => {
-  const referer = req.headers.referer || ''
-  if (!isDebug) {
-    if (!(referer.trim().includes('http://zhib.net/login'))) {
-      return res.send(403)
-    }
-  }
+  req.user = loginData.user
   next()
 }
 
@@ -121,7 +112,6 @@ const detectTimespan = async (req, res, next) => {
 export default {
   authUser,
   requireUser,
-  filterActivityAction,
   detectTimespan,
   authToken,
 }

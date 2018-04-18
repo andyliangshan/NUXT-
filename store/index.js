@@ -27,7 +27,8 @@ const store = () => new Vuex.Store({
         userMainInfoData: null,
 
         //--------------
-        loginPhone: null,
+        loginPhone: null,   // 登录的手机号码
+        isUserNew: false,   // 是否是新注册用户
     },
     mutations,
     actions,
@@ -35,5 +36,10 @@ const store = () => new Vuex.Store({
     strict: process.env.NODE_ENV === 'development',
     plugins: process.env.NODE_ENV === 'development' ? [createLogger()] : []
 })
+// if (!process.SERVER_BUILD) {
+//     if (window.__INITIAL_STATE__) {
+//         store.replaceState(window.__INITIAL_STATE__)
+//     }
+// }
 
 export default store

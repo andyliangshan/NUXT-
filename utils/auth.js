@@ -31,14 +31,20 @@ export const getUserFromSession = (req) => {
   try {
     userInfo = req.session.loginData.user;
   } catch (err) {
-    console.log(err);
+    console.log('getUserFromSession: ', err);
   }
   return userInfo
 }
 
 export const getUserFromLocalStorage = () => {
   const json = window.localStorage.user
-  return json ? JSON.parse(json) : undefined
+  let user;
+  try {
+    user = JSON.parse(json)
+  } catch (err) {
+    console.log('getUserFromLocalStorage: ', err);
+  }
+  return user
 }
 
 export const setSecret = (secret) => window.localStorage.setItem('secret', secret)

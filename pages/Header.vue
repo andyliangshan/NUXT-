@@ -52,7 +52,7 @@
         <!--登录后-->
         <div class="showLoginState">
           <div class="successLogin">
-            一剑飘絮<img src="../assets/img/triangle.png" alt="Group" />
+            {{userInfo.nickName}}<img src="../assets/img/triangle.png" alt="Group" />
           </div>
           <div class="logoutBox">
             <em class="triangle"></em>
@@ -64,7 +64,7 @@
         </div>
       </div>
       <div class="editorArea">
-         <div class="release"><nuxt-link to="/release"><img src="../assets/img/zb-icon6.png" alt="release"/></nuxt-link></div>
+         <div class="release"><a @click="openCategories"><img src="../assets/img/zb-icon6.png" alt="release"/></a></div>
          <div class="search"><nuxt-link to="/search"><img src="../assets/img/zb-icon7.png" alt="search"/></nuxt-link></div>
          <div class="reloadPage"><a href="javascript:void(0)"><img src="../assets/img/zb-icon5.png" alt="reloadPage"/></a></div> 
       </div>
@@ -81,13 +81,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 export default {
+  computed: mapGetters(['userInfo']),
   data() {
     return {
       loginState: false,
     };
   },
   middleware: 'authenticated',
-  computed: mapGetters(['userInfo']),
   mounted() {
     this.GET_MASTER_INFO_DATA();
   },

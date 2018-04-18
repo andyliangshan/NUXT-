@@ -53,6 +53,9 @@ export default {
     SET_LOGIN_PHONE (state, phone) {
         state.loginPhone = phone
     },
+    SET_USER_NEW (state, isNew) {
+        state.isUserNew = isNew;
+    },
     LOGINOUT: state => {
         state.userInfo = null;
         unsetToken();
