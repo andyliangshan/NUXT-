@@ -45,4 +45,6 @@ export default {
             console.log(err)
         }
     }
+    // LOGIN_PHONE: async({ commit }) => {
+    // }
 }

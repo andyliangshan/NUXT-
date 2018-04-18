@@ -1,4 +1,6 @@
 // import axios from '~/plugins/axios'
+import { unsetToken } from '~/utils/auth';
+
 export default {
     // 用户登录信息
     // userLoginInfo: async ({
@@ -37,4 +39,15 @@ export default {
         state.attentedData = data;
     },
 
+    // login
+    SET_USER (state, loggedUser) {
+        state.userInfo = loggedUser || null
+    },
+    SET_LOGIN_PHONE (state, phone) {
+        state.loginPhone = phone
+    },
+    LOGINOUT: state => {
+        state.userInfo = null;
+        unsetToken();
+    },
 }

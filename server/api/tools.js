@@ -391,22 +391,21 @@ token
 dba(必须) aes 加密的 userId==xxxx
 返回说明
  */
-router.post('/assets/info', wrapper(true, async (req, res) => { // token 用true字段来校验
+router.post('/assets/info', auth.requireUser, wrapper(true, async (req, res) => { // token 用true字段来校验
   const userId = req.session.loginData.user.id;
 
   const assetsInfoData = await new Request('/user/assets/info', {
     userId,
   }).post();
-  console.log(assetsInfoData, '.......11.......')
   if (assetsInfoData.success) {
     return res.json({
-      msg: '用户资产详细信息获取成功.',
+      msg: 'ok',
       success: true,
       data: assetsInfoData.data
     })
   } else {
     return res.json({
-      msg: '用户资产详细信息获取失败.',
+      msg: 'ok',
       success: false
     })
   }

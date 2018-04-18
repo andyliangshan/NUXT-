@@ -1,7 +1,9 @@
 import validator from 'validator'
 import moment from 'moment'
+import unless from 'express-unless';
 import { timespanGapSeconds } from '../config'
 import redis from '../utils/redis/redisCache'
+import app from '../index';
 
 const isDebug = process.env.NODE_ENV !== 'production'
 
@@ -10,7 +12,6 @@ const isDebug = process.env.NODE_ENV !== 'production'
  * 判断cookie, 生成认证信息
  */
 const authUser = async (req, res, next) => {
-  // let loginData = null
   let jwtToken = req.cookies['jwt-did']
 
   if (!jwtToken) {
@@ -19,25 +20,23 @@ const authUser = async (req, res, next) => {
     const sessionData = req.session.loginData
     const redisData = await redis.get(jwtToken)
     if ((!sessionData && !redisData) || (sessionData && !redisData)) {
-      if (req.url.indexOf('/activity') !== -1) {
-        return res.redirect('/activity/login')
-      }
-      return res.redirect('/login')
+      // return res.redirect('/login')
     } else if (!sessionData && redisData) {
       req.session.loginData = redisData
     }
   }
-  // console.log(loginData, '---------login------');
-  //  get client real ip;
-  req.realIP = req.headers['x-real-ip'] || req.connection.remoteAddress
   next()
 }
+authUser.unless = unless;
 
 const requireUser = async (req, res, next) => {
   let loginData = req.session.loginData
-  // console.log('middleware......', loginData);
   if (!loginData) {
-    return res.redirect('/login')
+    return res.json({
+      success: true,
+      code: 403,
+      message: 'Access is denied.',
+    })
   }
   next()
 }
@@ -50,6 +49,33 @@ const filterActivityAction = async (req, res, next) => {
     }
   }
   next()
+}
+
+// TODO: 验证客户端认证
+const authToken = async (req, res, next) => {
+  const token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+  if (token) {
+    try {
+      const token  = '';
+      if (decoded.exp <= Date.now()) {
+        return res.end('Access token has expired', 400);
+      }
+      
+      if (decoded.iss !== req.sesion.loginData.user.id) {
+        return res.end('Access token error', 400);
+      }
+      // handle token here
+      req.user = req.sesion.loginData.user;
+
+      next();
+  
+    } catch (err) {
+      console.log(err);
+      return res.end('Access token error', 400);
+    }
+  } else {
+    return res.end('Access token required', 400);
+  }
 }
 
 /**
@@ -95,5 +121,6 @@ export default {
   authUser,
   requireUser,
   filterActivityAction,
-  detectTimespan
+  detectTimespan,
+  authToken,
 }

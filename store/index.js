@@ -19,6 +19,8 @@ const store = () => new Vuex.Store({
         userBilldata: [],
         fansData: [],
         attentedData: [],
+
+        loginPhone: null,
     },
     mutations,
     actions,

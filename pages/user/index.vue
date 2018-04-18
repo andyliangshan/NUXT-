@@ -6,33 +6,33 @@
           <div class="profile-wp"><img src="../../assets/img/nt.png" alt="loginbg"/></div>
           <div class="profileInfo">
             <div class="profilebg">
-              <img :src="result.avatarImage" alt="profile" ref="avatarImg" />
+              <img :src="userInfo.avatarImage" alt="profile" ref="avatarImg" />
               <a href="javascript:void(0)" class="accoutFreeze"><i><img src="../../assets/img/tan.png" alt="editor" /></i>账号冻结</a>
             </div>
             <div class="profile-r">
               <div class="loginbox">
-                <a href="javascript:void(0)" id="logout" class="logout" >{{ result.nickName }}</a>
+                <a href="javascript:void(0)" id="logout" class="logout" >{{ userInfo.nickName }}</a>
                 <a href="/editorPeInfo" class="editor" ><img src="../../assets/img/editor.png" alt="editor" /></a>
               </div>
-              <div class="editorInfo">{{ result.introduce }}</div>
+              <div class="editorInfo">{{ userInfo.introduce }}</div>
             </div>
           </div>    
           <div class="infolist row">
-            <a class="listcon col" :href="'/user/' + result.id">
+            <a class="listcon col" :href="'/user/' + userInfo.id">
               <span class="title">发文</span>
-              <span class="number">{{ result.tweetsCount }}</span>
+              <span class="number">{{ userInfo.tweetsCount }}</span>
             </a>
             <a class="listcon col" href="javascript:void(0)">
               <span class="title">获赞</span>
-              <span class="number">{{ result.zanCount }}</span>
+              <span class="number">{{ userInfo.zanCount }}</span>
             </a>
             <a class="listcon col" href="/fans">
               <span class="title">粉丝</span>
-              <span class="number">{{ result.fansCount }}</span>
+              <span class="number">{{ userInfo.fansCount }}</span>
             </a>
             <a class="listcon col" href="/attent">
               <span class="title">关注</span>
-              <span class="number">{{ result.followCount }}</span>
+              <span class="number">{{ userInfo.followCount }}</span>
             </a>
           </div>
           <!--<div class="news-version">-->
@@ -42,13 +42,13 @@
         </div>
         <div class="fillline"></div>
         <div class="pelInfoCont">
-          <a href="/myAssets" class="data">
+          <nuxt-link to="/myAssets" class="data">
             <div class="title">我的资产</div>
             <div class="earnings">
-              <span>{{ result.presentCoin }} <em>ZIB</em></span>
-              <span>{{ parseInt(result.presentCoin * 0.2) }} <em>￥</em></span>
+              <span>{{ assets.t }} <em>ZIB</em></span>
+              <span>{{ assets.c }} <em>￥</em></span>
             </div>
-          </a>
+          </nuxt-link>
         </div>
         <div class="fill"></div>
         <div class="getSuger">
@@ -72,50 +72,29 @@
     </div>  
 </template>
 <script>
-import axios from '~/plugins/axios'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'homepage',
-  data () {
-    return {
-      showLoginState: false,
-      result: {}
-    }
-  },
+  middleware: 'authenticated',
+  computed: mapGetters(['userInfo']),
   head () {
     return {
       title: '个人中心'
     }
   },
-  components: {
-  },
-  // async asyncData () {
-  //   try {
-  //     let { res } = await axios.post('/api/userInfo')
-  //     console.log(res.data, '..........??????....')
-  //     return { result: res }
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // },
-  mounted () {
-    this.getUserInfo()
-  },
-  methods: {
-    async logoutUserID () {
-      const bkData = await axios.post('/api/logout')
-      if (bkData) {
-        window.location.href = '/login'
-      }
-    },
-    async getUserInfo () {
-      const userInfo = await axios.post('/api/userInfo')
-      console.log(userInfo, '.......');
-      if (userInfo.data.success === true) {
-        this.result = userInfo.data.data
-      }
+  data () {
+    return {
+      assets: {
+        t: 0,
+        c: 0,
+      },
     }
-  }
+  },
+  async asyncData () {
+    // TODO: fetch api
+    return { assets: { t: 100, c: 100 * 0.2 } }
+  },
 }
 </script>
 <style lang="stylus">

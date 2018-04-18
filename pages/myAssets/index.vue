@@ -60,6 +60,7 @@
   import { mapActions, mapGetters } from 'vuex'
   export default {
     name: 'myAssets',
+    middleware: 'authenticated',
     data () {
       return {
         showExpect: false,
