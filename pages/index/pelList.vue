@@ -1,9 +1,9 @@
 <template>
-  <div class="recommendList">
+  <div class="recommendList" v-if="recommedUserData">
     <div class="list">
       <ul>
-        <li v-for="(item, index) in result" :key="index">
-          <a href="javascript:void(0)">
+        <li v-for="(item, index) in recommedUserData" :key="index">
+          <a :href="'/user/' + item.rcdUser.id">
             <em><img :src="item.rcdUser.avatarImage" alt="back"/></em>
             <span class="name">{{ item.rcdUser.nickName }}</span>
             <span>{{ item.rcdUser.followCount }}关注</span>
@@ -15,45 +15,24 @@
 </template>
 <script>
 import axios from '~/plugins/axios'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'recommendList',
   data () {
     return {
       result: [],
-      page: 1,
-      limit: 10,
       initData: []
     }
   },
-  // async asyncData () {
-  //   try {
-  //     let res = await axios.get('/api/ru/rcd')
-  //     console.log(res.data, '...')
-  //     return { result: res.data }
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // },
   mounted () {
-    this.recommedUserData()
+    this.RECOMMEND_USER_TEN_DATA()
+  },
+  computed: {
+    ...mapGetters(['recommedUserData'])
   },
   methods: {
-    async recommedUserData () {
-      if (!this.initData) {
-        this.result = this.initData
-        return
-      }
-      const bkData = await axios.get(`/api/ru/rcd?page=${this.page}&limit=${this.limit}`, {
-        credentials: true
-      })
-      if (!bkData.success) {
-        this.result = bkData.data.data
-        this.initData = bkData.data.data
-      } else {
-        alert('数据加载失败')
-      }
-    }
+    ...mapActions(['RECOMMEND_USER_TEN_DATA'])
   }
 }
 </script>
@@ -91,6 +70,9 @@ export default {
               img {
                 width: 100%;
                 height: 60px;
+                border-radius 50%
+                -webkit-border-radius 50%
+                -moz-border-radius 50%
               }
             }
 
