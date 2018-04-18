@@ -236,7 +236,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .post-page {
     font-size: 16px;
     position: fixed;
@@ -247,6 +247,19 @@ export default {
     display: flex;
     flex-direction: column;
     pointer-events: default;
+
+    // 自定义 common-header 右上角按钮样式
+    .btn-tool {
+        border-radius: 4px;
+        background-color: #138FF2;
+        color: #fff;
+        font-size: 0.9rem;
+        padding: 0 1em;
+        height: 32px;
+        border: none;
+        margin: 6px 10px;
+        width: auto;
+    }
 
     #content {
         // height: calc(100% - 46px);

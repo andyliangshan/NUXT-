@@ -1,43 +1,35 @@
 <template>
-  <div class="detail" v-if="tweetInfoData">
-    <div class="detailTitle row">
-      <div class="backtoPage col-1"><a href="javascript:history.go(-1);" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></a></div>
-      <div class="title col-10">币文正文</div>
-      <div class="report">···</div>
+  <div class="tweet-detail" v-if="tweetInfoData && userInfo">
+    <common-header :title="tweetInfoData.tweetUser.nickName + '的币文'"></common-header>
+    <div class="tweet-content">
+      <div class="tweet-info">
+        <div class="author-avatar"><nuxt-link :to="'/user/' + tweetInfoData.tweetUser.id" class="backtoPage"><img src="../../assets/img/profile.png" alt="profile"></nuxt-link></div>
+        <div class="info">
+          <div class="author-name"><nuxt-link :to="'/user/' + tweetInfoData.tweetUser.id" class="backtoPage">{{ tweetInfoData.tweetUser.nickName }}</nuxt-link></div>
+          <div class="publish-time">{{ tweetInfoData.createdAt | dynamicFormatTime }}</div>
+        </div>
+        <div class="follow-button" v-if="showFollow()">
+          <button>TODO:关注</button>
+        </div>
+      </div>
+      <article class="contDesc" v-html="format(tweetInfoData)"></article>
+      <div class="tweet-images">
+        <div class="image-container" v-for="(img, idx) in getImages(tweetInfoData)" :key="idx" :style="{backgroundImage: 'url(' + img.url + ')'}"></div>
+      </div>
+      <div class="category" v-if="tweetInfoData.tweetCategory">
+        <span>{{tweetInfoData.tweetCategory.name}}</span>
+      </div>
+      <div class="tweet-stats"></div>
     </div>
-    <div class="dataListCont">
-      <div class="list-top row">
-        <div class="list-top-profile col-2"><a :href="'/user/' + tweetInfoData.tweetUser.id" class="backtoPage"><img src="../../assets/img/profile.png" alt="profile"/></a></div>
-        <div class="list-top-info col-8">
-          <div class="list-top-info-title"><a :href="'/user/' + tweetInfoData.tweetUser.id" class="backtoPage">{{ tweetInfoData.tweetUser.nickName }}</a></div>
-          <div class="list-top-info-publishTime"><span>{{ tweetInfoData.createdAt | dynamicFormatTime }}</span></div>
-        </div>
-      </div>
-      <div class="list-mid">
-        <div class="list-mid-publish-content">
-          <article class="contDesc" v-html="format(tweetInfoData)"></article>
-        </div>
-        <div class="list-mid-publish-img">
-          <span v-for="(img, idx) in getImages(tweetInfoData)" :key="idx"><img :src=img.url alt="profile-ho"/></span>
-        </div>
-      </div>
-    </div>
-    <div class="vueTab">
-      <div class="tab">
-        <span class="active">{{ tweetInfoData.replyCount }}评论</span>
-      </div>
-      <div class="tabCon">
-        <replay-list :replayItems="tweetInfoData"></replay-list>
-        <div class="moreReplay">
-            <a :href="'/moreReplay/' + tweetInfoData.id" class="moreReplay">{{ tweetInfoData.replyCount }}条回复&gt;&gt;</a>
-        </div>
-      </div>
+    <div class="comments">
+      <div class="comments-header">{{ tweetInfoData.replyCount }}评论</div>
+      <replay-list :replayItems="tweetInfoData"></replay-list>      
     </div>
     <div class="bottombar" v-show="showComment">
       <div class="bottombat-height"></div>
       <div class="comment">
         <form @submit.stop.prevent="commentCont">
-           <input type="text" placeholder="发表评论…" class="commentText" v-model="comment" contenteditable="true" />
+           <input type="text" placeholder="发表评论…" class="commentText" v-model="comment" contenteditable="true" >
         </form>
       </div>
     </div>
@@ -50,6 +42,8 @@ import axios from '~/plugins/axios';
 import * as filters from '../../server/tools/filters';
 import ReplayList from '../../components/ReplayList.vue';
 import TipPop from '../../components/TipPop.vue';
+import CommonHeader from '../../components/CommonHeader';
+
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
@@ -60,11 +54,14 @@ export default {
       showAttent: false,
       showComment: false,
       comment: '',
+      title: '币文正文',
+      canFollow: true,
     };
   },
   components: {
     ReplayList,
     TipPop,
+    CommonHeader,
   },
   head() {
     return {
@@ -73,20 +70,13 @@ export default {
   },
   computed: {
     ...mapGetters(['tweetInfoData']),
+    ...mapGetters(['userInfo']),
   },
   mounted() {
     const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
     this.GET_TWEET_DETAIL_DATA(uid);
   },
-  actions: {
-    getImages(tweet) {
-      try {
-        return JSON.parse(tweet.images);
-      } catch (e) {
-        return [];
-      }
-    },
-  },
+  actions: {},
   methods: {
     ...mapActions(['GET_TWEET_DETAIL_DATA']),
     // 解析博文图片
@@ -117,19 +107,127 @@ export default {
         if (substrStart !== content.length) {
           contents.push(content.substring(substrStart));
         }
-        console.log(contents);
         content = contents.join('');
       } catch (e) {
         // 如果出现错误，不再处理加粗内容
-        console.log(e);
       }
 
       return content.replace(/\n/g, '<br>');
+    },
+    showFollow() {
+      // 如果当前用户没有 follow 作者，并且不是作者本人，显示“关注”
+      return this.tweetInfoData.isfollow === null && this.userInfo.id !== this.tweetInfoData.tweetUser.id;
     },
   },
 };
 </script>
 
 <style lang="stylus">
-@import '../../assets/styl/detail.styl';
+// @import '../../assets/styl/detail.styl';
+.tweet-detail {
+  .tweet-content {
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+
+    .tweet-info {
+      display: flex;
+      margin-bottom: 30px;
+
+      // 作者头像
+      .author-avatar {
+        margin-right: 15px;
+
+        a {
+          display: block;
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          overflow: hidden;
+
+          img {
+            width: 100%;
+          }
+        }
+      }
+
+      // 信息块，作者、发布时间等
+      .info {
+        flex: auto;
+
+        .author-name {
+          line-height: 36px;
+          font-weight: bold;
+        }
+
+        .publish-time {
+          color: #999;
+          font-size: 0.8rem;
+        }
+      }
+
+      // 关注按钮
+      .follow-button {
+        button {
+          border: 1px solid #138FF2;
+          padding: 0.5em 2em;
+          color: #138FF2;
+          background-color: transparent;
+          border-radius: 8px;
+          margin-top: 15px;
+        }
+      }
+    }
+
+    .tweet-images {
+      margin: 15px 0;
+
+      .image-container {
+        float: left;
+        width: calc(33% - 8px);
+        padding-top: calc(33% - 8px);
+        max-width: 150px;
+        margin: 4px;
+        background-color: #eee;
+        border-radius: 4px;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+      }
+    }
+
+    .tweet-images::after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+  }
+
+  // 分类名称
+  .category {
+    span {
+      background-color: #F7F7F7;
+      color: #7D7D7D;
+      font-size: 0.9rem;
+      padding: 8px 12px;
+      border-radius: 10px;
+    }
+  }
+
+  .comments {
+    background-color: #fff;
+    padding: 15px;
+
+    .comments-header {
+      border-bottom: 1px solid #e5e5e5;
+      line-height: 35px;
+      font-weight: bold;
+    }
+
+    .newlist .list {
+      padding: 15px 0 0 0;
+    }
+  }
+}
 </style>

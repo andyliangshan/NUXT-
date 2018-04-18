@@ -2,7 +2,6 @@
 
 .detail {
   width: 100%;
-  background: #fff;
 
   .detailTitle {
     margin: 0;
@@ -55,8 +54,9 @@
 
   .dataListCont {
     padding 15px
-    padding-bottom: 0;
+    margin-bottom 15px;
     clear: both;
+    background-color #fff;
 
     .list-top {
       margin: 0;
@@ -363,7 +363,7 @@
           margin 15px 0 0 34px
           overflow hidden
           border-bottom 1px solid #e5e5e5
-          padding-bottom 15px
+          padding-bottom 5px
 
           .list-bot-time {
             padding: 0;
@@ -590,4 +590,22 @@ input::-webkit-input-placeholder,
 textarea::-webkit-input-placeholder {
   color: #939393;
   opacity 0.5
+}
+
+.comments {
+  background-color #fff;
+  padding 15px;
+
+  .comments-header {
+    border-bottom 1px solid #e5e5e5
+    margin-bottom 15px
+    line-height 30px
+    font-weight bold
+
+  }
+
+  .newlist .list {
+    padding 0;
+    margin-top 15px
+  }
 }
