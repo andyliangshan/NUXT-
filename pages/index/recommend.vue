@@ -1,14 +1,13 @@
 <template>
   <div class="homeView">
     <pel-list></pel-list>
-    <data-list :recommedList="result"></data-list>
+    <data-list :recommedList="tweetRcdData"></data-list>
     <common-footer></common-footer>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-import axios from '~/plugins/axios';
+import { mapGetters, mapActions } from 'vuex'
 import DataList from '../../components/DataList/DataList.vue';
 import PelList from './pelList.vue';
 import commonFooter from '../HomeFooter.vue';
@@ -29,20 +28,20 @@ export default {
       title: '推荐',
     };
   },
-  async asyncData() {
-    try {
-      let res = await axios.post('/api/tweet/rcd');
-      return { result: res.data.rcdData.data };
-    } catch (err) {
-      console.log(err);
-    }
-  },
   components: {
     DataList,
     PelList,
     commonFooter,
   },
-  methods: {},
+  mounted() {
+    this.RECOMMEND_ATICLE_SPECAL_DATA()
+  },
+  computed: {
+    ...mapGetters(['tweetRcdData'])
+  },
+  methods: {
+    ...mapActions(['RECOMMEND_ATICLE_SPECAL_DATA'])
+  },
 };
 </script>
 

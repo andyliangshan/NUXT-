@@ -231,32 +231,18 @@ router.post('/complaint', auth.requireUser, async (req, res) => {
  * 未登录用户不需要拼接userId，但格式必须一致
  * page,limit 可选
  */
-router.get('/ru/rcd', async (req, res) => {
-  const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
-  const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
+router.get('/ru/rcd', wrapper(async (req, res) => {
   const userId = req.session.loginData && req.session.loginData.user.id
   const deviceId = fetchDeviceId(req)
-  const page = req.query.page || ''
-  const limit = req.query.limit || ''
-  if (!validator.isInt(page)) {
-    return res.status(500).json({
-      msg: '页数不能为空',
-      success: false
-    })
-  }
-  if (!validator.isInt(limit)) {
-    return res.status(500).json({
-      msg: '数据长度不能为空',
-      success: false
-    })
-  }
-  const aesStr = userId ? `userId==${userId}&&page==${page}&&limit==${limit}&&deviceId==${deviceId}` : `page==${page}&&limit==${limit}&&deviceId==${deviceId}`
-  const dba = SecretKey.aesEncrypt256(aesStr, aesKeys)
-  const ruData = await agent.get(`${resApi.zhiBApi}/util/ru/rcd`, {
-    timespan,
-    raid,
-    dba
-  })
+  const page = req.query.page || 1
+  const limit = req.query.limit || 10
+
+  const ruData = await new Request('/util/ru/rcd', {
+    page,
+    limit,
+    userId,
+    deviceId
+  }).get();
   console.log(ruData, '....')
   if (ruData.success) {
     return res.json({
@@ -270,7 +256,7 @@ router.get('/ru/rcd', async (req, res) => {
       success: false
     })
   }
-})
+}))
 /**
  * 是否有强制更新的版本
  * /util/version/up

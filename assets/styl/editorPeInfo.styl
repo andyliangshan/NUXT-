@@ -96,11 +96,12 @@
         width: 100px;
         height: 100px;
         background-size: contain;
+        // background: url(../../assets/img/person-pic.png) no-repeat;
 
-        //img {
-        //  width: 100px;
-        //  height: 100px;
-        //}
+        img {
+         width: 100px;
+         height: 100px;
+        }
       }
 
       .photo {
@@ -109,8 +110,8 @@
         left: 50%;
         width 23px
         height 20px
-        margin-top -12px
-        margin-top -10px
+        margin-left -12px
+        margin-top -20px
 
         img {
          width 23px
@@ -135,13 +136,17 @@
       border: none;
       border-bottom: 1px solid #8590A6;
       padding 5px
-      font-size 16px
 
-      textarea {
+      .textareaText {
         width: 100%;
         resize: none;
         color: #0d0d0d;
         border: none;
+        background: none
+        width: 100%
+        height 44px
+        line-height: 44px
+        font-size 16px
       }
     }
 
@@ -159,6 +164,7 @@
         padding-left: 5px;
         font-size 16px
         color: #0d0d0d;
+        background none
 
         &:focus {
           outline none 

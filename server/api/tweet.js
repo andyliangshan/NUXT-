@@ -220,60 +220,19 @@ router.get('/tweetInfo', async (req, res, next) => {
 /**
  * 发布博文
  */
-router.post('/tweet/put', wrapper(true, async (req, res, next) => {
-    const BOLD_MARKER = '\u200B\u200B';
-    const BOLD_MARKER_SIZE = BOLD_MARKER.length;
-    // 过滤博文内容
-    let content = req.body.content.trim();
-    // 将多个空格替换为1个
-    content = content.replace(/\s{2,}/g, ' ');
-    // 删除无用的 0 宽空格
-    content = content.replace(/\u200B/g, '');
-    // 将 <b>,</b>,<strong>,</strong> 标签替换为2个 \u200B （0宽空格），以便之后计算加粗的位置
-    content = content.replace(/<b>|<\/b>|<strong><\/strong>/ig, BOLD_MARKER);
-    // 将 <div> <br> 替换为 \n 换行
-    content = content.replace(/(<div.*?>\s*)+|<br\s*\/?>/ig, '\n');
-    // 删除所有的标签
-    content = content.replace(/<\/?[a-zA-Z].*?>/g, '');
+router.post('/put', auth.authUser, async (req, res, next) => {
+  const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys);
+  const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys);
+  const userId = req.session.loginData.user.id;
+  const phone = req.session.loginData.user.phone;
+  const signature = req.session.loginData.signature;
+  const contents = req.body.content;
+  const images = req.body.images || '';
 
-    // 如果是空内容，返回错误
-    if (!content) {
-        res.json({
-            error: {
-                msg: '内容不能为空'
-            }
-        });
-        return;
-    }
-
-    const deviceId = fetchDeviceId(req);
-
-    // **************
-    // 检查分类是否存在
-    // 由于当前没有检查分类是否存在的API，所以只能通过获取所有的分类到内存来处理
-    // **************
-    const categories = (await new Request('/category/list', {
-        deviceId
-    }).get()).data;
-
-    if (!categories) {
-        res.json({
-            error: {
-                msg: '无法验证博文分类'
-            }
-        });
-        return;
-    }
-
-    const categoryId = req.body.categoryId;
-    let foundCategory = false;
-    categories.every(cate => {
-        if (cate.id === categoryId) {
-            foundCategory = true;
-            return false;
-        }
-
-        return true;
+  if (!contents) {
+    return res.status(500).json({
+      msg: '内容不能为空',
+      success: false
     });
 
     if (!foundCategory) {
@@ -325,7 +284,8 @@ router.post('/tweet/put', wrapper(true, async (req, res, next) => {
     res.json({
         success: true
     });
-}));
+  }
+});
 
 /**
  * 图片上传七牛

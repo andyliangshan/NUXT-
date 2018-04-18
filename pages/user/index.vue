@@ -1,38 +1,39 @@
 <template>
     <div class="homepage">
+      <nv-header></nv-header>
     <!--登陆后-->
-      <div class="after-login">
+      <div class="after-login" v-if="userMainInfoData">
         <div class="profile">
           <div class="profile-wp"><img src="../../assets/img/nt.png" alt="loginbg"/></div>
           <div class="profileInfo">
             <div class="profilebg">
-              <img :src="result.avatarImage" alt="profile" ref="avatarImg" />
+              <img :src="userMainInfoData.avatarImage" alt="profile" ref="avatarImg" />
               <a href="javascript:void(0)" class="accoutFreeze"><i><img src="../../assets/img/tan.png" alt="editor" /></i>账号冻结</a>
             </div>
             <div class="profile-r">
               <div class="loginbox">
-                <a href="javascript:void(0)" id="logout" class="logout" >{{ result.nickName }}</a>
-                <a href="/editorPeInfo" class="editor" ><img src="../../assets/img/editor.png" alt="editor" /></a>
+                <a href="javascript:void(0)" id="logout" class="logout" >{{ userMainInfoData.nickName }}</a>
+                <a href="/editorPelnfo" class="editor" ><img src="../../assets/img/editor.png" alt="editor" /></a>
               </div>
-              <div class="editorInfo">{{ result.introduce }}</div>
+              <div class="editorInfo">{{ userMainInfoData.introduce }}</div>
             </div>
           </div>    
           <div class="infolist row">
-            <a class="listcon col" :href="'/user/' + result.id">
+            <a class="listcon col" :href="'/user/' + userMainInfoData.id">
               <span class="title">发文</span>
-              <span class="number">{{ result.tweetsCount }}</span>
+              <span class="number">{{ userMainInfoData.tweetsCount }}</span>
             </a>
             <a class="listcon col" href="javascript:void(0)">
               <span class="title">获赞</span>
-              <span class="number">{{ result.zanCount }}</span>
+              <span class="number">{{ userMainInfoData.zanCount }}</span>
             </a>
             <a class="listcon col" href="/fans">
               <span class="title">粉丝</span>
-              <span class="number">{{ result.fansCount }}</span>
+              <span class="number">{{ userMainInfoData.fansCount }}</span>
             </a>
             <a class="listcon col" href="/attent">
               <span class="title">关注</span>
-              <span class="number">{{ result.followCount }}</span>
+              <span class="number">{{ userMainInfoData.followCount }}</span>
             </a>
           </div>
           <!--<div class="news-version">-->
@@ -45,8 +46,8 @@
           <a href="/myAssets" class="data">
             <div class="title">我的资产</div>
             <div class="earnings">
-              <span>{{ result.presentCoin }} <em>ZIB</em></span>
-              <span>{{ parseInt(result.presentCoin * 0.2) }} <em>￥</em></span>
+              <span>{{ userMainInfoData.presentCoin }} <em>ZIB</em></span>
+              <span>{{ parseInt(userMainInfoData.presentCoin * 0.2) }} <em>￥</em></span>
             </div>
           </a>
         </div>
@@ -68,11 +69,13 @@
             <em><img src="../../assets/img/right-gray-icon.png" alt="right-icon" /></em>
           </a>
         </div>
-      </div>        
+      </div>     
     </div>  
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import axios from '~/plugins/axios'
+import nvHeader from '../Header.vue'
 
 export default {
   name: 'homepage',
@@ -84,37 +87,20 @@ export default {
   },
   head () {
     return {
-      title: '个人中心'
+      title: '个人主页'
     }
   },
   components: {
+    nvHeader,
   },
-  // async asyncData () {
-  //   try {
-  //     let { res } = await axios.post('/api/userInfo')
-  //     console.log(res.data, '..........??????....')
-  //     return { result: res }
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // },
+  computed: {
+    ...mapGetters(['userMainInfoData'])
+  },
   mounted () {
-    this.getUserInfo()
+    this.GET_MASTER_INFO_DATA()
   },
   methods: {
-    async logoutUserID () {
-      const bkData = await axios.post('/api/logout')
-      if (bkData) {
-        window.location.href = '/login'
-      }
-    },
-    async getUserInfo () {
-      const userInfo = await axios.post('/api/userInfo')
-      console.log(userInfo, '.......');
-      if (userInfo.data.success === true) {
-        this.result = userInfo.data.data
-      }
-    }
+    ...mapActions(['GET_MASTER_INFO_DATA'])
   }
 }
 </script>
