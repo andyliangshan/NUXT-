@@ -10,6 +10,7 @@ import validator from 'validator'
 import {
     aesKeys,
     pubKeys,
+    qnAccess,
     resApi
 } from '../config'
 import {
@@ -280,9 +281,34 @@ router.post('/put', auth.authUser, async (req, res, next) => {
     // 替换加粗标记
     content = content.replace(new RegExp(BOLD_MARKER, 'g'), '');
 
+    const images = req.body.images;
+    // 如果有图片内容，则将图片的 key（七牛文件名）替换为完整URL
+    if (images) {
+        images.forEach(img => {
+            img.url = qnAccess.origin + '/' + img.key;
+            delete img.key;
+        });
+    }
+
     // TODO: 提交到API处理
+    const body = {
+        content
+    };
+
+    if (contentBold.length) {
+        body.contentBold = contentBold;
+    }
+
+    if (images) {
+        body.images = images;
+    }
+
+    const result = await new Request('/tweet/put', {
+        categoryId
+    }, body).post();
+
     res.json({
-        success: true
+        result
     });
   }
 });

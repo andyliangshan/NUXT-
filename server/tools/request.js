@@ -12,39 +12,55 @@ import {
  * new Request('/util/valid/phone', {phone: '131234567890'}).get()
  * ```
  * @param {string} api 要访问的API，以 / 开头的绝对URL
- * @param {object} raw 要提交的数据对象
+ * @param {object} dbaRaw dba 原始对象，如 {userId: 'xxx', categoryId: 'yy'}
+ * @param {object} bodyRaw 要提交的数据，如 {content: 'xxx', contentBold: 'yyy'}，可以为空
  */
-export const Request = function (api, data) {
-    let dba;
-    data = data || {};
-    data.from = 'pc';
+export const Request = function (api, dbaRaw, bodyRaw) {
+    dbaRaw = dbaRaw || {};
+    dbaRaw.from = 'pc';
 
-    const keys = Object.keys(data);
+    const keys = Object.keys(dbaRaw);
     const rawValues = [];
     for (let key of keys) {
-        rawValues.push(`${key}==${data[key]}`);
+        rawValues.push(`${key}==${dbaRaw[key]}`);
     }
     const aesStr = rawValues.join('&&');
-    dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
-    console.log(aesStr, '*********', dba, '*********');
+    const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
+
     const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys);
     const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
 
-    const _data = {
+    const query = {
         timespan,
         raid
     };
 
     const url = resApi.zhiBApi + api;
 
-    this.get = function () {
-        _data.dba = dba;
-        return agent.get(url, _data);
+    let body = {
+        dba
+    };
+
+    // 如果有提交的 body 内容，则转换成字符串后加密
+    if (bodyRaw) {
+        let keys = Object.keys(bodyRaw);
+        for (let key of keys) {
+            body[key] = SecretKey.aesEncrypt256(JSON.stringify(bodyRaw[key]), aesKeys);
+        }
     }
 
+    /**
+     * 以GET方式提交数据
+     */
+    this.get = function () {
+        Object.assign(query, body);
+        return agent.get(url, query);
+    }
+
+    /**
+     * 以POST方式提交数据
+     */
     this.post = function () {
-        return agent.post(url, _data, {
-            dba
-        });
+        return agent.post(url, query, body);
     }
 }
