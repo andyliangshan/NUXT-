@@ -1,7 +1,3 @@
-/**
- * Created by noodles on 2017/5/12.
- * description
- */
 
 import path from 'path';
 
@@ -24,12 +20,6 @@ export const redisConfigFunc = (db = 0) =>
     port: 6379,
     db,
   });
-
-export const databaseUrl =
-  process.env.DATABASE_URL ||
-  (isDebug
-    ? `postgres://postgres:postgres@localhost:5432/zhib_local`
-    : 'postgres://zhib_net:BjWl%@_zhib##_net@rm-2ze5a53w8zzc5910a.pg.rds.aliyuncs.com:3433/zhib_prod');
 
 // 7牛的access信息，用于文件上传
 export const qnAccess = {
@@ -65,3 +55,5 @@ export const timespanGapSeconds = 15; // /s
 export const resApi = {
   zhiBApi: 'http://apitest.zhib.net'
 }
+
+export const debug = isDebug;

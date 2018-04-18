@@ -14,7 +14,6 @@
   </div>
 </template>
 <script>
-import axios from '~/plugins/axios'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {

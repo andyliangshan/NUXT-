@@ -3,7 +3,7 @@
     <!--PC版本-->
     <div class="nav-container">
       <div class="min-container">
-        <div class="login"><nuxt-link to="/recommed" class="login"><img src="../assets/img/logo.png" /></nuxt-link></div>
+        <div class="login"><nuxt-link to="/recommend" class="login"><img src="../assets/img/logo.png" /></nuxt-link></div>
         <div class="menu">      
           <div class="zhiB-list">
             <nuxt-link :to="{path: 'follow'}" class="active"><em>关注</em><span class="underline"></span></nuxt-link>

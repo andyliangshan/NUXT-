@@ -44,15 +44,6 @@ export default {
       title: '发现',
     };
   },
-  // async asyncData () {
-  //   try {
-  //     let res = await axios.post('/api/falls')
-  //     console.log(res.data, '....111....')
-  //     return { result: res.data }
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // },
   components: {
     DataList,
     commonFooter,
@@ -137,13 +128,12 @@ export default {
 
       li {
         margin-left: 10px;
-        width: 60px;
         text-align: center;
         list-style: none;
 
         a {
           display: block;
-          width: 60px;
+          padding 0 5px
           height: 30px;
           line-height: 30px;
           background: #939393;

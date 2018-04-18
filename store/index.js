@@ -25,6 +25,9 @@ const store = () => new Vuex.Store({
         singleReplayListData: [],
         otherUserMainInfoData: null,
         userMainInfoData: null,
+
+        //--------------
+        loginPhone: null,
     },
     mutations,
     actions,

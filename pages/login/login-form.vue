@@ -17,8 +17,13 @@
   </div>
 </template>
 <script>
-  import axios from '~/plugins/axios'
+  import { mapMutations } from 'vuex';
+  import axios from '~/plugins/axios';
+  import eventHub from '../../components/eventHub.js';
+  import { mobileReg } from '~/plugins/constants';
+
   export default{
+    middleware: 'anonymous',
     name: 'accountCourse',
     data () {
       return {
@@ -46,6 +51,7 @@
       }
     },
     methods: {
+      ...mapMutations(['SET_LOGIN_PHONE']),
       setErrTips1 (msg) {
         this.errTips1 = msg
         setTimeout(() => {
@@ -53,11 +59,10 @@
         }, 2000)
       },
       linkhref () {
-        window.location.href = '/login'
+        eventHub.$emit('loginMobile:show', false);
       },
       async submitLogin () {
-        const regPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|16[0-9]|17[0-9]|18[0-9]|19[0-9]|14[57])[0-9]{8}$/
-        if (!regPhone.test(this.phone)) {
+        if (!mobileReg.test(this.phone)) {
           this.setErrTips1(this.validate.phoneError)
           return
         }
@@ -65,17 +70,23 @@
           return
         }
         this.isRequesting = true
-        const bkData = await axios.get(`/api/valid/phone?phone=${this.phone}`)
-        this.isRequesting = false
-        if (bkData.data.success) {
-          this.errTips1 = ''
-          if (bkData.data.data.password === true) {
-            this.$router.push({ path: '/login/password' })
+        try {
+          const bkData = await axios.get(`/api/valid/phone?phone=${this.phone}`)
+          this.isRequesting = false;
+          if (bkData.data.success) {
+            this.errTips1 = ''
+            eventHub.$emit('loginMobile:show', false);
+            this.SET_LOGIN_PHONE(this.phone)
+            if (bkData.data.data.password === true) {
+              this.$router.push({ path: '/login/password' })
+            } else {
+              this.$router.push({ path: '/login/setPassword' })
+            }
           } else {
-            this.$router.push({ path: '/login/setPassword' })
+            this.setErrTips1(bkData.msg)
           }
-        } else {
-          this.setErrTips1(bkData.msg)
+        } catch (err) {
+          this.isRequesting = false;
         }
       }
     }
@@ -89,9 +100,10 @@
     background: #fff;
     max-width: 750px;
     margin: 0 auto;
-    position absolute
+    position fixed
     top 0
-    left 0
+    left 50%
+    margin-left -375px
 
   .closeForm {
     position: absolute;
@@ -303,6 +315,18 @@
         margin-right: 10px;
         width: auto;
       }
+    }
+  }
+
+  @media screen and (max-width 767px) {
+    .accountCourse {
+      margin-left -50%
+    }
+  }
+
+  @media screen and (min-width 768px) {
+    .accountCourse {
+      margin-left -375px
     }
   }
 </style>

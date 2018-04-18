@@ -1,9 +1,16 @@
 const path = require('path')
+const isDebug = process.env.NODE_ENV !== 'production';
 
 module.exports = {
   /*
-   ** Headers of the page
-   */
+  ** Router config
+  */
+  router: {
+    middleware: 'check-auth'
+  },
+  /*
+  ** Headers of the page
+  */
   head: {
     title: 'start',
     meta: [{
@@ -37,6 +44,7 @@ module.exports = {
    ** Add axios globally
    */
   build: {
+    publicPath: isDebug ? '/_nuxt/' : 'https://cdn.zhib.net',
     vendor: ['axios'],
     /*
      ** Run ESLINT on save

@@ -107,6 +107,9 @@ export default {
           width: 32px;
           height: 32px;
           vertical-align: middle;
+          border-radius 50%
+          -webkit-border-radius 50%
+          -moz-border-radius 50%
         }
       }
 

@@ -1,4 +1,6 @@
 // import axios from '~/plugins/axios'
+import { unsetToken } from '~/utils/auth';
+
 export default {
     // 获取用户信息
     USER_ALL_INFO: (state, data) => {
@@ -43,5 +45,16 @@ export default {
     // 获取主人用户个人主页数据
     GET_MASTER_INFO_ALL_DATA: (state, data) => {
         state.userMainInfoData = data;
+    },
+    // ------------------
+    SET_USER (state, loggedUser) {
+        state.userInfo = loggedUser || null
+    },
+    SET_LOGIN_PHONE (state, phone) {
+        state.loginPhone = phone
+    },
+    LOGINOUT: state => {
+        state.userInfo = null;
+        unsetToken();
     },
 }

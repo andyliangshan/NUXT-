@@ -9,7 +9,7 @@
             <span class="col-md-12">修改密码</span>
             <em><img src="../../assets/img/right-icon.png" alt="right-icon" /></em>
         </a>
-        <a class="listcon row" href="/about_us">
+        <a class="listcon row" href="/user/about_us">
             <span class="col-md-12">关于知币</span>
             <em><img src="../../assets/img/right-icon.png" alt="right-icon" /></em>
         </a>
@@ -24,23 +24,29 @@
     <div class="logoutbox"><a href="javascript:void(0)" class="logoutcont" @click="logoutUserID">退出登录</a></div>
   </div>
 </template>
+
 <script>
 import axios from '~/plugins/axios'
+import { mapMutations } from 'vuex';
 export default {
   name: 'settings',
+  middleware: 'authenticated',
   data () {
     return { }
   },
   methods: {
+    ...mapMutations(['LOGINOUT']),
     async logoutUserID () {
       const bkData = await axios.post('/api/logout')
       if (bkData) {
-        window.location.href = '/login'
+        this.LOGINOUT();
+        this.$router.push({ path: '/login' })
       }
     }
   }
 }
 </script>
+
 <style lang="stylus">
 body, html {
   background #fafafa

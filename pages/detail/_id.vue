@@ -18,7 +18,7 @@
           <div class="contDesc">{{ tweetInfoData.content }}</div>
         </div>
         <div class="list-mid-publish-img">
-          <span v-for="(val, idx) in JSON.parse(tweetInfoData.images || '')" :key="idx"><img :src=val[idx] alt="profile-ho"/></span>
+          <span v-for="(val, idx) in JSON.parse(tweetInfoData.images || [])" :key="idx"><img :src=val.url alt="profile-ho"/></span>
         </div>
       </div>
     </div>
@@ -46,7 +46,6 @@
 <script>
   import Vue from 'vue'
   import { mapGetters, mapActions } from 'vuex'
-  import axios from '~/plugins/axios'
   import * as filters from '../../server/tools/filters'
   import ReplayList from '../../components/ReplayList.vue'
   import TipPop from '../../components/TipPop.vue'

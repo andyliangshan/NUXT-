@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="post">
         <div class="post-page" :class="{submitting: isSubmitting}">
             <common-header title="发布币文" button-label="发布" v-on:tool="publish"></common-header>
             <div id="content" contenteditable="true" data-placeholder="输入内容" ref="content"
@@ -212,6 +212,7 @@ export default {
       const content = this.$refs.content.innerHTML.replace(/\u200B/gi, ''); // 删除0宽空格（在“加粗”按下之后会添加）
       const categoryId = '29a88140-316f-11e8-87ac-055d9ddf12ff';
       const resp = await axios.post('/api/tweet/put', { content, images, categoryId });
+      console.log(resp);
     },
     // 删除一个图片
     removeImage: function(idx) {
@@ -226,21 +227,26 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.post {
+  width: 100%;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
 .post-page {
   font-size: 16px;
-  position: fixed;
+  position: static;
   width: 100%;
   height: 100%;
-  left: 0;
-  top: 0;
   display: flex;
   flex-direction: column;
   pointer-events: default;
+  min-height 500px
 
   #content {
     // height: calc(100% - 46px);
     padding: 1em;
-    overflow: scroll;
+    overflow-y: auto;
     box-sizing: border-box;
     flex: auto;
     // margin-top: 50px;

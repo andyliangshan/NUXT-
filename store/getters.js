@@ -10,4 +10,8 @@ export default {
     tweetInfoData: state => state.tweetInfoData, // 获取博文详情页面数据
     otherUserMainInfoData: state => state.otherUserMainInfoData, // 获取其他用户个人主页数据
     userMainInfoData: state => state.userMainInfoData, // 获取主人用户个人主页数据
+
+    //  --------
+    isAuthenticated: state => !!state.userInfo,
+    userInfo: state => state.userInfo,
 }

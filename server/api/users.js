@@ -1,34 +1,21 @@
 import fs from 'fs';
 import path from 'path';
 import util from 'util';
-import {
-    Router
-} from 'express'
+import moment from 'moment';
+import { Router } from 'express'
 import SecretKey from '../utils/encry/cryptoer'
 import agent from '../utils/fetch/superAgent'
 import validator from 'validator'
-import {
-    aesKeys,
-    cookieConf,
-    pubKeys
-} from '../config'
-import {
-    fetchDeviceId
-} from '../common/remote'
+import { aesKeys, cookieConf, pubKeys } from '../config'
+import { fetchDeviceId } from '../common/remote'
 import redis from '../utils/redis/redisCache'
 import requestIp from 'request-ip'
 import qnStore from "../common/qnStore";
 import auth from '../middlewares/auth'
 import { resApi } from '../config'
-
-import upload from '../common/localStore'
-
-import {
-    Request
-} from '../tools/request';
-import {
-    wrapper
-} from '../tools/wrapper';
+import { Request } from '../tools/request';
+import { wrapper } from '../tools/wrapper';
+import app from '../index';
 
 const router = new Router()
 
@@ -37,12 +24,10 @@ router.get('/valid/phone', wrapper(async (req, res) => {
     const phone = validator.trim(req.query.phone || '');
 
     if (!validator.isMobilePhone(phone, 'zh-CN')) {
-        res.json({
+        return res.json({
             msg: '手机号码错误',
             success: true
         });
-
-        return;
     }
 
     const deviceId = fetchDeviceId(req);
@@ -69,9 +54,16 @@ router.get('/valid/phone', wrapper(async (req, res) => {
 // 用户登录
 router.post('/login', wrapper(async (req, res) => { // auth.detectTimespan
     const password = validator.trim(req.body.password || '');
+    const phone = validator.trim(req.body.phone || '');
     const ip = requestIp.getClientIp(req);
     const deviceId = fetchDeviceId(req);
-    const phone = await redis.get(`${deviceId}_store_phone`);
+    
+    if (!password) {
+        return res.json({ success: false, msg: 'pass error'})
+    }
+    if (!phone) {
+        return res.json({ success: false, msg: 'phone error'})
+    }
 
     const loginData = await new Request('/account/login', {
         ip,
@@ -80,11 +72,9 @@ router.post('/login', wrapper(async (req, res) => { // auth.detectTimespan
         deviceId
     }).post();
 
-    console.log(loginData, '...----555555----')
     if (loginData && loginData.success) {
         // { signature, user: {} }
         req.session.loginData = loginData.data;
-        console.log(req.session.loginData, '...登录信息存入session....')
         const encDid = SecretKey.aesEncrypt256(deviceId, aesKeys);
         redis.set(encDid, loginData.data, cookieConf.timeout / 1000);
         // generate cookie
@@ -92,17 +82,17 @@ router.post('/login', wrapper(async (req, res) => { // auth.detectTimespan
             // domain: '.zhib.net',
             path: '/',
             maxAge: cookieConf.timeout,
-            httpOnly: false
+            httpOnly: true
         });
-        res.cookie('uid', loginData.data.user.id, {
-            // domain: '.zhib.net',
-            path: '/',
-            httpOnly: false
-        });
+        const expires = moment().add('days', cookieConf.timeout / 1000 * 60 * 60 * 24).valueOf();
+        // TODO: 生成加密验证信息
+        const token = 'abc';
+
         return res.json({
             msg: '登录成功',
             success: true,
-            id: loginData.data.user.id
+            token : token,
+            user: loginData.data.user,
         });
     } else {
         return res.json({
@@ -480,6 +470,22 @@ router.post('/action/follow', auth.requireUser, async (req, res, next) => {
   });
 
 /**
+ * 获取用户的博文
+ * 获取用户的博文
+登录用户查看自己的博文，就不需要显示 是否关注了（系统默认用户关注了自己）
+/user/tweet?timespan=xx&raid=xx
+method: post
+body
+dba(必须) aes 加密的 page, limit, userId, otherUserId
+1 登录用户 用户查看自己的所有博文 userId
+2 登录用户 查看别人的所有博文 userId, otherUserId
+3 未登录查看 otherUserId
+ */
+router.post('/user/tweet', wrapper(async(req, res) => {
+    
+}))
+
+/**
  * 登出
  /account/logout
  method: post
@@ -491,10 +497,11 @@ router.post('/logout', auth.authUser, async (req, res) => {
     res.clearCookie('jwt-did', {
         path: '/'
     })
-    res.clearCookie('uid', {
-        path: '/'
+    res.json({
+        success: true,
+        msg: 'ok'
     })
-    res.redirect('/login')
 })
+
 
 export default router

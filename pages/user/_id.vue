@@ -4,7 +4,7 @@
       <!--登录后-->
       <div class="after-login">
         <div class="profile">
-          <div class="backtoPage col-1"><a href="javascript:history.back(-1);" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></a></div>
+          <div class="backtoPage col-1"><a href="javascript:history.back(-1);"><img src="../../assets/img/back.png" alt="back"/></a></div>
           <div class="profile-wp"><img src="../../assets/img/nt.png" alt="loginbg"/></div>
           <div class="profileInfo">
             <div class="profilebg">
@@ -15,7 +15,7 @@
                 <a href="javascript:void(0)" id="logout" class="logout" >{{ userMainInfoData.nickName }}</a>
               </div>
               <div class="editorInfo">{{ userMainInfoData.introduce }}</div>
-              <div class="attentedBox">
+              <div class="attentedBox" v-show="userMainInfoData.isfollow">
                 <a href="javascript:void(0);" class="follow" @click="changeStateAttent(userMainInfoData, $event)">关注</a>
                 <!-- <a href="/privateLetter" class="priviateLetter">私信</a> -->
               </div>
@@ -34,7 +34,7 @@
               <span class="title">粉丝</span>
               <span class="number">{{ userMainInfoData.fansCount }}</span>
             </a>
-            <a class="listcon col" :href="'/attent' + userMainInfoData.id">
+            <a class="listcon col" :href="'/attent/' + userMainInfoData.id">
               <span class="title">关注</span>
               <span class="number">{{ userMainInfoData.followCount }}</span>
             </a>

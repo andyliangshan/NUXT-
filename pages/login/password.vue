@@ -17,15 +17,15 @@
     </div>
 </template>
 <script>
-// import { mapState } from 'vuex';
+import { mapState } from 'vuex';
 import axios from '~/plugins/axios'
 export default {
   name: 'accountCourse',
+  middleware: 'anonymous',
   data() {
     return {
       password: '',
       errTips: '',
-      isDoubleClick: false,
       isRequesting: false,
     };
   },
@@ -35,9 +35,9 @@ export default {
       meta: [{ hid: 'description', name: 'description', content: '输入密码' }],
     };
   },
-//   computed: {
-//     ...mapState(['userInfo']),
-//   },
+  computed: {
+    ...mapState(['loginPhone']),
+  },
   methods: {
     async submitLogin() {
       if (!this.password) {
@@ -50,20 +50,20 @@ export default {
       const postData = {
         password: this.password,
         isValidateRegister: 1,
+        phone: this.loginPhone,
       };
-      //   const data = this.userLoginInfo({ postData: postData });
-      //   console.log(this, data, '........./////.......')
       this.isRequesting = true;
       const bkData = await axios.post('/api/login', postData, {
         credentials: true,
       });
-      console.log(bkData, 'denglu');
       this.isRequesting = false;
       if (bkData.data.success) {
-        console.log('11');
         this.errTips1 = '';
+        localStorage.setItem('user', JSON.stringify(bkData.data.user));
+        localStorage.setItem('token', JSON.stringify(bkData.data.token));
         this.$router.push({ path: '/user' });
       } else {
+        //  TODO:友好提示信息
         alert(bkData.data.msg);
       }
     },
