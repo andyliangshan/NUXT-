@@ -1,41 +1,10 @@
 <template>
   <div class="index-datalist" id="wrapper" v-if="recommedList">
     <div class="datalist" id="myScrollbar">
-      <div class="tipsNews">5条新币文</div>
-      <div class="dataListCont" v-for="(item, index) in recommedList.essence" :key="index">
-        <div class="list-top row">
-          <div class="list-top-profile col-2"><img :src="item.essenceTweet.tweetUser.avatarImage" alt="profile"/></div>
-          <div class="list-top-info col-8">
-            <div class="list-top-info-title"><nuxt-link :to="'/masterState/' + item.essenceTweet.tweetUser.id" class="backtoPage">{{ item.essenceTweet.tweetUser.nickName }}</nuxt-link></div>
-            <div class="list-top-info-publishTime"><span>{{ item.createdAt | dynamicFormatTime }}</span><em><i></i>精选</em></div>
-          </div>
-          <div class="list-top-attent col-2" v-if="item.essenceTweet.isfollow !== null"></div>
-          <div class="list-top-attent col-2" v-else>
-            <!--<a href="javascript:void(0)" class="delete" ref="deleteBtn">删除</a>-->
-            <a href="javascript:void(0)" class="attention" ref="attentBtn" @click="changeStateAttent(item, $event)">关注</a>
-            <!--<a href="javascript:void(0)" class="report">×</a>-->
-          </div>
-        </div>
-        <div class="list-mid">
-          <div class="list-mid-publish-content">
-            <div class="contDesc" ref="contDesc">{{ item.essenceTweet.content }}</div>
-            <div class="queryDetail"><nuxt-link :to="'/detail/' + item.TweetId" class="backtoPage"></nuxt-link></div>
-            <p>查看详情</p>
-          </div>
-          <div class="list-mid-publish-img">
-            <!--<span v-for="(val, idx) in item.essenceTweet.images"><img src="../../assets/img/profile-ho.png" alt="profile-ho"/></span>-->
-          </div>
-        </div>
-        <div class="list-bot">
-          <div class="coin"><span></span><em>{{ item.essenceTweet.currentCoinWorth }}</em></div>
-          <div :class="[item.essenceTweet.iszan === null ? 'dianzan col-2' : 'dianzan col-2 active']" @click="userDianZanFlag(item, $event)"><span></span><em>{{ item.essenceTweet.zanCount }}</em></div>
-          <div class="sendmsg col-2"><span></span>{{ item.essenceTweet.collectCount }}</div>
-          <div class="share col-7"><span></span>{{ item.essenceTweet.shareCount }}</div>
-        </div>
-      </div>
+      <!-- <div class="tipsNews">5条新币文</div> -->
       <div class="dataListCont" v-for="(items, ind) in recommedList.tweet" :key="ind">
         <div class="list-top row">
-          <div class="list-top-profile col-2"><img :src="items.tweetUser.avatarImage" alt="profile"/></div>
+          <div class="list-top-profile col-2"><img :src="items.tweetUser.avatarImage" alt="profile"></div>
           <div class="list-top-info col-8">
             <div class="list-top-info-title"><nuxt-link :to="'/masterState/' + items.tweetUser.id" class="backtoPage">{{ items.tweetUser.nickName }}</nuxt-link></div>
             <div class="list-top-info-publishTime"><span>{{ items.createdAt | dynamicFormatTime }}</span></div>
@@ -53,10 +22,9 @@
           <div class="list-mid-publish-content">
             <div class="contDesc" ref="contDesc">{{ items.content }}</div>
             <div class="queryDetail"><nuxt-link :to="'/detail/' + items.id" class="backtoPage"></nuxt-link></div>
-            <p>查看详情</p>
           </div>
           <div class="list-mid-publish-img">
-            <span v-for="(val, idx) in JSON.parse(items.images)" :key="idx"><img :src=val[idx] alt="profile-ho"/></span>
+            <span v-for="(img, idx) in getImages(items)" :key="idx"><img :src=img.url alt="profile-ho"></span>
           </div>
         </div>
         <div class="list-bot">
@@ -148,13 +116,21 @@ export default {
           tweetId: item.id,
         };
         const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
-        console.log(bkData, '-----')
+        console.log(bkData, '-----');
         if (bkData.data.success) {
           alert(bkData.data.msg);
           selt.children[1].innerText = bkData.data.data;
         } else {
           alert(bkData.data.msg);
         }
+      }
+    },
+    // 解析博文图片
+    getImages: function(tweet) {
+      try {
+        return JSON.parse(tweet.images);
+      } catch (e) {
+        return [];
       }
     },
   },

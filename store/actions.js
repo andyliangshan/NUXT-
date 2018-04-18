@@ -116,8 +116,9 @@ export default {
         try {
             const masterInfoData = await axios.post('/api/userInfo');
             if (masterInfoData.data.success) {
-               commit('GET_MASTER_INFO_ALL_DATA', masterInfoData.data.data)
+               commit('SET_USER', masterInfoData.data.data)
             }
+            return masterInfoData.data
         } catch (err) {
             console.log(err)
         }

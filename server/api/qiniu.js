@@ -8,6 +8,8 @@ import {
     qnAccess
 } from '../config';
 
+import auth from '../middlewares/auth'
+
 import * as qiniu from 'qiniu';
 
 const router = new Router()
@@ -15,7 +17,7 @@ const router = new Router()
 /**
  * 获取七牛上传令牌
  */
-router.get('/qiniu/token', wrapper(true, (req, res) => {
+router.get('/qiniu/token', auth.authUser, wrapper((req, res) => {
     qiniu.conf.ACCESS_KEY = qnAccess.accessKey;
     qiniu.conf.SECRET_KEY = qnAccess.secretKey;
     const policy = new qiniu.rs.PutPolicy({

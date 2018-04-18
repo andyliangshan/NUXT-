@@ -45,7 +45,11 @@ export const Request = function (api, dbaRaw, bodyRaw) {
     if (bodyRaw) {
         let keys = Object.keys(bodyRaw);
         for (let key of keys) {
-            body[key] = SecretKey.aesEncrypt256(JSON.stringify(bodyRaw[key]), aesKeys);
+            let value = bodyRaw[key];
+            if (typeof value !== 'string') {
+                value = JSON.stringify(value);
+            }
+            body[key] = SecretKey.aesEncrypt256(value, aesKeys);
         }
     }
 
