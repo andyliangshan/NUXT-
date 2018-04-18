@@ -275,16 +275,8 @@ router.post('/updateUserInfo', async (req, res, next) => { // auth.requireUser
 // method: post
 // body
 // dba(必须) aes 加密的 aes(userId==xxx)
-router.post('/userInfo', wrapper(true, async (req, res) => {
-    let userId = req.body.userId;
-    if (!userId) {
-      if (!req.session.loginData) {
-        return res.json({});
-      } else {
-        console.log(req.session.loginData, '.......');
-        userId = req.session.loginData.user.id;
-      }
-    }
+router.post('/userInfo', auth.requireUser, wrapper(true, async (req, res) => {
+    let userId = req.user.id;
     const userInfoData = await new Request('/user/info', {
         userId
     }).post();
