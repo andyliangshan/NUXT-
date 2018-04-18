@@ -21,6 +21,8 @@ import qnStore from "../common/qnStore";
 import auth from '../middlewares/auth'
 import { resApi } from '../config'
 
+import upload from '../common/localStore'
+
 import {
     Request
 } from '../tools/request';
@@ -284,22 +286,53 @@ router.post('/updateUserInfo', async (req, res, next) => { // auth.requireUser
 // body
 // dba(必须) aes 加密的 aes(userId==xxx)
 router.post('/userInfo', wrapper(true, async (req, res) => {
-    const userId = req.session.loginData.user.id;
-    if (!req.session.loginData) {
-        res.redirect('/login');
+    let userId = req.body.userId;
+    if (!userId) {
+      if (!req.session.loginData) {
+        return res.json({});
+      } else {
+        console.log(req.session.loginData, '.......');
+        userId = req.session.loginData.user.id;
+      }
     }
     const userInfoData = await new Request('/user/info', {
         userId
     }).post();
     if (userInfoData.success) {
         return res.json({
-            msg: '个人信息返回成功',
+            msg: '获取用户信息返回成功',
             success: true,
             data: userInfoData.data
         })
     } else {
         return res.json({
-            msg: '个人信息返回失败',
+            msg: '获取用户信息返回失败',
+            success: false
+        })
+    }
+}))
+
+/**
+ * 根据用户id获取用户信息
+/user/info?timespan=xx&raid=xx
+method: post
+body
+dba(必须) aes 加密的 userId==xxxx
+*/
+router.post('/otherUserInfo', wrapper(async(req, res) => {
+    const userId = req.body.userId || ''
+    const otherUserInfoData = await new Request('/user/info', {
+        userId
+    }).post();
+    if (otherUserInfoData.success) {
+        return res.json({
+            msg: '用户信息返回成功',
+            success: true,
+            data: userInfoData.data
+        })
+    } else {
+        return res.json({
+            msg: '用户信息返回失败',
             success: false
         })
     }
@@ -311,14 +344,19 @@ router.post('/base642img', async (req, res) => {
         const base64Data = value.replace(/^data:image\/\w+;base64,/, '');
         const dataBuffer = new Buffer(base64Data, 'base64');
         fs.writeFile(path.join(__dirname, `../upload/holeImg.png`), dataBuffer, function (err) {
+            console.log('11')
             if (err) {
+                console.log('22')
                 res.json({
                     code: -1,
                     msg: err,
                 });
             } else {
+                console.log('33')
                 // ../upload/a5f70019ad238d0cf5ef3a2eb4d7763c.jpg
                 qnStore.upload(fs.createReadStream(path.join(__dirname, '../upload/holeImg.png')), function (err, result) {
+                    console.log('55')
+                    console.log(err, result);
                     if (err) {
                         logger.error('骑牛上传图片失败,错误信息:' + util.inspect(err));
                         console.log('upload qn error', err);

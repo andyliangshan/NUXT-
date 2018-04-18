@@ -148,6 +148,7 @@ router.post('/tweet/rcd', async (req, res) => {
  uid(登录用户必选) aes 加密的 userId
  */
 router.get('/tweetInfo', async (req, res, next) => {
+  console.log('11');
   const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys);
   const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys);
   const userId = req.session.loginData && req.session.loginData.user.id;
@@ -160,7 +161,7 @@ router.get('/tweetInfo', async (req, res, next) => {
     const tweetData = userId ? await agent.get(`${resApi.zhiBApi}/tweet/info`, { timespan, raid, uid, tid })
       : await agent.get(`${resApi.zhiBApi}/tweet/info`, { timespan, raid, tid });
 
-    // console.log(tweetData, '======...dddddd..=====');
+    console.log(tweetData, '======...dddddd..=====');
 
     if (tweetData.success) {
       return res.json({
@@ -186,7 +187,7 @@ router.get('/tweetInfo', async (req, res, next) => {
  content 客户端字符限制
  images 为 abc.png,bb.png 多个图片地址 用 逗号分隔
  */
-router.post('/put', auth.requireUser, async (req, res, next) => {
+router.post('/put', auth.authUser, async (req, res, next) => {
   const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys);
   const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys);
   const userId = req.session.loginData.user.id;

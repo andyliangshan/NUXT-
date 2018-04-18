@@ -1,25 +1,9 @@
 // import axios from '~/plugins/axios'
 export default {
-    // 用户登录信息
-    // userLoginInfo: async ({
-    //     state
-    // }, postData) => { // eslint-disable-line
-    //     const userInfoData = await axios.post('/api/login', postData);
-    //     state.userInfo = userInfoData;
-    // },
-    // increment: (state) => {
-    //     state.counter++
-    // },
-    // getTweetInfoDetail: async ({
-    //     state
-    // }, query) => {
-    //     console.log(this.$route.query, '........');
-    //     const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0]
-    //     const bkData = await axios.get(`/api/tweetInfo?tid=${uid}`, {
-    //         credentials: true
-    //     })
-    //     state.tweetInfoData = bkData;
-    // },
+    // 获取用户信息
+    USER_ALL_INFO: (state, data) => {
+        state.userAllInfoData = data;
+    },
     // 用户资产详细信息
     USER_AESSETS_INFO: (state, data) => {
         state.userAessetsInfo = data;
@@ -36,5 +20,28 @@ export default {
     MY_ATTENTED_DATA: (state, data) => {
         state.attentedData = data;
     },
-
+    // 首页 推荐 用户10条数据
+    MAIN_RECOMMEND_TEN_DATA: (state, data) => {
+        state.recommedUserData = data;
+    },
+    // 首页 推荐文章 + 1条精选
+    RECOMMEND_ATICLE_SPECAL: (state, data) => {
+        state.tweetRcdData = data;
+    },
+    // 首页 单个回复列表
+    MAIN_SINGLE_REPLAY_DATA: (state, data) => {
+        state.singleReplayListData = data;
+    },
+    // 博文详情页面的数据信息
+    GET_TWEET_DETAIL_ALL_DATA: (state, data) => {
+        state.tweetInfoData = data;
+    },
+    // 获取其他用户个人主页数据
+    GET_OTHER_USER_INFO_ALL_DATA: (state, data) => {
+        state.otherUserMainInfoData = data;
+    },
+    // 获取主人用户个人主页数据
+    GET_MASTER_INFO_ALL_DATA: (state, data) => {
+        state.userMainInfoData = data;
+    },
 }
