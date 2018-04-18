@@ -33,11 +33,12 @@ const requireUser = async (req, res, next) => {
   let loginData = req.session.loginData
   if (!loginData) {
     return res.json({
-      success: true,
+      success: false,
       code: 403,
-      message: 'Access is denied.',
+      msg: 'Access is denied.',
     })
   }
+  req.user = req.session.loginData.user
   next()
 }
 
