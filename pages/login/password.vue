@@ -11,7 +11,7 @@
                 <div class="submitBtn">
                     <button type="submit" class="btn btn-default about-btn" ref="btnCode">进入</button>
                 </div>
-                <div class="forgetPwd"><a href="/login/forgetPassword" class="backtoPage">忘记密码</a></div>
+                <div class="forgetPwd"><nuxt-link to="/login/forgetPassword" class="backtoPage">忘记密码</nuxt-link></div>
             </form>
         </div>
     </div>

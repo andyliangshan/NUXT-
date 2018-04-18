@@ -51,7 +51,7 @@
       }
     },
     methods: {
-      ...mapMutations(['SET_LOGIN_PHONE']),
+      ...mapMutations(['SET_LOGIN_PHONE', 'SET_USER_NEW']),
       setErrTips1 (msg) {
         this.errTips1 = msg
         setTimeout(() => {
@@ -77,6 +77,7 @@
             this.errTips1 = ''
             eventHub.$emit('loginMobile:show', false);
             this.SET_LOGIN_PHONE(this.phone)
+            this.SET_USER_NEW(bkData.data.data.useIsNew)
             if (bkData.data.data.password === true) {
               this.$router.push({ path: '/login/password' })
             } else {

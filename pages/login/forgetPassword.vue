@@ -3,7 +3,7 @@
         <div class="closeForm"><a href="javascript:history.back(-1);" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></a></div>
         <div class="yuyueForm">
             <div class="tit">修改密码</div>
-            <div class="subtit">验证码发送至<b>{{ phoneNumer }}</b>的手机上</div>
+            <div class="subtit">验证码发送至<b>{{ loginPhone }}</b>的手机上</div>
             <form @submit.stop.prevent="submitSetLogin">
                 <div class="cont username">
                     <input type="text" placeholder="请输入短信验证码" name="name" v-model="phoneCode" maxlength="4" autocomplete="off" />
@@ -22,8 +22,13 @@
 </template>
 <script>
     import axios from '~/plugins/axios'
+    import { mapState } from 'vuex'
     export default{
       name: 'setPassword',
+      middleware: 'anonymous',
+      computed: {
+        ...mapState(['loginPhone']),
+      },
       head () {
         return {
           title: '设置密码',
@@ -37,11 +42,13 @@
           serPassword: '',
           phoneCode: '',
           errTips: '',
-          phoneNumer: '',
           isDoubleClick: false
         }
       },
       mounted () {
+        if (!this.loginPhone) {
+            return this.$router.push({ path: '/login' })
+        }
         this.sendPhoneCode()
       },
       methods: {
@@ -59,8 +66,7 @@
             }, 1000)
           }
           try {
-            const bkData = await axios.post('/api/phoneCode')
-            this.phoneNumer = bkData.phone
+            const bkData = await axios.post('/api/phoneCode', { phone: this.loginPhone, type: 'password' })
             const btnCodeEle = this.$refs.btnCode
             if (!bkData.success) {
               let timeout = 60
@@ -118,6 +124,8 @@
             console.log(bkData, '------/////////------')
             if (bkData.data.success) {
               this.errTips = ''
+              localStorage.setItem('user', JSON.stringify(bkData.data.user));
+             localStorage.setItem('token', JSON.stringify(bkData.data.token));
               this.$router.push({ path: '/recommend' });
             } else {
               alert('密码设置过于频繁操作')

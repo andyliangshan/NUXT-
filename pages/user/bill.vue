@@ -25,6 +25,7 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'bill',
+  middleware: 'authenticated',
   data() {
     return {
       result: [],

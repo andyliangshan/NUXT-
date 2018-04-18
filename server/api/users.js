@@ -106,17 +106,15 @@ router.post('/login', wrapper(async (req, res) => { // auth.detectTimespan
 router.post('/phoneCode', wrapper(async (req, res) => {
     const ip = requestIp.getClientIp(req);
     const deviceId = fetchDeviceId(req);
-    const phone = await redis.get(`${deviceId}_store_phone`);
-    const typeState = await redis.get(`${deviceId}_phoneData`);
-    const type = !!typeState.password ? 'update' : 'password';
-
+    const phone = req.body.phone;
+    const type = req.body.type;
+    // TODO: 验证参数 验证referer  /login/setPassword
     const codeData = await new Request('/util/phoneCode', {
         phone,
         deviceId,
         type,
         ip
     }).post();
-
     if (codeData.success) {
         res.status(200).json({
             msg: '发送成功.',
@@ -139,7 +137,7 @@ router.post('/account/password', wrapper(async (req, res) => { // auth.detectTim
     const phoneCode = req.body.phoneCode || '';
     const password = req.body.password || '';
 
-    if (password && password.length < 6) {
+    if (!password || password.length < 6) {
         res.status(500).json({
             msg: '密码长度不能少于6位',
             success: false
@@ -155,18 +153,32 @@ router.post('/account/password', wrapper(async (req, res) => { // auth.detectTim
         ip,
         type: 'password'
     }).post();
-    console.log(accountData, '----0000-----')
 
     if (accountData.success) {
+        req.session.loginData = accountData.data;
+        const encDid = SecretKey.aesEncrypt256(deviceId, aesKeys);
+        redis.set(encDid, accountData.data, cookieConf.timeout / 1000);
+        // generate cookie
+        res.cookie('jwt-did', encDid, {
+            // domain: '.zhib.net',
+            path: '/',
+            maxAge: cookieConf.timeout,
+            httpOnly: true
+        });
+        const expires = moment().add('days', cookieConf.timeout / 1000 * 60 * 60 * 24).valueOf();
+        // TODO: 生成加密验证信息
+        const token = 'abc';
         return res.json({
             msg: '设置密码成功.',
             timeout: 60,
-            success: true
+            success: true,
+            token : token,
+            user: accountData.data.user,
         });
     } else {
         return res.json({
             msg: '设置密码失败.',
-            success: true
+            success: false
         });
     }
 }));
