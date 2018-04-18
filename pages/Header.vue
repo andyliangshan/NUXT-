@@ -64,7 +64,7 @@
         </div>
       </div>
       <div class="editorArea">
-         <div class="release"><a @click="openCategories"><img src="../assets/img/zb-icon6.png" alt="release"/></a></div>
+         <div class="release"><a><img src="../assets/img/zb-icon6.png" alt="release"/></a></div>
          <div class="search"><nuxt-link to="/search"><img src="../assets/img/zb-icon7.png" alt="search"/></nuxt-link></div>
          <div class="reloadPage"><a href="javascript:void(0)"><img src="../assets/img/zb-icon5.png" alt="reloadPage"/></a></div> 
       </div>
