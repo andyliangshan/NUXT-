@@ -106,17 +106,15 @@ router.post('/login', wrapper(async (req, res) => { // auth.detectTimespan
 router.post('/phoneCode', wrapper(async (req, res) => {
     const ip = requestIp.getClientIp(req);
     const deviceId = fetchDeviceId(req);
-    const phone = await redis.get(`${deviceId}_store_phone`);
-    const typeState = await redis.get(`${deviceId}_phoneData`);
-    const type = !!typeState.password ? 'update' : 'password';
-
+    const phone = req.body.phone;
+    const type = req.body.type;
+    // TODO: 验证参数 验证referer  /login/setPassword
     const codeData = await new Request('/util/phoneCode', {
         phone,
         deviceId,
         type,
         ip
     }).post();
-
     if (codeData.success) {
         res.status(200).json({
             msg: '发送成功.',
@@ -139,7 +137,7 @@ router.post('/account/password', wrapper(async (req, res) => { // auth.detectTim
     const phoneCode = req.body.phoneCode || '';
     const password = req.body.password || '';
 
-    if (password && password.length < 6) {
+    if (!password || password.length < 6) {
         res.status(500).json({
             msg: '密码长度不能少于6位',
             success: false
@@ -155,18 +153,32 @@ router.post('/account/password', wrapper(async (req, res) => { // auth.detectTim
         ip,
         type: 'password'
     }).post();
-    console.log(accountData, '----0000-----')
 
     if (accountData.success) {
+        req.session.loginData = accountData.data;
+        const encDid = SecretKey.aesEncrypt256(deviceId, aesKeys);
+        redis.set(encDid, accountData.data, cookieConf.timeout / 1000);
+        // generate cookie
+        res.cookie('jwt-did', encDid, {
+            // domain: '.zhib.net',
+            path: '/',
+            maxAge: cookieConf.timeout,
+            httpOnly: true
+        });
+        const expires = moment().add('days', cookieConf.timeout / 1000 * 60 * 60 * 24).valueOf();
+        // TODO: 生成加密验证信息
+        const token = 'abc';
         return res.json({
             msg: '设置密码成功.',
             timeout: 60,
-            success: true
+            success: true,
+            token : token,
+            user: accountData.data.user,
         });
     } else {
         return res.json({
             msg: '设置密码失败.',
-            success: true
+            success: false
         });
     }
 }));
@@ -275,8 +287,13 @@ router.post('/updateUserInfo', async (req, res, next) => { // auth.requireUser
 // method: post
 // body
 // dba(必须) aes 加密的 aes(userId==xxx)
-router.post('/userInfo', auth.requireUser, wrapper(true, async (req, res) => {
-    let userId = req.user.id;
+router.post('/userInfo', wrapper(async (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        if (req.session.loginData) {
+            userId = req.session.loginData.user.id
+        }
+    }
     const userInfoData = await new Request('/user/info', {
         userId
     }).post();
@@ -289,32 +306,6 @@ router.post('/userInfo', auth.requireUser, wrapper(true, async (req, res) => {
     } else {
         return res.json({
             msg: '获取用户信息返回失败',
-            success: false
-        })
-    }
-}))
-
-/**
- * 根据用户id获取用户信息
-/user/info?timespan=xx&raid=xx
-method: post
-body
-dba(必须) aes 加密的 userId==xxxx
-*/
-router.post('/otherUserInfo', wrapper(async(req, res) => {
-    const userId = req.body.userId || ''
-    const otherUserInfoData = await new Request('/user/info', {
-        userId
-    }).post();
-    if (otherUserInfoData.success) {
-        return res.json({
-            msg: '用户信息返回成功',
-            success: true,
-            data: userInfoData.data
-        })
-    } else {
-        return res.json({
-            msg: '用户信息返回失败',
             success: false
         })
     }
@@ -460,6 +451,22 @@ router.post('/action/follow', auth.requireUser, async (req, res, next) => {
       next(err);
     }
   });
+
+/**
+ * 获取用户的博文
+ * 获取用户的博文
+登录用户查看自己的博文，就不需要显示 是否关注了（系统默认用户关注了自己）
+/user/tweet?timespan=xx&raid=xx
+method: post
+body
+dba(必须) aes 加密的 page, limit, userId, otherUserId
+1 登录用户 用户查看自己的所有博文 userId
+2 登录用户 查看别人的所有博文 userId, otherUserId
+3 未登录查看 otherUserId
+ */
+router.post('/user/tweet', wrapper(async(req, res) => {
+    
+}))
 
 /**
  * 登出

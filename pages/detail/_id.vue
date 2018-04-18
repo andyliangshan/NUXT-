@@ -38,7 +38,6 @@
 <script>
 import Vue from 'vue';
 import { mapGetters, mapActions } from 'vuex';
-import axios from '~/plugins/axios';
 import * as filters from '../../server/tools/filters';
 import ReplayList from '../../components/ReplayList.vue';
 import TipPop from '../../components/TipPop.vue';

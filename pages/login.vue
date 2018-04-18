@@ -9,7 +9,7 @@
                 <div class="loginbox"><a href="javascript:void(0)" id="login" class="login" @click="showLoginState = !showLoginState">登录/注册</a></div>
             </div>
             <div class="version-list">
-                <a class="listcon row" href="/about">
+                <a class="listcon row" href="/user/about_us">
                     <span class="col-md-12">关于知币</span>
                     <em><img src="../assets/img/right-icon.png" alt="right-icon" /></em>
                 </a>
@@ -75,5 +75,9 @@ export default {
         background: url('../assets/img/icon1-black.png') no-repeat;
         background-size: contain;
     }
+}
+
+.prev-login {
+    margin-top 91px
 }
 </style>

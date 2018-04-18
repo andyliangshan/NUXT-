@@ -92,7 +92,7 @@ export default {
     .list-top {
       margin: 0;
       display: flex;
-      overflow visibility
+      overflow visibility !important
 
       .list-top-profile {
         display: inline-block;
@@ -107,6 +107,9 @@ export default {
           width: 32px;
           height: 32px;
           vertical-align: middle;
+          border-radius 50%
+          -webkit-border-radius 50%
+          -moz-border-radius 50%
         }
       }
 
@@ -137,7 +140,7 @@ export default {
 
       .list-top-attent {
         display: inline-block;
-        padding: 0;
+        padding: 0 5px 0 0;
         max-width: 70px;
 
         a {

@@ -11,7 +11,7 @@
                 <div class="submitBtn">
                     <button type="submit" class="btn btn-default about-btn" ref="btnCode">进入</button>
                 </div>
-                <div class="forgetPwd"><a href="/login/forgetPassword" class="backtoPage">忘记密码</a></div>
+                <div class="forgetPwd"><nuxt-link to="/login/forgetPassword" class="backtoPage">忘记密码</nuxt-link></div>
             </form>
         </div>
     </div>
@@ -80,7 +80,7 @@ export default {
     margin: 0 auto;
     position: absolute;
     top: 0;
-    left: 0;
+    left: 50%;
 
     .forgetPwd {
         clear: both;
@@ -302,6 +302,18 @@ export default {
             margin-right: 10px;
             width: auto;
         }
+    }
+}
+
+@media screen and (min-width 768px) {
+    .passwordFrom {
+        margin-left -375px
+    }
+}
+
+@media screen and (max-width 767px) {
+    .passwordFrom {
+        margin-left -50%
     }
 }
 </style>

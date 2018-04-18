@@ -232,7 +232,12 @@ router.post('/complaint', auth.requireUser, async (req, res) => {
  * page,limit 可选
  */
 router.get('/ru/rcd', wrapper(async (req, res) => {
-  const userId = req.session.loginData && req.session.loginData.user.id
+  let userId;
+  if (req.session.loginData) {
+    userId = req.session.loginData.user.id;
+  } else {
+    userId = ''
+  }
   const deviceId = fetchDeviceId(req)
   const page = req.query.page || 1
   const limit = req.query.limit || 10
@@ -347,18 +352,18 @@ token
 dba(必须) aes 加密的 userId==xxxx
 返回说明
  */
-router.post('/assets', wrapper(true, async (req, res) => { // token 用true字段来校验
-  const userId = req.session.loginData.user.id;
-
+router.post('/assets', auth.requireUser, wrapper(true, async (req, res) => { // token 用true字段来校验
+  const userId = req.user.id;
   const assetsData = await new Request('/user/assets', {
     userId,
   }).post();
-  console.log(assetsData, '.......11.......')
+  
   if (assetsData.success) {
+    const { data, rmb } = assetsData;
     return res.status(200).json({
       msg: '持有资产获取成功.',
       success: true,
-      data: assetsData.data
+      data: { t: data, c: rmb }
     })
   } else {
     return res.status(500).json({

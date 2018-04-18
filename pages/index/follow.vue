@@ -9,7 +9,7 @@
       </div>
     </div>
     <!--已经有关注内容列表-->
-    <!-- <data-list v-show="showSharePop" :pushDataList="result"></data-list> -->
+    <data-list v-show="showSharePop" :pushDataList="result"></data-list>
     <common-footer></common-footer>
   </div>
 </template>

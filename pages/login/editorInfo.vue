@@ -1,11 +1,11 @@
 <template>
-  <div class="teaseInfo">
+  <div class="teaseInfo" style="margin-top: 100px;">
     <div class="editorbg"><img src="../../assets/img/loginbg.png" alt="editorbg"/></div>
     <div class="teaseForm">
       <form @submit.stop.prevent="submitSaveEditorInfo">
         <div class="submitBox row">
-          <div class="backtoPage col-1"><a href="javascript:history.back(-1);" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></a></div>
-          <div class="title col-9">编辑个人资料</div>
+          <div class="backtoPage col-1"><nuxt-link to="/user" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></nuxt-link></div>
+          <div class="title col-9">编辑社区名片</div>
           <div class="submitBtn col-2"><button type="submit" id="about-btn" class="btn btn-defaultabout-btn">保存</button></div>
         </div>
         <div class="editorProfile">
@@ -33,6 +33,7 @@ import cropProfile from './cropProfile.vue';
 
 export default {
   name: 'teaseInfo',
+  middleware: 'authenticated',
   data() {
     return {
       nickName: '',
