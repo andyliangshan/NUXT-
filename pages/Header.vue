@@ -45,7 +45,7 @@
       </div>
     </div>
     <!--移动端-->
-    <div class="h5NavMeum">
+    <div class="h5NavMeum" v-if="userInfo">
       <div class="loginModel">
         <!--登录前-->
         <div class="loginTag"><nuxt-link to="/login">登录</nuxt-link></div>
