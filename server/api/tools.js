@@ -232,7 +232,12 @@ router.post('/complaint', auth.requireUser, async (req, res) => {
  * page,limit 可选
  */
 router.get('/ru/rcd', wrapper(async (req, res) => {
-  const userId = req.session.loginData && req.session.loginData.user.id
+  let userId;
+  if (req.session.loginData) {
+    userId = req.session.loginData.user.id;
+  } else {
+    userId = ''
+  }
   const deviceId = fetchDeviceId(req)
   const page = req.query.page || 1
   const limit = req.query.limit || 10

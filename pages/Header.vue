@@ -15,14 +15,14 @@
         <div class="loginbox">
             <div class="loginModel">
               <!--登录前-->
-              <div class="loginTag"><nuxt-link to="/login">登录</nuxt-link></div>
+              <div class="loginTag" v-if="userInfo"><nuxt-link to="/login">登录</nuxt-link></div>
               <!--登录后-->
-              <div class="showLoginState">
+              <div class="showLoginState" v-else>
                 <div class="successLogin"><img src="../assets/img/pelProfile.png" alt="pelProfile"/></div>
                 <div class="successBox">
                   <span class="triangle"></span>
                   <div class="logout">
-                    <nuxt-link to="/user" class="user" >个人中心</nuxt-link>
+                    <nuxt-link :to="'/user/' + userInfo.id" class="user" >个人中心</nuxt-link>
                     <nuxt-link to="/logout" class="logout" >退出登录</nuxt-link>
                   </div>
                 </div>
@@ -79,12 +79,19 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {};
   },
-  mounted() {},
-  methods: {},
+  middleware: 'authenticated',
+  computed: mapGetters(['userInfo']),
+  mounted() {
+    this.GET_MASTER_INFO_DATA()
+  },
+  methods: {
+    ...mapActions(['GET_MASTER_INFO_DATA']),
+  },
 };
 </script>
 

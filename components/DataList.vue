@@ -92,7 +92,7 @@ export default {
     .list-top {
       margin: 0;
       display: flex;
-      overflow visibility
+      overflow visibility !important
 
       .list-top-profile {
         display: inline-block;
@@ -140,7 +140,7 @@ export default {
 
       .list-top-attent {
         display: inline-block;
-        padding: 0;
+        padding: 0 5px 0 0;
         max-width: 70px;
 
         a {

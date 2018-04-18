@@ -287,8 +287,13 @@ router.post('/updateUserInfo', async (req, res, next) => { // auth.requireUser
 // method: post
 // body
 // dba(必须) aes 加密的 aes(userId==xxx)
-router.post('/userInfo', auth.requireUser, wrapper(true, async (req, res) => {
-    let userId = req.user.id;
+router.post('/userInfo', wrapper(async (req, res) => {
+    let userId = req.body.userId;
+    if (!userId) {
+        if (req.session.loginData) {
+            userId = req.session.loginData.user.id
+        }
+    }
     const userInfoData = await new Request('/user/info', {
         userId
     }).post();
@@ -301,32 +306,6 @@ router.post('/userInfo', auth.requireUser, wrapper(true, async (req, res) => {
     } else {
         return res.json({
             msg: '获取用户信息返回失败',
-            success: false
-        })
-    }
-}))
-
-/**
- * 根据用户id获取用户信息
-/user/info?timespan=xx&raid=xx
-method: post
-body
-dba(必须) aes 加密的 userId==xxxx
-*/
-router.post('/otherUserInfo', wrapper(async(req, res) => {
-    const userId = req.body.userId || ''
-    const otherUserInfoData = await new Request('/user/info', {
-        userId
-    }).post();
-    if (otherUserInfoData.success) {
-        return res.json({
-            msg: '用户信息返回成功',
-            success: true,
-            data: userInfoData.data
-        })
-    } else {
-        return res.json({
-            msg: '用户信息返回失败',
             success: false
         })
     }

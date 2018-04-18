@@ -80,7 +80,7 @@ export default {
     margin: 0 auto;
     position: absolute;
     top: 0;
-    left: 0;
+    left: 50%;
 
     .forgetPwd {
         clear: both;
@@ -302,6 +302,18 @@ export default {
             margin-right: 10px;
             width: auto;
         }
+    }
+}
+
+@media screen and (min-width 768px) {
+    .passwordFrom {
+        margin-left -375px
+    }
+}
+
+@media screen and (max-width 767px) {
+    .passwordFrom {
+        margin-left -50%
     }
 }
 </style>
