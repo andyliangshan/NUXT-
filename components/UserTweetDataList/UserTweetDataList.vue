@@ -50,7 +50,6 @@ import ReportList from '../../components/ReportList.vue';
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
-
 export default {
   name: 'index-datalist',
   middleware: 'authenticated',
@@ -60,7 +59,7 @@ export default {
       maxLen: 60,
       instroduce: '',
       page: 1,
-      limit: 10,
+      limit: 0,
       off_on: false,
       timers: null,
     };
@@ -163,8 +162,9 @@ export default {
           const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
           console.log(bkData, '-----');
           if (bkData.data.success) {
-            alert(bkData.data.msg);
-            selt.children[1].innerText = bkData.data.data;
+            alert(bkData.data.msg, '......');
+            selt.children[1].innerText = bkData.data.data.data;
+            selt.className = 'dianzan col-2 active';
           } else {
             alert(bkData.data.msg);
           }
@@ -172,19 +172,24 @@ export default {
       }
     },
     // 分页加载 page++ limit + 10
-    handLoadingDataScrollTop({ page, limit, otherUserId }) {
+    handLoadingDataScrollTop() {
       const _this = this;
       _this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-      // const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
+      const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
       if (_this.scrollTop + document.body.clientHeight > document.body.scrollHeight - 10) {
         console.log('aaaaa');
         clearTimeout(this.timers);
         this.timers = setTimeout(function() {
-          page = this.page++;
-          limit = this.limit + 10;
-          console.log('......');
-          console.log('第' + page, limit + '页');
-          // this.$store.dispatch('GET_TWEET_LIST_ALL_DATA', { page: page, limit: limit, otherUserId: uid });
+          const page = _this.page++;
+          const limit = _this.limit + 10;
+          const len = Math.ceil(this.tweetListData / 10);
+          if (this.tweetListData && this.tweetListData.length >= page) {
+            this.off_on = true;
+            _this.$store.dispatch('GET_TWEET_LIST_ALL_DATA', { page: page, limit: limit, otherUserId: uid });
+          } else {
+            this.off_on = false;
+          }
+          console.log('第' + page + '页', limit + '条数据');
         }, 300);
       }
     },

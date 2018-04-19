@@ -7308,6 +7308,12 @@ vue-router@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.1.tgz#d9b05ad9c7420ba0f626d6500d693e60092cc1e9"
 
+vue-scroller@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/vue-scroller/-/vue-scroller-2.2.4.tgz#c28a50f2e5ecd7ad60e43ce4eb8f38886ff7b1cf"
+  dependencies:
+    vue "^2.2.6"
+
 vue-server-renderer@^2.5.13:
   version "2.5.16"
   resolved "https://registry.yarnpkg.com/vue-server-renderer/-/vue-server-renderer-2.5.16.tgz#279ef8e37e502a0de3a9ae30758cc04a472eaac0"
@@ -7343,7 +7349,7 @@ vue2-touch-events@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/vue2-touch-events/-/vue2-touch-events-1.0.0.tgz#e1bf077d04ac93c46d1e811eafc6db6c75cb49d5"
 
-vue@^2.5.13:
+vue@^2.2.6, vue@^2.5.13:
   version "2.5.16"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.16.tgz#07edb75e8412aaeed871ebafa99f4672584a0085"
 

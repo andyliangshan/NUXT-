@@ -126,4 +126,10 @@ export default {
 .customState .after-login {
   margin-top 0
 }
+
+.customState {
+  .infolist {
+    clear none
+  }  
+}
 </style>

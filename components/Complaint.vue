@@ -13,7 +13,9 @@
 export default {
   name: 'complaint',
   props: ['tweet', 'show'],
-  data() {},
+  data() {
+    return {}
+  },
   methods: {
     hide() {
       this.isHide = true;
