@@ -2,7 +2,7 @@
   <div class="tweet-stats">
       <div><span class="collect-count">{{ tweet.collectCount }}</span></div>
       <div><span :class="['zan-count', {'already-zan': tweet.iszan}]" @click="zan">{{ tweet.zanCount }}  </span></div>
-      <div v-if="!hideReplyCount"><span class="reply-count">{{ tweet.replyCount }}</span></div>
+      <div v-if="!hideReplyCount"><span class="reply-count" @click="jumpToReply">{{ tweet.replyCount }}</span></div>
       <div><span class="share-count">{{ tweet.shareCount }}</span></div>
   </div>
 </template>
@@ -13,7 +13,7 @@ import axios from '~/plugins/axios';
 // import { toast } from './toast';
 
 export default {
-  props: ['hideReplyCount', 'tweet', 'user'],
+  props: ['hideReplyCount', 'tweet'],
   computed: mapGetters(['userInfo']),
   methods: {
     async zan() {
@@ -37,6 +37,10 @@ export default {
       if (resp.data.success) {
         this.$emit('zan', resp.data.data.data);
       }
+    },
+
+    jumpToReply() {
+      this.$router.push('/detail/' + this.tweet.id);
     },
   },
 };
