@@ -60,17 +60,25 @@
   </div>
 </template>
 <script>
-  export default {
-    name: 'message',
-    data () {
-      return {}
-    },
-    props: {},
-    mounted () { },
-    methods: {}
-  }
+import { mapActions, mapGetters } from 'vuex';
+export default {
+  name: 'message',
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapGetters(['noticeListData', 'userInfo']),
+  },
+  mounted() {
+    this.GET_NOTICE_LIST_DATA();
+    this.GET_MASTER_INFO_DATA();
+  },
+  methods: {
+    ...mapActions(['GET_NOTICE_LIST_DATA', 'GET_MASTER_INFO_DATA']),
+  },
+};
 </script>
 
 <style lang="stylus">
-  @import "../../assets/styl/notice.styl";
+@import '../../assets/styl/notice.styl';
 </style>

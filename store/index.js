@@ -26,6 +26,7 @@ const store = () => new Vuex.Store({
         otherUserMainInfoData: null,
         userMainInfoData: null,
         tweetListData: null,
+        noticeListData: null,
 
         //--------------
         loginPhone: null,   // 登录的手机号码

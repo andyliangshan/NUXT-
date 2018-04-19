@@ -29,8 +29,8 @@
               </div>
             </div>
             <div class="search"><nuxt-link to="/search" class="search" ><img src="../assets/img/search-b.png" alt="search"/></nuxt-link></div>
-            <div class="zhiB-msg">
-              <nuxt-link to="/notice" class="message" >
+            <div class="zhiB-msg" v-show="!!userInfo">
+              <nuxt-link to="/notice" class="message">
                 <img src="../assets/img/Info.png" alt="Group"/>
                 <em ref="showFlagIcon">3</em>
               </nuxt-link>
@@ -86,6 +86,7 @@ export default {
     return {
       loginState: false,
       h5LoginState: false,
+      showMsgState: false,
     };
   },
   middleware: 'authenticated',

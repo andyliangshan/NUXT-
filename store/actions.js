@@ -142,4 +142,16 @@ export default {
             console.log(err)
         }
     },
+    // 消息列表数据
+    GET_NOTICE_LIST_DATA: async({ commit }) => {
+        try {
+            const noticeListData = await axios.post('/api/notice/markedall');
+            if (noticeListData.data.success) {
+               commit('NOTICE_LIST_DATA', noticeListData)
+            }
+            // return noticeListData.data
+        } catch (err) {
+            console.log(err)
+        }
+    }
 }
