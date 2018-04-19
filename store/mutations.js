@@ -66,4 +66,15 @@ export default {
         state.userInfo = null;
         unsetToken();
     },
+    SET_ZAN(state, zanCount, userId) {
+        state.tweetInfoData.zanCount = zanCount;
+        state.tweetInfoData.iszan = {
+            userId
+        };
+    },
+    SET_FOLLOWED(state, followUserId) {
+        state.tweetInfoData.isfollow = {
+            followUserId
+        };
+    }
 }

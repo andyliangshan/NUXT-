@@ -9,7 +9,7 @@
           <div class="publish-time">{{ tweetInfoData.createdAt | dynamicFormatTime }}</div>
         </div>
         <div class="follow-button" v-if="showFollow()">
-          <button>TODO:关注</button>
+          <button @click="follow">关注</button>
         </div>
       </div>
       <article class="contDesc" v-html="format(tweetInfoData)"></article>
@@ -19,7 +19,7 @@
       <div class="category" v-if="tweetInfoData.tweetCategory">
         <span>{{tweetInfoData.tweetCategory.name}}</span>
       </div>
-      <div class="tweet-stats"></div>
+      <tweet-stats :tweet="tweetInfoData" hideReplyCount="true" v-on:zan="updateZan"></tweet-stats>
     </div>
     <div class="comments">
       <div class="comments-header">{{ tweetInfoData.replyCount }}评论</div>
@@ -37,11 +37,14 @@
 </template>
 <script>
 import Vue from 'vue';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 import * as filters from '../../server/tools/filters';
 import ReplayList from '../../components/ReplayList.vue';
 import TipPop from '../../components/TipPop.vue';
 import CommonHeader from '../../components/CommonHeader';
+import TweetStats from '../../components/TweetStats';
+import axios from '~/plugins/axios';
+import { toast } from '../../components/toast';
 
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
@@ -61,6 +64,7 @@ export default {
     ReplayList,
     TipPop,
     CommonHeader,
+    TweetStats,
   },
   head() {
     return {
@@ -115,7 +119,25 @@ export default {
     },
     showFollow() {
       // 如果当前用户没有 follow 作者，并且不是作者本人，显示“关注”
-      return this.tweetInfoData.isfollow === null && this.userInfo.id !== this.tweetInfoData.tweetUser.id;
+      return this.tweetInfoData.isfollow === null && this.userInfo && this.userInfo.id !== this.tweetInfoData.tweetUser.id;
+    },
+    ...mapMutations(['SET_ZAN', 'SET_FOLLOWED']),
+    // 关注用户
+    async follow() {
+      const postdata = {
+        toFollowUserId: this.tweetInfoData.tweetUser.id,
+        action: 1,
+      };
+      const resp = await axios.post('/api/action/follow', postdata, { credentials: true });
+      if (resp.data.success) {
+        this.SET_FOLLOWED(this.userInfo.id);
+        toast('关注成功');
+      } else {
+        toast(resp.data.msg);
+      }
+    },
+    updateZan(cnt) {
+      this.SET_ZAN(cnt, this.userInfo.id);
     },
   },
 };
@@ -126,6 +148,7 @@ export default {
 .tweet-detail {
   .tweet-content {
     padding: 15px;
+    padding-bottom: 6px;
     margin-bottom: 15px;
     background-color: #fff;
 
@@ -205,12 +228,15 @@ export default {
 
   // 分类名称
   .category {
+    margin-bottom: 15px;
+
     span {
       background-color: #F7F7F7;
       color: #7D7D7D;
       font-size: 0.9rem;
       padding: 8px 12px;
       border-radius: 10px;
+      display: inline-block;
     }
   }
 
@@ -227,6 +253,11 @@ export default {
     .newlist .list {
       padding: 15px 0 0 0;
     }
+  }
+
+  .tweet-stats {
+    border-top: 1px solid #e5e5e5;
+    font-size: 0.8rem;
   }
 }
 </style>
