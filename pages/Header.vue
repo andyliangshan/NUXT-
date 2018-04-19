@@ -69,10 +69,10 @@
          <div class="reloadPage"><a href="javascript:void(0)"><img src="../assets/img/zb-icon5.png" alt="reloadPage"/></a></div> 
       </div>
       <div class="mobileMeum">
-        <nuxt-link :to="{path: 'follow'}"><em>关注</em></nuxt-link>
-        <nuxt-link :to="{path: 'recommend'}"><em>推荐</em></nuxt-link>
-        <nuxt-link :to="{path: 'find'}"><em>发现</em></nuxt-link>
-        <nuxt-link :to="{path: 'user'}"><em>我</em></nuxt-link>
+        <nuxt-link :to="'/follow'"><em>关注</em></nuxt-link>
+        <nuxt-link :to="'/recommend'"><em>推荐</em></nuxt-link>
+        <nuxt-link :to="'/find'"><em>发现</em></nuxt-link>
+        <nuxt-link :to="'/user'"><em>我</em></nuxt-link>
       </div>
     </div>
   </div>

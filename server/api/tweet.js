@@ -495,4 +495,32 @@ router.get('/tweetSh', async (req, res) => {
         console.log(err);
     }
 })
+
+/**
+ * 删除博文
+/user/action/deltweet?timespan=xx&raid=xx
+method: post
+query
+token
+dba(必须) aes 加密的 userId===xx&&tweetId==xxx
+ */
+router.post('/deltweet', wrapper(true, async (req, res) => {
+    const userId = req.session.loginData.user.id;
+    const tweetId = req.body.tweetId;
+    const codeData = await new Request('/user/action/deltweet', {
+        userId,
+        tweetId
+    }).post();
+    if (codeData.success) {
+        return res.json({
+            msg: '删除博文成功',
+            success: true
+        })
+    } else {
+        return res.json({
+            msg: '删除博文失败',
+            success: false
+        })
+    }
+}))
 export default router
