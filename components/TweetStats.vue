@@ -10,6 +10,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import axios from '~/plugins/axios';
+// import { toast } from './toast';
 
 export default {
   props: ['hideReplyCount', 'tweet'],

@@ -111,25 +111,26 @@ export default {
 
 .findList {
   width: 100%;
-  overflow-y: hidden;
-  overflow-x: auto;
   padding: 10px 0;
   background: #f2f2f2;
 
   .list {
     width: 100%;
+    height 30px
+    overflow-x: auto;
 
     ul {
       width: 100%;
-      display: flex;
-      justify-content: flex-start;
       margin: 0;
       padding: 0;
+      overflow hidden
+      height 30px
 
       li {
         margin-left: 10px;
         text-align: center;
         list-style: none;
+        float left
 
         a {
           display: block;

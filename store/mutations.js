@@ -76,5 +76,9 @@ export default {
         state.tweetInfoData.isfollow = {
             followUserId
         };
+    },
+    // 消息列表数据
+    NOTICE_LIST_DATA: (state, data) => {
+        state.noticeListData = data
     }
 }

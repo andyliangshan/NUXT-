@@ -1,7 +1,7 @@
 <template>
   <div class="compatible" ref="compatible">
     <!--PC版本-->
-    <div class="nav-container" v-if="userInfo">
+    <div class="nav-container">
       <div class="min-container">
         <div class="login"><nuxt-link to="/recommend" class="login"><img src="../assets/img/logo.png" /></nuxt-link></div>
         <div class="menu">      
@@ -18,7 +18,7 @@
               <div class="loginTag" v-if="!userInfo"><nuxt-link to="/login">登录</nuxt-link></div>
               <!--登录后-->
               <div class="showLoginState" v-else @click="changeState">
-                <div class="successLogin"><img src="../assets/img/pelProfile.png" alt="pelProfile"/></div>
+                <div class="successLogin"><img :src="userInfo ? userInfo.avatarImage : '../assets/img/pelProfile.png'" alt="pelProfile"/></div>
                 <div class="successBox" v-show="loginState">
                   <span class="triangle"></span>
                   <div class="logout">
@@ -29,8 +29,8 @@
               </div>
             </div>
             <div class="search"><nuxt-link to="/search" class="search" ><img src="../assets/img/search-b.png" alt="search"/></nuxt-link></div>
-            <div class="zhiB-msg">
-              <nuxt-link to="/notice" class="message" >
+            <div class="zhiB-msg" v-show="!!userInfo">
+              <nuxt-link to="/notice" class="message">
                 <img src="../assets/img/Info.png" alt="Group"/>
                 <em ref="showFlagIcon">3</em>
               </nuxt-link>
@@ -45,12 +45,12 @@
       </div>
     </div>
     <!--移动端-->
-    <div class="h5NavMeum" v-if="userInfo">
+    <div class="h5NavMeum">
       <div class="loginModel">
         <!--登录前-->
-        <div class="loginTag"><nuxt-link to="/login">登录</nuxt-link></div>
+        <div class="loginTag" v-if="!userInfo"><nuxt-link to="/login">登录</nuxt-link></div>
         <!--登录后-->
-        <div class="showLoginState">
+        <div class="showLoginState" v-else>
           <div class="successLogin" @click="changeH5State">
             {{userInfo.nickName}}<img src="../assets/img/triangle.png" alt="Group" />
           </div>
@@ -69,31 +69,30 @@
          <div class="reloadPage"><a href="javascript:void(0)"><img src="../assets/img/zb-icon5.png" alt="reloadPage"/></a></div> 
       </div>
       <div class="mobileMeum">
-        <nuxt-link :to="{path: 'follow'}"><em>关注</em></nuxt-link>
-        <nuxt-link :to="{path: 'recommend'}"><em>推荐</em></nuxt-link>
-        <nuxt-link :to="{path: 'find'}"><em>发现</em></nuxt-link>
-        <nuxt-link :to="{path: 'user'}"><em>我</em></nuxt-link>
+        <nuxt-link :to="'/follow'"><em>关注</em></nuxt-link>
+        <nuxt-link :to="'/recommend'"><em>推荐</em></nuxt-link>
+        <nuxt-link :to="'/find'"><em>发现</em></nuxt-link>
+        <nuxt-link :to="'/user'"><em>我</em></nuxt-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
   computed: mapGetters(['userInfo']),
   data() {
     return {
       loginState: false,
       h5LoginState: false,
+      showMsgState: false,
     };
   },
   middleware: 'authenticated',
   mounted() {
-    this.GET_MASTER_INFO_DATA();
   },
   methods: {
-    ...mapActions(['GET_MASTER_INFO_DATA']),
     changeState() {
       // this.$emit('transmitState', !this.loginState)
       this.loginState = true;

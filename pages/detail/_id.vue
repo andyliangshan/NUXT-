@@ -3,7 +3,7 @@
     <common-header :title="tweetInfoData.tweetUser.nickName + '的币文'"></common-header>
     <div class="tweet-content">
       <div class="tweet-info">
-        <div class="author-avatar"><nuxt-link :to="'/user/' + tweetInfoData.tweetUser.id" class="backtoPage"><img src="../../assets/img/profile.png" alt="profile"></nuxt-link></div>
+        <div class="author-avatar"><nuxt-link :to="'/user/' + tweetInfoData.tweetUser.id" class="backtoPage"><img :src="tweetInfoData.tweetUser.avatarImage" alt="profile"></nuxt-link></div>
         <div class="info">
           <div class="author-name"><nuxt-link :to="'/user/' + tweetInfoData.tweetUser.id" class="backtoPage">{{ tweetInfoData.tweetUser.nickName }}</nuxt-link></div>
           <div class="publish-time">{{ tweetInfoData.createdAt | dynamicFormatTime }}</div>

@@ -17,7 +17,7 @@
             <a href="javascript:void(0);" class="attention active" ref="attentBtn" @click="changeStateAttent(item, $event)">已关注</a>
           </div>
           <div class="list-r-attention" v-else>
-            <a href="javascript:void(0);" class="attention" ref="attentBtn" @click="changeStateAttent(item, $event)">已关注</a>
+            <a href="javascript:void(0);" class="attention" ref="attentBtn" @click="changeStateAttent(item, $event)">关注</a>
           </div>
         </div>
         <div class="list-links"><a :href="'/user/' +  item.toFollowUser.id" class="links">&nbsp;</a></div>
