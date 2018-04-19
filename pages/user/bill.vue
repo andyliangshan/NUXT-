@@ -38,9 +38,9 @@ export default {
   },
   async mounted() {
     const flag = await this.GET_BILL_INFO_DATA()
-    if (flag) {
+    if (!flag) {
       alert('网络异常，请稍后再试！');
-      this.$router.push({ path: '/myAssets' })
+      this.$router.push({ path: '/user/myAssets' })
     }
   },
   computed: {
