@@ -12,6 +12,9 @@ export default {
     otherUserMainInfoData: state => state.otherUserMainInfoData, // 获取其他用户个人主页数据
     userMainInfoData: state => state.userMainInfoData, // 获取主人用户个人主页数据
     noticeListData: state => state.noticeListData, // 消息列表数据
+    cpsData: state => state.cpsData, // 举报成功数据
+    cpsedData: state => state.cpsedData, // 被举报数据
+    cpsnoData: state => state.cpsnoData, // 恶意举报数据
 
     //  --------
     isAuthenticated: state => !!state.userInfo,

@@ -21,7 +21,18 @@
 </template>
 
 <script>
-
+import { mapGetters, mapActions } from 'vuex';
+export default {
+  name: 'reportSuccess',
+  computed: mapGetters(['userInfo', 'cpsData']),
+  middleware: 'authenticated',
+  mounted() {
+    this.GET_CPS_DATA()
+  },
+  methods: {
+    ...mapActions(['GET_CPS_DATA'])
+  },
+}
 </script>
 
 <style lang="stylus">

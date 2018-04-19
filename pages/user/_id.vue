@@ -123,7 +123,7 @@ export default {
 
 <style lang="stylus">
 @import '../../assets/styl/customState.styl';
-.after-login {
+.customState .after-login {
   margin-top 0
 }
 </style>

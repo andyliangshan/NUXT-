@@ -28,6 +28,11 @@ const store = () => new Vuex.Store({
         tweetListData: null,
         noticeListData: null,
 
+        everyDataCoinZIB: null,
+        cpsData: null,
+        cpsedData: null,
+        cpsnoData: null,
+
         //--------------
         loginPhone: null,   // 登录的手机号码
         isUserNew: false,   // 是否是新注册用户

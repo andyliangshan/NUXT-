@@ -153,5 +153,41 @@ export default {
         } catch (err) {
             console.log(err)
         }
-    }
+    },
+    // 举报成功
+    GET_CPS_DATA: async({ commit }) => {
+        try {
+            const cpsData = await axios.post('/api/cps');
+            if (cpsData.data.success) {
+               commit('CPS_DATA', cpsData.data)
+            }
+            // return noticeListData.data
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    // 被举报
+    GET_CPSED_DATA: async({ commit }) => {
+        try {
+            const cpsedData = await axios.post('/api/cpsed');
+            if (cpsedData.data.success) {
+               commit('CPSED_DATA', cpsedData.data)
+            }
+            // return noticeListData.data
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    // 恶意举报
+    GET_CPS_NO_DATA: async({ commit }) => {
+        try {
+            const cpsnoData = await axios.post('/api/cpsno');
+            if (cpsnoData.data.success) {
+               commit('CPS_NO_DATA', cpsnoData.data.data)
+            }
+            // return noticeListData.data
+        } catch (err) {
+            console.log(err)
+        }
+    },
 }

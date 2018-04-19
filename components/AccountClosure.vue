@@ -1,11 +1,11 @@
 <template>
-  <div class="accountClose">
+  <div class="accountClose" v-if="cpsnoData">
     <div class="incomeInfo">
       <div class="closeIncome">×</div>
       <div class="incomeList">
-        <div class="title">账号封停</div>
-        <div class="subTitle">您举报的内容未通过审核，举报行为被判定为“恶意举报”。</div>
-        <div class="accoutDesc">账号将被封号 1 天，1 天内您将无法进行文章发布、投票和评论操作，望知晓！</div>
+        <div class="title">{{ cpsnoData.reason }}</div>
+        <div class="subTitle">{{ cpsnoData.message }}</div>
+        <div class="accoutDesc">{{ cpsnoData.extraMsg }}</div>
         <div class="queryDetail"><a href="javascript:void(0)">确定</a></div>
       </div>
     </div>
@@ -13,7 +13,18 @@
 </template>
 
 <script>
-
+import { mapGetters, mapActions } from 'vuex';
+export default {
+  name: 'accountClose',
+  computed: mapGetters(['userInfo', 'cpsnoData']),
+  middleware: 'authenticated',
+  mounted() {
+    this.GET_CPS_NO_DATA()
+  },
+  methods: {
+    ...mapActions(['GET_CPS_NO_DATA'])
+  },
+}
 </script>
 
 <style lang="stylus">

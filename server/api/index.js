@@ -1,4 +1,6 @@
-import { Router } from 'express'
+import {
+    Router
+} from 'express'
 
 import users from './users'
 import tools from './tools'

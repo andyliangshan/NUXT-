@@ -13,11 +13,13 @@ import {
 } from '../common/remote'
 import auth from '../middlewares/auth'
 import {
-    Request
+  Request
 } from '../tools/request';
 import {
   wrapper
 } from '../tools/wrapper';
+import requestIp from 'request-ip'
+import { resolve4 } from 'dns';
 
 const router = new Router()
 
@@ -320,7 +322,7 @@ router.get('/baipishu.pdf', async (req, res) => {
 router.post('/bill', wrapper(true, async (req, res) => {
   console.log('......./////...')
   const page = req.body.page || 1;
-  const limit = req.body.limit ||20;
+  const limit = req.body.limit || 20;
   const userId = req.session.loginData.user.id;
 
   const billData = await new Request('/user/bill', {
@@ -357,13 +359,19 @@ router.post('/assets', auth.requireUser, wrapper(true, async (req, res) => { // 
   const assetsData = await new Request('/user/assets', {
     userId,
   }).post();
-  
+
   if (assetsData.success) {
-    const { data, rmb } = assetsData;
+    const {
+      data,
+      rmb
+    } = assetsData;
     return res.status(200).json({
       msg: '持有资产获取成功.',
       success: true,
-      data: { t: data, c: rmb }
+      data: {
+        t: data,
+        c: rmb
+      }
     })
   } else {
     return res.status(500).json({
@@ -412,12 +420,16 @@ dba(必须) aes 加密的 page, limit, userId, otherUserId
 2 登录用户 查看别人的粉丝 userId, otherUserId
 3 未登录查看 otherUserId
  */
-router.post('/fans', wrapper(async(req, res) => {
+router.post('/fans', wrapper(async (req, res) => {
   const page = req.body.page || 1;
   const limit = req.body.limit || 20
   const otherUserId = req.body.otherUserId || ''
-  const userId = req.session.loginData && req.session.loginData.user.id;
-
+  let userId;
+  if (req.session.loginData) {
+    userId = req.session.loginData.user.id;
+  } else {
+    userId = ''
+  }
   const fansData = await new Request('/user/fans', {
     userId,
     page,
@@ -449,12 +461,16 @@ dba(必须) aes 加密的 page, limit, otherUserId, userId
 2 登录用户 查看其他用户所关注的人 参数userId，otherUserId
 3 未登录查看 otherUserId
  */
-router.post('/user/follow', wrapper(async(req, res) => {
+router.post('/user/follow', wrapper(async (req, res) => {
   const page = req.body.page || 1;
   const limit = req.body.limit || 20
   const otherUserId = req.body.otherUserId || ''
-  const userId = req.session.loginData && req.session.loginData.user.id;
-
+  let userId;
+  if (req.session.loginData) {
+    userId = req.session.loginData.user.id;
+  } else {
+    userId = ''
+  }
   const followData = await new Request('/user/follow', {
     userId,
     page,
@@ -473,6 +489,125 @@ router.post('/user/follow', wrapper(async(req, res) => {
       msg: '粉丝获取失败.',
       success: false
     })
+  }
+}))
+/**
+ * 用户每日登录领取赠送币
+/user/day/coin?timespan=xx&raid=xx
+method: post
+body
+token
+dba: userId==xxx&&ip==xxx&&device==xxx * ip web页面必须传递， ios/android 不需要传递 * device 取值： ios, android, pc,h5
+ */
+router.post('/coin', wrapper(true, async (req, res) => {
+  const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
+  const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
+
+  const ip = requestIp.getClientIp(req);
+  const userId = req.session.loginData.user.id;
+
+  const aesStr = `ip==${ip}&&userId==${userId}&&device==pc`;
+  const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
+
+  const coinData = await agent.post(`${resApi.zhiBApi}/user/day/coin`, {
+      timespan,
+      raid
+  }, {
+      dba
+  });
+  if (coinData.success) {
+      res.json({
+          msg: '成功领取赠送币.',
+          success: true,
+          data: coinData
+      });
+  } else {
+      res.json({
+          msg: '领取赠送币失败.',
+          success: false
+      });
+  }
+}))
+/**
+ * 每日登录时获取登录用户是否有举报奖励的信息
+/user/day/cps?timespan=xx&raid=xx
+method: post
+body
+token
+dba: userId==xxx
+ */
+router.post('/cps', wrapper(true, async (req, res) => {
+  const userId = req.session.loginData.user.id;
+  const cpsData = await new Request('/user/day/cps', {
+    userId
+  }).post();
+  
+  console.log(cpsData, '........55555........')
+  if (cpsData.success) {
+      res.json({
+          msg: '有举报奖励.',
+          success: true,
+          data: cpsData.data
+      });
+  } else {
+      res.json({
+          msg: '无举报奖励.',
+          success: false
+      });
+  }
+}))
+/**
+ * 每日登录时获取登录用户是否有被举报的信息
+/user/day/cpsed?timespan=xx&raid=xx
+method: post
+body
+token
+dba: userId==xxx
+ */
+router.post('/cpsed', wrapper(true, async (req, res) => {
+  const userId = req.session.loginData.user.id;
+  const cpsedData = await new Request('/user/day/cpsed', {
+    userId
+  }).post();
+  console.log(cpsedData, '........66666........')
+  if (cpsedData.success) {
+      res.json({
+          msg: '有被举报.',
+          success: true,
+          data: cpsedData.data
+      });
+  } else {
+      res.json({
+          msg: '无被举报.',
+          success: false
+      });
+  }
+}))
+/**
+ * 每日登录时获取登录用户是否有恶意举报封号的
+/user/day/cpsno?timespan=xx&raid=xx
+method: post
+body
+token
+dba: userId==xxx
+ */
+router.post('/cpsno', wrapper(true, async (req, res) => {
+  const userId = req.session.loginData.user.id;
+  const cpsnoData = await new Request('/user/day/cpsno', {
+    userId
+  }).post();
+  console.log(cpsnoData, '........77777........')
+  if (cpsnoData.success) {
+      res.json({
+          msg: '有被举报.',
+          success: true,
+          data: cpsnoData.data
+      });
+  } else {
+      res.json({
+          msg: '无被举报.',
+          success: false
+      });
   }
 }))
 export default router

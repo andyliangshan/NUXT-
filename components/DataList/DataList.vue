@@ -4,7 +4,7 @@
       <!-- <div class="tipsNews">5条新币文</div> -->
       <div class="dataListCont" v-for="(items, ind) in recommedList.tweet" :key="ind">
         <div class="list-top row">
-          <div class="list-top-profile col-2"><img :src="items.tweetUser.avatarImage" alt="profile"></div>
+          <div class="list-top-profile col-2"><nuxt-link :to="'/user/' + items.tweetUser.id" class="backtoPage"><img :src="items.tweetUser.avatarImage" alt="profile"></nuxt-link></div>
           <div class="list-top-info col-8">
             <div class="list-top-info-title"><nuxt-link :to="'/user/' + items.tweetUser.id" class="backtoPage">{{ items.tweetUser.nickName }}</nuxt-link></div>
             <div class="list-top-info-publishTime"><span>{{ items.createdAt | dynamicFormatTime }}</span></div>

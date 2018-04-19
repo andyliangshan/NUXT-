@@ -9,7 +9,7 @@
             <div class="list-top-info-publishTime"><span>{{ items.createdAt | dynamicFormatTime }}</span></div>
           </div>
           <div class="list-top-attent col-2" v-show="userInfo.id === items.tweetUser.id">
-            <a href="javascript:void(0)" class="delete" ref="deleteBtn" @click="deleteTweet(items, $event)">删除</a>
+            <a href="javascript:void(0)" class="delete" ref="deleteBtn" @click="deleteTweet(items, ind, $event)">删除</a>
             <!-- <a href="javascript:void(0)" class="report">×</a> -->
           </div>
           <div class="list-top-attent col-2" v-show="userInfo.id !== items.tweetUser.id" v-if="items.isfollow === null">
@@ -72,18 +72,15 @@ export default {
   mounted() {
     const otherUserId = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
     this.GET_TWEET_LIST_ALL_DATA({ page: 1, limit: 10, otherUserId: otherUserId });
-    // const wrapper = document.querySelector('#wrapper');
     window.addEventListener('scroll', this.handLoadingDataScrollTop);
   },
   methods: {
     ...mapActions(['GET_TWEET_LIST_ALL_DATA']),
-    async deleteTweet(item, event) {
+    async deleteTweet(item, index, event) {
       const evt = event.currentTarget;
-      console.log(evt);
       const deleteBtn = await axios.post('/api/deltweet', { tweetId: item.id });
       if (deleteBtn.data.success) {
         alert('成功删除该条博文');
-        this.$refs[evt].parentRoot.removeChild();
       } else {
         alert('删除失败');
       }
@@ -178,14 +175,14 @@ export default {
     handLoadingDataScrollTop({ page, limit, otherUserId }) {
       const _this = this;
       _this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-      const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
-      if (_this.scrollTop + document.body.clientHeight > (document.body.scrollHeight - 10)) {
-        console.log('aaaaa')
+      // const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
+      if (_this.scrollTop + document.body.clientHeight > document.body.scrollHeight - 10) {
+        console.log('aaaaa');
         clearTimeout(this.timers);
         this.timers = setTimeout(function() {
           page = this.page++;
           limit = this.limit + 10;
-          console.log('......')
+          console.log('......');
           console.log('第' + page, limit + '页');
           // this.$store.dispatch('GET_TWEET_LIST_ALL_DATA', { page: page, limit: limit, otherUserId: uid });
         }, 300);

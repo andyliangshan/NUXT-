@@ -80,5 +80,21 @@ export default {
     // 消息列表数据
     NOTICE_LIST_DATA: (state, data) => {
         state.noticeListData = data
-    }
+    },
+    // 删除某一条数据重置
+    spliceData(state, dataName, index) {
+        state[dataName] = state[dataName].splice(index, 1)
+    },
+    // 举报成功
+    CPS_DATA: (state, data) => {
+        state.cpsData = data
+    },
+    // 被举报
+    CPSED_DATA: (state, data) => {
+        state.cpsedData = data
+    },
+    // 恶意举报
+    CPS_NO_DATA: (state, data) => {
+        state.cpsnoData = data
+    },
 }

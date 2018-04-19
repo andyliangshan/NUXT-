@@ -21,7 +21,18 @@
 </template>
 
 <script>
-
+import { mapGetters, mapActions } from 'vuex';
+export default {
+  name: 'accountClose',
+  computed: mapGetters(['userInfo', 'cpsedData']),
+  middleware: 'authenticated',
+  mounted() {
+    this.GET_CPSED_DATA()
+  },
+  methods: {
+    ...mapActions(['GET_CPSED_DATA'])
+  },
+}
 </script>
 
 <style lang="stylus">
