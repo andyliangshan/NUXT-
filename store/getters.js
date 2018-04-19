@@ -8,8 +8,10 @@ export default {
     tweetRcdData: state => state.tweetRcdData, // 首页 推荐 文章 + 1条精选
     singleReplayListData: state => state.singleReplayListData, // 首页 推荐 单个回复列表
     tweetInfoData: state => state.tweetInfoData, // 获取博文详情页面数据
+    tweetListData: state => state.tweetListData, // 获取博文列表页面数据
     otherUserMainInfoData: state => state.otherUserMainInfoData, // 获取其他用户个人主页数据
     userMainInfoData: state => state.userMainInfoData, // 获取主人用户个人主页数据
+    noticeListData: state => state.noticeListData, // 消息列表数据
 
     //  --------
     isAuthenticated: state => !!state.userInfo,

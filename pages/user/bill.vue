@@ -1,7 +1,7 @@
 <template>
   <div class="bill" v-if="userBilldata">
     <div class="bill-top">
-      <div class="backpage"><a href="javascript:history.back(-1);" class="backtoPagse"><img src="../../assets/img/back.png" alt="backWhite"/></a></div>
+      <div class="backpage"><a href="/user/myAssets" class="backtoPagse"><img src="../../assets/img/back.png" alt="backWhite"/></a></div>
       <div class="myTitle">个人账单</div>
     </div>
     <div class="bill-list">

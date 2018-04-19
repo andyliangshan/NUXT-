@@ -83,3 +83,21 @@ a:visited {
   opacity: 0;
   transform: translate(-30px, 0);
 }
+
+#toast-msg {
+  left: 0px;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: -webkit-fit-content;
+  height: -webkit-fit-content;
+  color: black;
+  margin: auto;
+  border: none;
+  padding: 1em;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  position: fixed;
+}
