@@ -147,4 +147,8 @@ export default {
     color: #f00;
   }
 }
+
+.teaseInfo {
+  margin-top 0  
+}
 </style>

@@ -9,10 +9,10 @@
           <div class="list-top-info-publishTime"><span>{{ item.createdAt | dynamicFormatTime }}</span></div>
         </div>
         <div class="list-top-attent col-2" v-if="item.isfollow !== null">
-          <a href="javascript:void(0);" class="attention active">已关注</a>
+          <a href="javascript:void(0);" class="attention active" @click="changeStateAttent(item, $event)">已关注</a>
         </div>
         <div class="list-top-attent col-2" v-else>
-          <a href="javascript:void(0);" class="attention">关注</a>
+          <a href="javascript:void(0);" class="attention" @click="changeStateAttent(item, $event)">关注</a>
         </div>
       </div>
       <div class="list-mid">
@@ -22,13 +22,13 @@
           <p>查看详情</p>
         </div>
         <div class="list-mid-publish-img">
-          <span v-for="(tem, ind) in (JSON.parse(item.images) || '')" :key="ind"><img :src=tem[ind] alt="profile-ho"/></span>
+          <span v-for="(tem, ind) in (JSON.parse(item.images) || [])" :key="ind"><img :src=tem.url alt="profile-ho"/></span>
         </div>
       </div>
       <div class="list-bot row">
         <div class="coin"><span>&nbsp;</span><em>{{ item.currentScoreWorth }}</em></div>
-        <div class="dianzan col-2" ><span>&nbsp;</span><em>{{ item.zanCount }}</em></div>
-        <div class="sendmsg col-2"><span>&nbsp;</span>{{ item.collectCount }}</div>
+        <div :class="[item.iszan === null ? 'dianzan col-2' : 'dianzan col-2 active']" @click="userDianZanFlag(item, $event)"><span>&nbsp;</span><em>{{ item.zanCount }}</em></div>
+        <div class="sendmsg col-2"><nuxt-link :to="'/detail/' + item.id"><span>&nbsp;</span>{{ item.collectCount }}</nuxt-link></div>
         <div class="share col-6"><span>&nbsp;</span>{{ item.shareCount }}</div>
       </div>
     </div>
@@ -36,7 +36,7 @@
 </template>
 <script>
 import Vue from 'vue';
-// import axios from '~/plugins/axios'
+import axios from '~/plugins/axios'
 import * as filters from '../server/tools/filters';
 import ReportList from '../components/ReportList.vue';
 import TipPop from './TipPop.vue';
@@ -63,7 +63,51 @@ export default {
     TipPop,
     ReportList,
   },
-  methods: {},
+  methods: {
+    async changeStateAttent(item, evt) {
+      const selt = evt.currentTarget;
+      if (item.isfollow === null) {
+        this.action = 1;
+        selt.innerHTML = '已关注';
+        selt.style.border = '1px solid #939393';
+        selt.style.color = '#939393';
+      } else {
+        this.action = -1;
+        selt.innerHTML = '关注Ta';
+        selt.style.border = '1px solid #138FF2';
+        selt.style.color = '#138FF2';
+      }
+      const postdata = {
+        toFollowUserId: item.tweetUser.id,
+        action: this.action,
+      };
+      const bkData = await axios.post('/api/action/follow', postdata, { credentials: true });
+      if (bkData.data.success) {
+        alert(bkData.data.msg);
+      } else {
+        alert(bkData.data.msg);
+      }
+    },
+    async userDianZanFlag(item, evt) {
+      const selt = evt.currentTarget;
+      if (item.iszan !== null) {
+        alert('你已经点过赞啦～');
+      } else {
+        const postdata = {
+          targetUserId: item.tweetUser.id,
+          tweetId: item.id,
+        };
+        const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
+        console.log(bkData, '-----');
+        if (bkData.data.success) {
+          alert(bkData.data.msg);
+          selt.children[1].innerText = bkData.data.data;
+        } else {
+          alert(bkData.data.msg);
+        }
+      }
+    },
+  },
   mounted() {},
 };
 </script>

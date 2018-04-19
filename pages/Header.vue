@@ -1,7 +1,7 @@
 <template>
   <div class="compatible" ref="compatible">
     <!--PC版本-->
-    <div class="nav-container">
+    <div class="nav-container" v-if="userInfo">
       <div class="min-container">
         <div class="login"><nuxt-link to="/recommend" class="login"><img src="../assets/img/logo.png" /></nuxt-link></div>
         <div class="menu">      
@@ -51,10 +51,10 @@
         <div class="loginTag"><nuxt-link to="/login">登录</nuxt-link></div>
         <!--登录后-->
         <div class="showLoginState">
-          <div class="successLogin">
+          <div class="successLogin" @click="changeH5State">
             {{userInfo.nickName}}<img src="../assets/img/triangle.png" alt="Group" />
           </div>
-          <div class="logoutBox">
+          <div class="logoutBox" v-show="h5LoginState">
             <em class="triangle"></em>
             <div class="logout">
               <nuxt-link to="/notice" class="notice">消息列表</nuxt-link>
@@ -64,7 +64,7 @@
         </div>
       </div>
       <div class="editorArea">
-         <div class="release"><a><img src="../assets/img/zb-icon6.png" alt="release"/></a></div>
+         <div class="release"><nuxt-link to="/release"><img src="../assets/img/zb-icon6.png" alt="release"/></nuxt-link></div>
          <div class="search"><nuxt-link to="/search"><img src="../assets/img/zb-icon7.png" alt="search"/></nuxt-link></div>
          <div class="reloadPage"><a href="javascript:void(0)"><img src="../assets/img/zb-icon5.png" alt="reloadPage"/></a></div> 
       </div>
@@ -85,6 +85,7 @@ export default {
   data() {
     return {
       loginState: false,
+      h5LoginState: false,
     };
   },
   middleware: 'authenticated',
@@ -95,7 +96,16 @@ export default {
     ...mapActions(['GET_MASTER_INFO_DATA']),
     changeState() {
       // this.$emit('transmitState', !this.loginState)
-      this.loginState = !this.loginState;
+      this.loginState = true;
+      setTimeout(() => {
+        this.loginState = false;
+      }, 2000)
+    },
+    changeH5State() {
+      this.h5LoginState = true;
+      setTimeout(() => {
+        this.h5LoginState = false;
+      }, 2000)
     },
   },
 };

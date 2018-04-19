@@ -15,7 +15,7 @@
                 <a href="javascript:void(0)" id="logout" class="logout" >{{ otherUserMainInfoData.nickName }}</a>
               </div>
               <div class="editorInfo">{{ otherUserMainInfoData.introduce }}</div>
-              <div class="attentedBox" v-show="otherUserMainInfoData.isfollow">
+              <div class="attentedBox" v-show="userInfo.id !== otherUserMainInfoData.id">
                 <a href="javascript:void(0);" class="follow" @click="changeStateAttent(otherUserMainInfoData, $event)">关注</a>
                 <!-- <a href="/privateLetter" class="priviateLetter">私信</a> -->
               </div>
@@ -47,7 +47,7 @@
         <div class="fillline"></div>
       </div>   
       <div class="customList">
-        <data-list-box ref="datalist" :recommedList="tweetList"></data-list-box>
+        <data-list-box ref="datalist"></data-list-box>
       </div>
     </div>
   </div>
@@ -55,17 +55,15 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import axios from '~/plugins/axios';
-import DataListBox from '../../components/UserDataList/UserDataList.vue';
+import DataListBox from '../../components/UserTweetDataList/UserTweetDataList.vue';
 
 export default {
   name: 'customState',
   data() {
     return {
-      userInfo: {},
       toFollowUserId: '',
       action: null,
       userCookie: '',
-      tweetList: {},
       isAttentInfo: {},
     };
   },
@@ -75,17 +73,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['otherUserMainInfoData']),
+    ...mapGetters(['otherUserMainInfoData', 'userInfo']),
   },
   mounted() {
     const otherUserId = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
     this.GET_OTHER_USER_INFO_DATA(otherUserId);
+    this.GET_MASTER_INFO_DATA();
   },
   components: {
     DataListBox,
   },
   methods: {
-    ...mapActions(['GET_OTHER_USER_INFO_DATA']),
+    ...mapActions(['GET_MASTER_INFO_DATA', 'GET_OTHER_USER_INFO_DATA']),
     async changeStateAttent(item, evt) {
       const selt = evt.currentTarget;
       if (item.isfollow === null) {

@@ -1,7 +1,7 @@
 <template>
   <div class="bill" v-if="userBilldata">
     <div class="bill-top">
-      <div class="backpage"><a href="javascript:history.back(-1);" class="backtoPagse"><img src="../../assets/img/back.png" alt="backWhite"/></a></div>
+      <div class="backpage"><a href="/user/myAssets" class="backtoPagse"><img src="../../assets/img/back.png" alt="backWhite"/></a></div>
       <div class="myTitle">个人账单</div>
     </div>
     <div class="bill-list">
@@ -40,7 +40,7 @@ export default {
     const flag = await this.GET_BILL_INFO_DATA()
     if (flag) {
       alert('网络异常，请稍后再试！');
-      this.$router.push({ path: '/myAssets' })
+      this.$router.push({ path: '/user/myAssets' })
     }
   },
   computed: {

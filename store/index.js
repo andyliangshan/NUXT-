@@ -25,6 +25,7 @@ const store = () => new Vuex.Store({
         singleReplayListData: [],
         otherUserMainInfoData: null,
         userMainInfoData: null,
+        tweetListData: null,
 
         //--------------
         loginPhone: null,   // 登录的手机号码

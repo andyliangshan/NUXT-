@@ -108,6 +108,17 @@ export default {
             console.log(err)
         }
     },
+    // 获取博文列表页面数据
+    GET_TWEET_LIST_ALL_DATA: async({ commit }, { page, limit, otherUserId }) => {
+        try {
+            const tweetListData = await axios.post('/api/user/tweet');
+            if (tweetListData.data.success) {
+            commit('GET_TWEET_LIST_DATA', tweetListData.data.data)
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    },
     // 获取其他用户个人主页数据
     GET_OTHER_USER_INFO_DATA: async({ commit }, userId) => {
         try {

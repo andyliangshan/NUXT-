@@ -33,6 +33,11 @@
     data () {
       return {}
     },
+    head() {
+      return {
+        title: '我关注的'
+      }
+    },
     mounted () {
       this.MY_ATTENTED();
     },

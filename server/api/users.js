@@ -2,19 +2,34 @@ import fs from 'fs';
 import path from 'path';
 import util from 'util';
 import moment from 'moment';
-import { Router } from 'express'
+import {
+    Router
+} from 'express'
 import SecretKey from '../utils/encry/cryptoer'
 import agent from '../utils/fetch/superAgent'
 import validator from 'validator'
-import { aesKeys, cookieConf, pubKeys } from '../config'
-import { fetchDeviceId } from '../common/remote'
+import {
+    aesKeys,
+    cookieConf,
+    pubKeys
+} from '../config'
+import {
+    fetchDeviceId
+} from '../common/remote'
 import redis from '../utils/redis/redisCache'
 import requestIp from 'request-ip'
 import qnStore from "../common/qnStore";
 import auth from '../middlewares/auth'
-import { resApi } from '../config'
-import { Request } from '../tools/request';
-import { wrapper } from '../tools/wrapper';
+import logger from "../utils/log4js";
+import {
+    resApi
+} from '../config'
+import {
+    Request
+} from '../tools/request';
+import {
+    wrapper
+} from '../tools/wrapper';
 import app from '../index';
 
 const router = new Router()
@@ -57,12 +72,18 @@ router.post('/login', wrapper(async (req, res) => { // auth.detectTimespan
     const phone = validator.trim(req.body.phone || '');
     const ip = requestIp.getClientIp(req);
     const deviceId = fetchDeviceId(req);
-    
+
     if (!password) {
-        return res.json({ success: false, msg: 'pass error'})
+        return res.json({
+            success: false,
+            msg: 'pass error'
+        })
     }
     if (!phone) {
-        return res.json({ success: false, msg: 'phone error'})
+        return res.json({
+            success: false,
+            msg: 'phone error'
+        })
     }
 
     const loginData = await new Request('/account/login', {
@@ -91,7 +112,7 @@ router.post('/login', wrapper(async (req, res) => { // auth.detectTimespan
         return res.json({
             msg: '登录成功',
             success: true,
-            token : token,
+            token: token,
             user: loginData.data.user,
         });
     } else {
@@ -172,7 +193,7 @@ router.post('/account/password', wrapper(async (req, res) => { // auth.detectTim
             msg: '设置密码成功.',
             timeout: 60,
             success: true,
-            token : token,
+            token: token,
             user: accountData.data.user,
         });
     } else {
@@ -316,8 +337,8 @@ router.post('/base642img', async (req, res) => {
     req.busboy.on('field', function (key, value, keyTruncated, valueTruncated) {
         const base64Data = value.replace(/^data:image\/\w+;base64,/, '');
         const dataBuffer = new Buffer(base64Data, 'base64');
-        fs.writeFile(path.join(__dirname, `../upload/holeImg.png`), dataBuffer, function (err) {
-            console.log('11')
+        fs.writeFile(path.join(__dirname, `../../upload/holeImg.png`), dataBuffer, function (err) {
+            console.log('11', __dirname)
             if (err) {
                 console.log('22')
                 res.json({
@@ -327,7 +348,7 @@ router.post('/base642img', async (req, res) => {
             } else {
                 console.log('33')
                 // ../upload/a5f70019ad238d0cf5ef3a2eb4d7763c.jpg
-                qnStore.upload(fs.createReadStream(path.join(__dirname, '../upload/holeImg.png')), function (err, result) {
+                qnStore.upload(fs.createReadStream(path.join(__dirname, '../../upload/holeImg.png')), function (err, result) {
                     console.log('55')
                     console.log(err, result);
                     if (err) {
@@ -424,33 +445,39 @@ router.post('/action/follow', auth.requireUser, async (req, res, next) => {
     const signature = req.session.loginData.signature;
     const toFollowUserId = req.body.toFollowUserId || '';
     const action = req.body.action || '';
-  
+
     const deviceId = fetchDeviceId(req);
     const pubStr = `phone==${phone}&&signature==${signature}&&deviceId==${deviceId}`;
     const aesStr = `toFollowUserId==${toFollowUserId}&&action==${action}&&userId==${userId}`;
-  
+
     try {
-      const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
-      const token = SecretKey.nodeRSAEncryptWithPubKey(pubStr, pubKeys);
-      const followData = await agent.post(`${resApi.zhiBApi}/user/action/follow`, { timespan, raid }, { dba, token });
-      console.log(followData, '===========');
-  
-      if (followData.success) {
-        return res.json({
-          msg: '关注_取消 ok',
-          success: true,
-          data: followData.data,
+        const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
+        const token = SecretKey.nodeRSAEncryptWithPubKey(pubStr, pubKeys);
+        const followData = await agent.post(`${resApi.zhiBApi}/user/action/follow`, {
+            timespan,
+            raid
+        }, {
+            dba,
+            token
         });
-      } else {
-        return res.json({
-          msg: '关注失败',
-          success: false,
-        });
-      }
+        console.log(followData, '===========');
+
+        if (followData.success) {
+            return res.json({
+                msg: '关注_取消 ok',
+                success: true,
+                data: followData.data,
+            });
+        } else {
+            return res.json({
+                msg: '关注失败',
+                success: false,
+            });
+        }
     } catch (err) {
-      next(err);
+        next(err);
     }
-  });
+});
 
 /**
  * 获取用户的博文
@@ -464,8 +491,88 @@ dba(必须) aes 加密的 page, limit, userId, otherUserId
 2 登录用户 查看别人的所有博文 userId, otherUserId
 3 未登录查看 otherUserId
  */
-router.post('/user/tweet', wrapper(async(req, res) => {
-    
+router.post('/user/tweet', wrapper(async (req, res) => {
+    const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
+    const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
+    const userId = req.session.loginData && req.session.loginData.user.id
+    const page = req.body.page || 1
+    const limit = req.body.limit || 10
+    const otherUserId = req.body.otherUserId || ''
+
+    const aesStr = userId ? `page==${page}&&limit==${limit}&&otherUserId==${otherUserId}&&userId==${userId}` : `page==${page}&&limit==${limit}&&otherUserId==${otherUserId}`;
+    const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
+
+    const tweetData = await agent.post(`${resApi.zhiBApi}/user/tweet`, {
+        timespan,
+        raid
+    }, {
+        dba
+    });
+    console.log(tweetData, '===========');
+
+    if (tweetData.success) {
+        return res.json({
+            msg: '获取用户博文成功',
+            success: true,
+            data: tweetData.data,
+        });
+    } else {
+        return res.json({
+            msg: '获取用户的博文失败',
+            success: false,
+        });
+    }
+}))
+
+/**
+ * 用户关注的用户的最新博文
+/user/follow/tweet?timespan=xx&raid=xx
+method: post
+body
+token(必须) 公钥加密的 deviceId, phone, signature
+dba(必须) aes 加密的
+page, 可选
+limit, 可选
+userId 必须
+rtime 13为时间戳 首次为0
+ */
+router.post('/user/follow/tweet', wrapper(true, async (req, res) => {
+    const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
+    const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
+    const userId = req.session.loginData.user.id
+    const phone = req.session.loginData.user.phone;
+    const signature = req.session.loginData.signature;
+    const deviceId = fetchDeviceId(req);
+
+    const page = req.body.page || 1
+    const limit = req.body.limit || 10
+    const rtime = req.body.rtime || 0 // 需要验证时间戳
+
+    const aesStr = `page==${page}&&limit==${limit}&&rtime==${rtime}&&userId==${userId}`;
+    const pubStr = `deviceId==${deviceId}&&phone==${phone}&&signature==${signature}`;
+    const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
+    const token = SecretKey.nodeRSAEncryptWithPubKey(pubStr, pubKeys);
+    const followData = await agent.post(`${resApi.zhiBApi}/user/follow/tweet`, {
+        timespan,
+        raid
+    }, {
+        dba,
+        token
+    });
+    console.log(followData, '===========');
+
+    if (followData.success) {
+        return res.json({
+            msg: '获取最新博文成功',
+            success: true,
+            data: followData.data,
+        });
+    } else {
+        return res.json({
+            msg: '获取最新博文失败',
+            success: false,
+        });
+    }
 }))
 
 /**
