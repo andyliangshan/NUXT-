@@ -33,6 +33,7 @@
         </form>
       </div>
     </div>
+    <complaint :show="showComplain"></complaint>
   </div>
 </template>
 <script>
@@ -45,6 +46,7 @@ import CommonHeader from '../../components/CommonHeader';
 import TweetStats from '../../components/TweetStats';
 import axios from '~/plugins/axios';
 import { toast } from '../../components/toast';
+import Complaint from '../../components/complaint';
 
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
@@ -58,6 +60,7 @@ export default {
       comment: '',
       title: '币文正文',
       canFollow: true,
+      showComplain: false
     };
   },
   components: {
@@ -65,6 +68,7 @@ export default {
     TipPop,
     CommonHeader,
     TweetStats,
+    Complaint,
   },
   head() {
     return {
@@ -93,6 +97,7 @@ export default {
     // 格式化博文内容（加粗显示）
     format(tweet) {
       let content = tweet.content;
+      document.title = this.userInfo.nickName + '的币文';
       try {
         // 解析 ['10:5','21:2'] 格式的加粗标记，并替换博文内容
         const contentBold = Array.isArray(tweet.contentBold) ? tweet.contentBold : JSON.parse(tweet.contentBold);

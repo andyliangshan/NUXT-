@@ -246,7 +246,7 @@ export default {
     top: 0;
     display: flex;
     flex-direction: column;
-    pointer-events: default;
+    pointer-events: auto;
 
     // 自定义 common-header 右上角按钮样式
     .common-header .btn-tool {
