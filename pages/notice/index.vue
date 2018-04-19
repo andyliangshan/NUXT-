@@ -19,7 +19,7 @@
     <div class="noticeList">
       <h1>通知列表</h1>
       <div class="notice">
-        <div class="list">
+        <!-- <div class="list">
           <div class="list-top row">
             <div class="list-top-l col-2"><img src="../../assets/img/profile-ho.png" alt="pravite-profile"/></div>
             <div class="list-top-mid col-8">
@@ -54,7 +54,7 @@
             <div class="col-2"></div>
             <div class="remarkDesc col-10">我每天都会更新一些行情研判，大家快来关注我，跟着我，保证翻倍</div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -71,10 +71,9 @@ export default {
   },
   mounted() {
     this.GET_NOTICE_LIST_DATA();
-    this.GET_MASTER_INFO_DATA();
   },
   methods: {
-    ...mapActions(['GET_NOTICE_LIST_DATA', 'GET_MASTER_INFO_DATA']),
+    ...mapActions(['GET_NOTICE_LIST_DATA']),
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="compatible" ref="compatible">
     <!--PC版本-->
-    <div class="nav-container" v-if="userInfo">
+    <div class="nav-container">
       <div class="min-container">
         <div class="login"><nuxt-link to="/recommend" class="login"><img src="../assets/img/logo.png" /></nuxt-link></div>
         <div class="menu">      
@@ -18,7 +18,7 @@
               <div class="loginTag" v-if="!userInfo"><nuxt-link to="/login">登录</nuxt-link></div>
               <!--登录后-->
               <div class="showLoginState" v-else @click="changeState">
-                <div class="successLogin"><img src="../assets/img/pelProfile.png" alt="pelProfile"/></div>
+                <div class="successLogin"><img :src="userInfo ? userInfo.avatarImage : '../assets/img/pelProfile.png'" alt="pelProfile"/></div>
                 <div class="successBox" v-show="loginState">
                   <span class="triangle"></span>
                   <div class="logout">
@@ -45,12 +45,12 @@
       </div>
     </div>
     <!--移动端-->
-    <div class="h5NavMeum" v-if="userInfo">
+    <div class="h5NavMeum">
       <div class="loginModel">
         <!--登录前-->
-        <div class="loginTag"><nuxt-link to="/login">登录</nuxt-link></div>
+        <div class="loginTag" v-if="!userInfo"><nuxt-link to="/login">登录</nuxt-link></div>
         <!--登录后-->
-        <div class="showLoginState">
+        <div class="showLoginState" v-else>
           <div class="successLogin" @click="changeH5State">
             {{userInfo.nickName}}<img src="../assets/img/triangle.png" alt="Group" />
           </div>
@@ -91,10 +91,8 @@ export default {
   },
   middleware: 'authenticated',
   mounted() {
-    this.GET_MASTER_INFO_DATA();
   },
   methods: {
-    ...mapActions(['GET_MASTER_INFO_DATA']),
     changeState() {
       // this.$emit('transmitState', !this.loginState)
       this.loginState = true;

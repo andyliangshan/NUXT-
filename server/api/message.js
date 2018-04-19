@@ -72,7 +72,9 @@ router.post('/notice', auth.requireUser, async (req, res, next) => {
   dba aes加密
   userId(必须) 登录用户 id
  */
-router.post('/notice/markedall', wrapper(true, async (req, res) => {
+router.post('/notice/markedall', auth.authUser, auth.authToken, async (req, res) => {
+  console.log('22')
+
   const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys);
   const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys);
 
@@ -87,25 +89,30 @@ router.post('/notice/markedall', wrapper(true, async (req, res) => {
   const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
   const token = SecretKey.nodeRSAEncryptWithPubKey(pubStr, pubKeys);
 
-  const noticeListData = await agent.post(`${resApi.zhiBApi}/notice/markedall`, {
-    timespan,
-    raid
-  }, {
-    dba,
-    token
-  });
-  console.log(noticeListData, '===========');
-
-  if (noticeListData.success) {
-    return res.json({
-      msg: '消息列表获取成功',
-      success: true,
+  console.log('11',userId, phone, signature)
+  try {
+    const noticeListData = await agent.post(`${resApi.zhiBApi}/notice/markedall`, {
+      timespan,
+      raid
+    }, {
+      dba,
+      token
     });
-  } else {
-    return res.json({
-      msg: '消息列表获取失败',
-      success: false,
-    });
+    console.log(noticeListData, '===========');
+  
+    if (noticeListData.success) {
+      return res.json({
+        msg: '消息列表获取成功',
+        success: true,
+      });
+    } else {
+      return res.json({
+        msg: '消息列表获取失败',
+        success: false,
+      });
+    }
+  } catch (err) {
+    console.log(err)
   }
-}))
+})
 export default router
