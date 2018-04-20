@@ -42,7 +42,12 @@ export default {
     },
     // 获取博文列表页面数据
     GET_TWEET_LIST_DATA: (state, data) => {
-        state.tweetListData = data;
+        if (!state.tweetListData) {
+            state.tweetListData = data;
+        } else {
+            data.forEach(tweet => state.tweetListData.push(tweet));
+        }
+        // state.tweetListData = data;
     },
     // 获取其他用户个人主页数据
     GET_OTHER_USER_INFO_ALL_DATA: (state, data) => {

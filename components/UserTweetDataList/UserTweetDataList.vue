@@ -184,8 +184,8 @@ export default {
     // 分页加载 page++ limit + 10
     infiniteHandler($state) {
       const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
-      const page = Math.ceil(this.tweetListData.length / 10);
-      this.$store.dispatch('GET_TWEET_LIST_ALL_DATA', { page: page, limit: 10, otherUserId: uid });
+      // const page = Math.ceil(this.tweetListData.length / 10);
+      this.$store.dispatch('GET_TWEET_LIST_ALL_DATA', { page: ++this.page, limit: 10, otherUserId: uid });
       if (this.tweetListData.length) {
         // this.tweetListData = this.tweetListData.concat(newData);
         $state.loaded();
