@@ -110,4 +110,12 @@ export default {
     USER_FOLLOW_TWEET_LIST_DATA: (state, data) => {
         state.userFollowListData = data
     },
+    // 分类数据
+    CATEGORY_DATA: (state, data) => {
+        state.categoryData = data
+    },
+    // 分类列表数据
+    CATEGORY_LIST_DATA: (state, data) => {
+        state.categoryListData = data
+    },
 }

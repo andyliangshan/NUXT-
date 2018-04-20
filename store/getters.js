@@ -17,6 +17,8 @@ export default {
     cpsnoData: state => state.cpsnoData, // 恶意举报数据
     isFollowState: state => state.isFollowState, // 用户是否关注了否个用户
     userFollowListData: state => state.userFollowListData, // 用户关注的博文列表数据
+    categoryData: state => state.categoryData, // 分类数据
+    categoryListData: state => state.categoryListData, // 分类列表数据
     //  --------
     isAuthenticated: state => !!state.userInfo,
     userInfo: state => state.userInfo,

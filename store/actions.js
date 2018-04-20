@@ -215,4 +215,28 @@ export default {
             console.log(err)
         }
     },
+    // 获取分类
+    CATEGORY_ALL_DATA: async({ commit }, { page, limit }) => {
+        try {
+            const categoryData = await axios.get(`/api/categoryList?page=${page}&&limit=${limit}`);
+            if (categoryData.data.success) {
+               commit('CATEGORY_DATA', categoryData.data.data)
+            }
+            // return noticeListData.data
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    // 获取分类列表数据
+    GET_CATEGORY_ALL_DATA: async({ commit }, { page, limit, categoryId }) => {
+        try {
+            const categorylistData = await axios.post('/api/falls', { page: page, limit: limit, categoryId: categoryId });
+            if (categorylistData.data.success) {
+               commit('CATEGORY_LIST_DATA', categorylistData.data.data)
+            }
+            // return noticeListData.data
+        } catch (err) {
+            console.log(err)
+        }
+    },
 }

@@ -13,7 +13,7 @@
             <!-- <a href="javascript:void(0)" class="report">×</a> -->
           </div>
           <div class="list-top-attent col-2" v-show="userInfo.id !== items.tweetUser.id" v-if="items.isfollow !== null">
-            <a href="javascript:void(0)" class="attention" ref="attentBtn active" @click="changeStateAttent(items, $event)">已关注</a>
+            <a href="javascript:void(0)" class="attention active" ref="attentBtn" @click="changeStateAttent(items, $event)">已关注</a>
           </div>
           <div class="list-top-attent col-2" v-show="userInfo.id !== items.tweetUser.id" v-else>
             <a href="javascript:void(0)" class="attention" ref="attentBtn" @click="changeStateAttent(items, $event)">关注</a>
@@ -131,11 +131,11 @@ export default {
         if (item.isfollow === null) {
           this.action = 1;
           selt.innerHTML = '已关注';
-          selt.className = 'attentBtn active';
+          selt.className = 'attention active';
         } else {
           this.action = -1;
           selt.innerHTML = '关注';
-          selt.className = 'attentBtn';
+          selt.className = 'attention';
         }
         const postdata = {
           toFollowUserId: item.tweetUser.id,
