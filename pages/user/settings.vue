@@ -40,6 +40,9 @@ export default {
       const bkData = await axios.post('/api/logout')
       if (bkData) {
         this.LOGINOUT();
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('logout');
         this.$router.push({ path: '/login' })
       }
     }

@@ -95,6 +95,9 @@ export default {
     async logout() {
       const logout = await axios.post('/api/logout');
       if (logout.data.success) {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('logout');
         this.$router.push({ path: '/login' });
       } else {
         alert('退出失败');
