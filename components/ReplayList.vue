@@ -40,9 +40,9 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import axios from '~/plugins/axios'
+import axios from '~/plugins/axios';
 import * as filters from '../server/tools/filters';
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
@@ -51,44 +51,48 @@ Object.keys(filters).forEach(key => {
 export default {
   name: 'newlist',
   data() {
-    return {
-    };
+    return {};
   },
   mounted() {
-    const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0]
-    this.SINGLE_REPLAY_LIST(uid)
+    const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
+    this.SINGLE_REPLAY_LIST(uid);
   },
   computed: {
-    ...mapGetters(['singleReplayListData'])
+    ...mapGetters(['singleReplayListData', 'userInfo']),
   },
   methods: {
     ...mapActions(['SINGLE_REPLAY_LIST']),
     async userDianZanFlag(item, evt) {
-      const selt = evt.currentTarget;
-      if (item.iszan !== null) {
-        alert('你已经点过赞啦～');
-      } else {
-        const postdata = {
-          targetUserId: item.UserId,
-          tweetId: item.TweetId,
-        };
-        const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
-        console.log(bkData, '-----')
-        if (bkData.data.success) {
-          alert(bkData.data.msg);
-          selt.children[1].innerText = bkData.data.data;
+      if (this.userInfo) {
+        const selt = evt.currentTarget;
+        if (item.iszan !== null) {
+          alert('你已经点过赞啦～');
         } else {
-          alert(bkData.data.msg);
+          const postdata = {
+            targetUserId: item.UserId,
+            tweetId: item.TweetId,
+          };
+          const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
+          console.log(bkData, '-----');
+          if (bkData.data.success) {
+            alert(bkData.data.msg);
+            selt.children[0].children[0].innerText = bkData.data.data.data;
+            selt.className = 'list-bot-zans col-2 active'
+          } else {
+            alert(bkData.data.msg);
+          }
         }
+      } else {
+        this.$router.push({ path: '/login' });
       }
     },
     async replayComments() {
-    //  const commentsInsertContHTML = '';
-    }
-  }
-}
+      //  const commentsInsertContHTML = '';
+    },
+  },
+};
 </script>
 
 <style lang="stylus">
-@import "../assets/styl/replayList.styl";
+@import '../assets/styl/replayList.styl';
 </style>

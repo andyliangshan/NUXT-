@@ -8,7 +8,7 @@
           <div class="profileInfo">
             <div class="profilebg">
               <img :src="userInfo.avatarImage" alt="profile" ref="avatarImg" />
-              <a href="javascript:void(0)" class="accoutFreeze"><i><img src="../../assets/img/tan.png" alt="editor" /></i>账号冻结</a>
+              <a href="javascript:void(0)" class="accoutFreeze" v-if="userInfo.isBlock"><i><img src="../../assets/img/tan.png" alt="editor" /></i>账号冻结</a>
             </div>
             <div class="profile-r">
               <div class="loginbox">
@@ -128,5 +128,9 @@ export default {
 </script>
 <style lang="stylus">
 @import '../../assets/styl/login.styl';
+  .after-login .infolist {
+    position absolute
+    top 158px
+  }
 </style>
 

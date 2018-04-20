@@ -7,7 +7,7 @@
           <nuxt-link to="/user" class="backtoPagse"><img src="../../assets/img/backWhite.png" alt="backWhite"/></nuxt-link>
         </div>
         <div class="myTitle">我的资产</div>
-        <div class="myBill"><a href="/user/bill" class="bill"><img src="../../assets/img/bill.png" alt="bill"/></a></div>
+        <div class="myBill"><a href="/user/bill"><img src="../../assets/img/bill.png" alt="bill"/></a></div>
       </div>
       <div class="incomeSelf">
         <div class="self-tit">昨日收益</div>

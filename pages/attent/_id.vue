@@ -50,7 +50,7 @@ export default {
   methods: {
     ...mapActions(['MY_ATTENTED']),
     async changeStateAttent(item, evt) {
-      if (!this.userInfo) {
+      if (this.userInfo) {
         const selt = evt.currentTarget;
         if (item.toFollowUser.isfollow === null) {
           this.action = 1;
@@ -73,6 +73,8 @@ export default {
         } else {
           alert(bkData.data.msg);
         }
+      } else {
+        this.$router.push({ path: '/login' })
       }
     },
   },

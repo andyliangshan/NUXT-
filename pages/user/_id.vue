@@ -16,10 +16,12 @@
                   <a href="javascript:void(0)" id="logout" class="logout" >{{ otherUserMainInfoData.nickName }}</a>
                 </div>
                 <div class="editorInfo">{{ otherUserMainInfoData.introduce }}</div>
-                <div class="attentedBox" v-show="userInfo.id !== otherUserMainInfoData.id">
-                  <a href="javascript:void(0);" class="follow" @click="changeStateAttent(otherUserMainInfoData, $event)">关注</a>
-                  <!-- <a href="javascript:void(0);" class="follow" @click="changeStateAttent(otherUserMainInfoData, $event)">关注</a> -->
+                <div class="attentedBox" v-show="userInfo.id !== otherUserMainInfoData.id" v-if="isFollowState && isFollowState.data1.isFollow !== true">
+                  <a href="javascript:void(0);" class="follow" @click="changeStateAttent($event)">关注</a>
                   <!-- <a href="/privateLetter" class="priviateLetter">私信</a> -->
+                </div>
+                <div class="attentedBox" v-show="userInfo.id !== otherUserMainInfoData.id" v-else>
+                  <a href="javascript:void(0);" class="follow active" @click="changeStateAttent($event)">已关注</a>
                 </div>
               </div>
             </div>    
@@ -51,7 +53,7 @@
         <div class="customList">
           <data-list-box ref="datalist"></data-list-box>
         </div>
-      </div>
+      </div>     
     </div>
   </div>
 </template>
@@ -76,40 +78,40 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['otherUserMainInfoData', 'userInfo']),
+    ...mapGetters(['otherUserMainInfoData', 'userInfo', 'isFollowState']),
   },
   mounted() {
     const otherUserId = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
     this.GET_OTHER_USER_INFO_DATA(otherUserId);
+    this.GET_IS_FOLLOW_DATA({ targetUserId: otherUserId });
   },
   components: {
     DataListBox,
   },
   methods: {
-    ...mapActions(['GET_OTHER_USER_INFO_DATA']),
-    async changeStateAttent(item, evt) {
+    ...mapActions(['GET_OTHER_USER_INFO_DATA', 'GET_IS_FOLLOW_DATA']),
+    async changeStateAttent(evt) {
       if (!this.userInfo) {
         this.$router.push({
-          path: '/login'
-        })
+          path: '/login',
+        });
       } else {
         const selt = evt.currentTarget;
-        if (item.isfollow === null) {
+        if (this.isFollowState.data1.isFollow === false) {
           this.action = 1;
           selt.innerHTML = '已关注';
-          selt.style.border = '1px solid #939393';
-          selt.style.color = '#939393';
+          selt.className = 'follow active';
         } else {
           this.action = -1;
           selt.innerHTML = '关注';
-          selt.style.border = '1px solid #138FF2';
-          selt.style.color = '#138FF2';
+          selt.className = 'follow';
         }
+        const otherUserId = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
         const postdata = {
-          toFollowUserId: item.id,
+          toFollowUserId: otherUserId,
           action: this.action,
         };
-        const bkData = await axios.post('/api/action/follow', postdata, { credentials: true });
+        const bkData = await axios.post('/api/action/follow', postdata);
         if (bkData.data.success) {
           alert(bkData.data.msg);
         } else {
@@ -123,13 +125,12 @@ export default {
 
 <style lang="stylus">
 @import '../../assets/styl/customState.styl';
+
 .customState .after-login {
-  margin-top 0
+  margin-top: 0;
 }
 
-.customState {
-  .infolist {
-    clear none
-  }  
+body, html {
+  overflow: auto !important;
 }
 </style>

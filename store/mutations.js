@@ -42,6 +42,11 @@ export default {
     },
     // 获取博文列表页面数据
     GET_TWEET_LIST_DATA: (state, data) => {
+        // if (!state.tweetListData) {
+        //     state.tweetListData = data;
+        // } else {
+        //     data.forEach(tweet => state.tweetListData.push(tweet));
+        // }
         state.tweetListData = data;
     },
     // 获取其他用户个人主页数据
@@ -96,5 +101,13 @@ export default {
     // 恶意举报
     CPS_NO_DATA: (state, data) => {
         state.cpsnoData = data
+    },
+    // 是否关注了某个用户
+    IS_FOLLOW_STATE: (state, data) => {
+        state.isFollowState = data
+    },
+    // 用户关注的博文列表数据
+    USER_FOLLOW_TWEET_LIST_DATA: (state, data) => {
+        state.userFollowListData = data
     },
 }

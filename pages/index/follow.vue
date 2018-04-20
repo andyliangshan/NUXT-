@@ -1,7 +1,7 @@
 <template>
   <div class="follow">
     <!--没有关注内容显示-->
-    <div class="noFollow" ref="follow">
+    <div class="noFollow" ref="follow" v-show="userFollowListData !== ''">
       <div class="cont">
         <div class="img"><img src="../../assets/img/attent.png" alt="Group"/></div>
         <div class="desc">还没有关注账号哟</div>
@@ -9,13 +9,15 @@
       </div>
     </div>
     <!--已经有关注内容列表-->
-    <data-list v-show="showSharePop" :pushDataList="result"></data-list>
+    <!-- <data-list v-show="showSharePop" :pushDataList="result"></data-list> -->
+    <follow-list-data></follow-list-data>
     <common-footer></common-footer>
   </div>
 </template>
 
 <script>
-import DataList from '../../components/DataList.vue';
+import { mapGetters } from 'vuex'
+import FollowListData from '../../components/FollowListData.vue';
 import commonFooter from '../HomeFooter.vue';
 
 export default {
@@ -34,8 +36,11 @@ export default {
       title: '关注',
     };
   },
+  computed: {
+    ...mapGetters(['userFollowListData'])
+  },
   components: {
-    DataList,
+    FollowListData,
     commonFooter,
   },
 };

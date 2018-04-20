@@ -209,7 +209,7 @@ router.post('/complaint', auth.requireUser, async (req, res) => {
     token,
     dba
   })
-  // console.log(complaintData, '===========')
+  // console.log(complaintData, '=====complaintData======')
   if (complaintData.success) {
     return res.json({
       msg: '投诉举报成功',
@@ -285,7 +285,7 @@ router.get('/version', async (req, res) => {
     raid,
     dba
   })
-  // console.log(versionData, '===========')
+  // console.log(versionData, '=====verisondata======')
   if (versionData.success) {
     return res.json({
       msg: '版本更新成功',

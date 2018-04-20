@@ -1,26 +1,28 @@
 <template>
   <div>
-    <div>分享博文</div>
+    <!-- <share :config="config"></share> -->
   </div>
 </template>
 <script>
-  export default{
-    name: 'attentPop',
-    data () {
-      return {
-        msg: ''
-      }
+// import Vue from 'vue';
+// import Share from 'vue-social-share';
+// Vue.use(Share);
+
+export default {
+  name: 'attentPop',
+  data() {
+    return {
+      msg: '',
+    };
+  },
+  props: {
+    customClass: {
+      type: String,
+      default: '',
     },
-    props: {
-      customClass: {
-        type: String,
-        default: ''
-      }
-    },
-    methods: {
-    }
-  }
+  },
+  methods: {},
+};
 </script>
 <style lang="stylus">
-
 </style>

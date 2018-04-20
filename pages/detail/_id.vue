@@ -78,8 +78,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['tweetInfoData']),
-    ...mapGetters(['userInfo']),
+    ...mapGetters(['tweetInfoData', 'userInfo']),
   },
   mounted() {
     const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
@@ -199,10 +198,10 @@ export default {
       .follow-button {
         button {
           border: 1px solid #138FF2;
-          padding: 0.5em 2em;
+          padding: 3px 15px;
           color: #138FF2;
           background-color: transparent;
-          border-radius: 8px;
+          border-radius: 4px;
           margin-top: 15px;
         }
       }
@@ -240,9 +239,9 @@ export default {
     span {
       background-color: #F7F7F7;
       color: #7D7D7D;
-      font-size: 0.9rem;
-      padding: 8px 12px;
-      border-radius: 10px;
+      font-size: 14px;
+      padding: 3px 15px;
+      border-radius: 4px;
       display: inline-block;
     }
   }

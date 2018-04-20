@@ -4,7 +4,7 @@
       <div class="backtoPage col-1"><a href="javascript:history.back(-1);" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></a></div>
       <div class="title col-11">消息</div>
     </div>
-    <div class="privateMsg row">
+    <!-- <div class="privateMsg row">
       <div class="msg-l col-3">
         <div class="msg-l-profile"><img src="../../assets/img/profile-ho.png" alt="profile"/></div>
         <span><img src="../../assets/img/Info-white.png" alt="profile"/></span>
@@ -15,10 +15,10 @@
         <div class="msg-r-desc"><b>马云：</b>兄弟，我看好你的项目，有没有兴趣具体聊有没有兴趣具体聊</div>
       </div>
       <div class="links-privateLetter"><a href="/privateLetter" class="privateLetter">&nbsp;</a></div>
-    </div>
+    </div> -->
     <div class="noticeList">
       <h1>通知列表</h1>
-      <div class="notice">
+      <div class="notice" v-if="noticeListData">
         <!-- <div class="list">
           <div class="list-top row">
             <div class="list-top-l col-2"><img src="../../assets/img/profile-ho.png" alt="pravite-profile"/></div>
@@ -66,6 +66,12 @@ export default {
   data() {
     return {};
   },
+  head() {
+    return {
+      title: '通知列表'
+    }
+  },
+  middleware: 'authenticated',
   computed: {
     ...mapGetters(['noticeListData', 'userInfo']),
   },

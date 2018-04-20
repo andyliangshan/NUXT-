@@ -33,6 +33,9 @@ const store = () => new Vuex.Store({
         cpsedData: null,
         cpsnoData: null,
 
+        isFollowState: null,
+        userFollowListData: [],
+
         //--------------
         loginPhone: null,   // 登录的手机号码
         isUserNew: false,   // 是否是新注册用户

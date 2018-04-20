@@ -12,12 +12,12 @@
             <a href="javascript:void(0)" class="delete" ref="deleteBtn" @click="deleteTweet(items, ind, $event)">删除</a>
             <!-- <a href="javascript:void(0)" class="report">×</a> -->
           </div>
-          <div class="list-top-attent col-2" v-show="userInfo.id !== items.tweetUser.id" v-if="items.isfollow === null">
+          <div class="list-top-attent col-2" v-show="userInfo.id !== items.tweetUser.id" v-if="items.isfollow !== null">
+            <a href="javascript:void(0)" class="attention" ref="attentBtn active" @click="changeStateAttent(items, $event)">已关注</a>
+          </div>
+          <div class="list-top-attent col-2" v-show="userInfo.id !== items.tweetUser.id" v-else>
             <a href="javascript:void(0)" class="attention" ref="attentBtn" @click="changeStateAttent(items, $event)">关注</a>
           </div>
-          <!-- <div class="list-top-attent col-2" v-show="userInfo.id !== items.tweetUser.id" v-else>
-            <a href="javascript:void(0)" class="attention" ref="attentBtn active" @click="changeStateAttent(items, $event)">已关注</a>
-          </div> -->
         </div>
         <div class="list-mid">
           <div class="list-mid-publish-content">
@@ -36,12 +36,6 @@
           <div class="share col-7"><span></span>{{ items.shareCount }}</div>
         </div>
       </div>
-
-      <infinite-loading @infinite="infiniteHandler">
-        <span slot="no-more">
-          数据已经加载完～😊
-        </span>
-      </infinite-loading>
     </div>
     <report-list v-show="reportListPop"></report-list>
   </div>
@@ -89,7 +83,7 @@ export default {
       if (deleteBtn.data.success) {
         alert('成功删除该条博文');
         this.tweetListData.splice(index, 1);
-        this.$store.commit('GET_TWEET_LIST_ALL_DATA')
+        this.$store.commit('GET_TWEET_LIST_ALL_DATA');
       } else {
         alert('删除失败');
       }
@@ -137,13 +131,11 @@ export default {
         if (item.isfollow === null) {
           this.action = 1;
           selt.innerHTML = '已关注';
-          selt.style.border = '1px solid #939393';
-          selt.style.color = '#939393';
+          selt.className = 'attentBtn active';
         } else {
           this.action = -1;
           selt.innerHTML = '关注';
-          selt.style.border = '1px solid #138FF2';
-          selt.style.color = '#138FF2';
+          selt.className = 'attentBtn';
         }
         const postdata = {
           toFollowUserId: item.tweetUser.id,
@@ -181,38 +173,7 @@ export default {
         }
       }
     },
-    // 分页加载 page++ limit + 10
-    infiniteHandler($state) {
-      const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
-      const page = Math.ceil(this.tweetListData.length / 10);
-      this.$store.dispatch('GET_TWEET_LIST_ALL_DATA', { page: page, limit: 10, otherUserId: uid });
-      if (this.tweetListData.length) {
-        // this.tweetListData = this.tweetListData.concat(newData);
-        $state.loaded();
-        if (parseInt(this.tweetListData.length / 10) === 3) {
-          $state.complete();
-        }
-      } else {
-        $state.complete();
-      }
-      document.querySelector('.infinite-status-prompt').innerHTML = '数据加载完～';
-      // axios.get(api, {
-      //   params: {
-      //     page: this.list.length / 20 + 1,
-      //   },
-      // }).then(({ data }) => {
-      //   if (data.hits.length) {
-      //     this.list = this.list.concat(data.hits);
-      //     $state.loaded();
-      //     if (this.list.length / 20 === 10) {
-      //       $state.complete();
-      //     }
-      //   } else {
-      //     $state.complete();
-      //   }
-      // });
-    },
-    // handLoadingDataScrollTop() {
+     // handLoadingDataScrollTop() {
     //   const _this = this;
     //   _this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
     //   const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];

@@ -13,7 +13,7 @@
               <span>{{ item.item }}</span>
               <em class="dateLine">{{ item.day }}</em>
             </div>
-            <div class="data-r"><b>+</b>{{ item.sum }}<b>ZIB</b></div>
+            <div :class="[item.sum < 0 ? 'data-r red' : 'data-r']">{{ item.sum }}<b>ZIB</b></div>
           </div>
         </div>
       </div>

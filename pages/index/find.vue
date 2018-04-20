@@ -16,7 +16,9 @@
         </ul>
       </div>
     </div>
-    <data-list :pushDataList="categorylist"></data-list>
+    <keep-alive>
+      <data-list :pushDataList="categorylist"></data-list>
+    </keep-alive>
     <common-footer></common-footer>
   </div>
 </template>

@@ -412,7 +412,7 @@ router.post('/action/zan', auth.requireUser, async (req, res, next) => {
             dba,
             token
         });
-        console.log(zanData, '===========');
+        // console.log(zanData, '==========='); 
 
         if (zanData.success) {
             return res.json({
@@ -460,7 +460,7 @@ router.post('/action/follow', auth.requireUser, async (req, res, next) => {
             dba,
             token
         });
-        console.log(followData, '===========');
+        // console.log(followData, '======followdata=====');
 
         if (followData.success) {
             return res.json({
@@ -508,7 +508,7 @@ router.post('/user/tweet', wrapper(async (req, res) => {
     }, {
         dba
     });
-    console.log(tweetData, '===========');
+    // console.log(tweetData, '======tweetData=====');
 
     if (tweetData.success) {
         return res.json({
@@ -536,45 +536,90 @@ limit, 可选
 userId 必须
 rtime 13为时间戳 首次为0
  */
-router.post('/user/follow/tweet', wrapper(true, async (req, res) => {
-    const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
-    const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
-    const userId = req.session.loginData.user.id
-    const phone = req.session.loginData.user.phone;
-    const signature = req.session.loginData.signature;
-    const deviceId = fetchDeviceId(req);
+router.post('/user/follow/tweet', auth.authUser, async (req, res) => {
+    try {
+        const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
+        const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
+        const userId = req.session.loginData.user.id
+        const phone = req.session.loginData.user.phone;
+        const signature = req.session.loginData.signature;
+        const deviceId = fetchDeviceId(req);
 
-    const page = req.body.page || 1
-    const limit = req.body.limit || 10
-    const rtime = req.body.rtime || 0 // 需要验证时间戳
+        const page = req.body.page || 1
+        const limit = req.body.limit || 10
+        const rtime = req.body.rtime || 0 // 需要验证时间戳
 
-    const aesStr = `page==${page}&&limit==${limit}&&rtime==${rtime}&&userId==${userId}`;
-    const pubStr = `deviceId==${deviceId}&&phone==${phone}&&signature==${signature}`;
-    const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
-    const token = SecretKey.nodeRSAEncryptWithPubKey(pubStr, pubKeys);
-    const followData = await agent.post(`${resApi.zhiBApi}/user/follow/tweet`, {
-        timespan,
-        raid
-    }, {
-        dba,
-        token
-    });
-    console.log(followData, '===========');
-
-    if (followData.success) {
-        return res.json({
-            msg: '获取最新博文成功',
-            success: true,
-            data: followData.data,
+        console.log(page, limit, rtime, '...///.......')
+        const aesStr = `page==${page}&&limit==${limit}&&rtime==${rtime}&&userId==${userId}`;
+        const pubStr = `deviceId==${deviceId}&&phone==${phone}&&signature==${signature}`;
+        const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
+        const token = SecretKey.nodeRSAEncryptWithPubKey(pubStr, pubKeys);
+        
+        const followData = await agent.post(`${resApi.zhiBApi}/user/follow/tweet`, {
+            timespan,
+            raid
+        }, {
+            dba,
+            token
         });
+        console.log(followData, '====1111用户关注的用户的最新博文1111=======');
+
+        if (followData.success) {
+            return res.json({
+                msg: '获取最新博文成功',
+                success: true,
+                data: followData.data,
+            });
+        } else {
+            return res.json({
+                msg: '获取最新博文失败',
+                success: false,
+            });
+        }
+    } catch (err) {
+        console.log(err, err.status)
+    }
+})
+
+/**
+ * user/action/isfollow
+ * 当前用户是否已经关注了某个用户
+/user/action/isfollow?timespan=xx&raid=xx
+method: post
+body
+dba(必须) aes 加密的 userId,targetUserId
+userId(必选) login user
+targetUserId(必选) 目标用户 id
+ */
+router.post('/user/action/isfollow', wrapper(async(req, res) => {
+    const userId = req.session.loginData.user.id;
+    const targetUserId = req.body.targetUserId || '';
+    console.log(targetUserId, '.......', userId)
+    if (!targetUserId) {
+        res.json({
+            msg: '目标用户不能为空',
+            success: false
+        })
+    }
+
+    const isFollowData = await new Request('/user/action/isfollow', {
+        userId,
+        targetUserId
+    }).post();
+    console.log(isFollowData, '---3333----')
+    if (isFollowData.success) {
+        return res.json({
+            msg: '成功关注了某个用户',
+            success: true,
+            data: isFollowData
+        })
     } else {
         return res.json({
-            msg: '获取最新博文失败',
-            success: false,
-        });
+            msg: '关注用户失败',
+            success: false
+        })
     }
 }))
-
 /**
  * 登出
  /account/logout

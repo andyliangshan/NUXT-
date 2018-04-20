@@ -146,6 +146,7 @@ export default {
     GET_NOTICE_LIST_DATA: async({ commit }) => {
         try {
             const noticeListData = await axios.post('/api/notice/markedall');
+            console.log(noticeListData)
             if (noticeListData.data.success) {
                commit('NOTICE_LIST_DATA', noticeListData)
             }
@@ -184,6 +185,30 @@ export default {
             const cpsnoData = await axios.post('/api/cpsno');
             if (cpsnoData.data.success) {
                commit('CPS_NO_DATA', cpsnoData.data.data)
+            }
+            // return noticeListData.data
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    // 用户是否关注了否个用户
+    GET_IS_FOLLOW_DATA: async({ commit }, targetUserId) => {
+        try {
+            const isFollowData = await axios.post('/api/user/action/isfollow', targetUserId);
+            if (isFollowData.data.success) {
+               commit('IS_FOLLOW_STATE', isFollowData.data.data)
+            }
+            // return noticeListData.data
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    // 用户关注的博文列表数据
+    USER_FOLLOW_TWEET_LIST_ALL_DATA: async({ commit }, { page, limit, rtime }) => {
+        try {
+            const userFollowData = await axios.post('/api/user/follow/tweet', { page: page, limit: limit, rtime: rtime });
+            if (userFollowData.data.success) {
+               commit('USER_FOLLOW_TWEET_LIST_DATA', userFollowData.data.data)
             }
             // return noticeListData.data
         } catch (err) {

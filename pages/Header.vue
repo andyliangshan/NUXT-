@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import axios from '~/plugins/axios';
 export default {
   computed: mapGetters(['userInfo']),
@@ -92,12 +92,14 @@ export default {
   },
   middleware: 'authenticated',
   methods: {
+    ...mapMutations(['LOGINOUT']),
     async logout() {
       const logout = await axios.post('/api/logout');
       if (logout.data.success) {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         localStorage.removeItem('logout');
+        this.LOGINOUT();
         this.$router.push({ path: '/login' });
       } else {
         alert('退出失败');

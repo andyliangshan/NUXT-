@@ -9,18 +9,14 @@
             <div class="list-top-info-title"><nuxt-link :to="'/user/' + items.tweetUser.id" class="backtoPage">{{ items.tweetUser.nickName }}</nuxt-link></div>
             <div class="list-top-info-publishTime"><span>{{ items.createdAt | dynamicFormatTime }}</span></div>
           </div>
-          <div class="list-top-attent col-2" v-if="items.isfollow !== null" v-show="items.id !== items.tweetUser.id">
-            <a href="javascript:void(0)" class="attention active" ref="attentBtn" @click="changeStateAttent(items, $event)">已关注</a>
-          </div>
+          <div class="list-top-attent col-2" v-if="items.isfollow !== null" v-show="items.id !== items.tweetUser.id"></div>
           <div class="list-top-attent col-2" v-else  v-show="items.id !== items.tweetUser.id">
-            <!--<a href="javascript:void(0)" class="delete" ref="deleteBtn">删除</a>-->
             <a href="javascript:void(0)" class="attention" ref="attentBtn" @click="changeStateAttent(items, $event)">关注</a>
-            <!--<a href="javascript:void(0)" class="report">×</a>-->
           </div>
         </div>
         <div class="list-mid">
           <div class="list-mid-publish-content">
-            <div class="contDesc" ref="contDesc">{{ items.content }}</div>
+            <div class="contDesc" ref="contDesc" v-html="format(items)"></div>
             <div class="queryDetail"><nuxt-link :to="'/detail/' + items.id" class="backtoPage"></nuxt-link></div>
           </div>
           <div class="list-mid-publish-img">
@@ -69,23 +65,11 @@ export default {
     ReportList,
   },
   mounted() {
-    // this.limitSize()
   },
   computed: {
     ...mapGetters(['userInfo']),
   },
   methods: {
-    limitSize() {
-      for (let i = 0, len = this.recommedList.essence.length; i < len; i++) {
-        //  eslint-disable-line
-        let instroduce = this.recommedList.essence[i].essenceTweet.content;
-        if (instroduce.length > this.maxLen) {
-          instroduce = instroduce.slice(0, this.maxLen) + '...'; //  eslint-disable-line
-        } else {
-          instroduce = this.recommedList.essence[i].content;
-        }
-      }
-    },
     async changeStateAttent(item, evt) {
       if (this.userInfo) {
         const selt = evt.currentTarget;
@@ -145,6 +129,33 @@ export default {
       } catch (e) {
         return [];
       }
+    },
+    // 格式化博文内容（加粗显示）
+    format(tweet) {
+      let content = tweet.content;
+      try {
+        // 解析 ['10:5','21:2'] 格式的加粗标记，并替换博文内容
+        const contentBold = Array.isArray(tweet.contentBold) ? tweet.contentBold : JSON.parse(tweet.contentBold);
+        const contents = []; // 内容数据，将纯文本的content按 contentBold 记录的数据切分成片段，并在相关片段增加 <strong></strong>
+        let substrStart = 0;
+        if (Array.isArray(contentBold)) {
+          for (let i = 0; i < contentBold.length; i++) {
+            let [start, len] = contentBold[i].split(':').map(val => Number(val));
+            contents.push(content.substring(substrStart, start));
+            contents.push('<strong>' + content.substr(start, len) + '</strong>');
+            substrStart = start + len;
+          }
+        }
+        // 内容剩余部分
+        if (substrStart !== content.length) {
+          contents.push(content.substring(substrStart));
+        }
+        content = contents.join('');
+      } catch (e) {
+        // 如果出现错误，不再处理加粗内容
+      }
+
+      return content.replace(/\n/g, '<br>');
     },
   },
 };

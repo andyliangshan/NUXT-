@@ -3,7 +3,7 @@
     <div class="tipsNews">5条新币文</div>
     <div class="dataListCont"  v-for="(item, index) in pushDataList" :key="index">
       <div class="list-top row">
-        <div class="list-top-profile col-2"><img :src="item.tweetUser.avatarImage" alt="profile"/></div>
+        <div class="list-top-profile col-2"><a :href="'/user/' + item.tweetUser.id"><img :src="item.tweetUser.avatarImage" alt="profile"/></a></div>
         <div class="list-top-info col-8">
           <div class="list-top-info-title"><a :href="'/user/' + item.tweetUser.id" class="backtoPage">{{ item.tweetUser.nickName }}</a></div>
           <div class="list-top-info-publishTime"><span>{{ item.createdAt | dynamicFormatTime }}</span></div>
@@ -17,21 +17,22 @@
       </div>
       <div class="list-mid">
         <div class="list-mid-publish-content">
-          <div class="contDesc" ref="contDesc">{{ item.content }}</div>
+          <div class="contDesc" ref="contDesc" v-html="format(item)"></div>
           <div class="queryDetail"><a :href="'/detail/' + item.id" class="backtoPage">&nbsp;</a></div>
           <p>查看详情</p>
         </div>
         <div class="list-mid-publish-img">
-          <span v-for="(tem, ind) in (JSON.parse(item.images) || [])" :key="ind"><img :src=tem.url alt="profile-ho"/></span>
+          <span v-for="(tem, ind) in getImages(item)" :key="ind"><img :src=tem.url alt="profile-ho"/></span>
         </div>
       </div>
       <div class="list-bot row">
         <div class="coin"><span>&nbsp;</span><em>{{ item.currentScoreWorth }}</em></div>
         <div :class="[item.iszan === null ? 'dianzan col-2' : 'dianzan col-2 active']" @click="userDianZanFlag(item, $event)"><span>&nbsp;</span><em>{{ item.zanCount }}</em></div>
         <div class="sendmsg col-2"><nuxt-link :to="'/detail/' + item.id"><span>&nbsp;</span>{{ item.collectCount }}</nuxt-link></div>
-        <div class="share col-6"><span>&nbsp;</span>{{ item.shareCount }}</div>
+        <div class="share col-6" @click="showSharePopCont"><span>&nbsp;</span>{{ item.shareCount }}</div>
       </div>
     </div>
+    <!-- <share-pop v-show="showSharePop"></share-pop> -->
   </div>
 </template>
 <script>
@@ -41,6 +42,7 @@ import { mapGetters } from 'vuex';
 import * as filters from '../server/tools/filters';
 import ReportList from '../components/ReportList.vue';
 import TipPop from './TipPop.vue';
+import SharePop from '../components/SharePop.vue';
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
@@ -52,6 +54,7 @@ export default {
       result: [],
       page: 1,
       limit: 10,
+      showSharePop: false,
     };
   },
   props: {
@@ -63,11 +66,15 @@ export default {
   components: {
     TipPop,
     ReportList,
+    SharePop,
   },
   computed: {
     ...mapGetters(['userInfo']),
   },
   methods: {
+    showSharePopCont() {
+      this.showSharePop = true;
+    },
     async changeStateAttent(item, evt) {
       if (this.userInfo) {
         const selt = evt.currentTarget;
@@ -93,7 +100,7 @@ export default {
           alert(bkData.data.msg);
         }
       } else {
-        this.$router.push({ path: '/login' })
+        this.$router.push({ path: '/login' });
       }
     },
     async userDianZanFlag(item, evt) {
@@ -117,8 +124,43 @@ export default {
           }
         }
       } else {
-        this.$router.push({ path: '/login' })
+        this.$router.push({ path: '/login' });
       }
+    },
+    // 解析博文图片
+    getImages: function(tweet) {
+      try {
+        return JSON.parse(tweet.images);
+      } catch (e) {
+        return [];
+      }
+    },
+    // 格式化博文内容（加粗显示）
+    format(tweet) {
+      let content = tweet.content;
+      try {
+        // 解析 ['10:5','21:2'] 格式的加粗标记，并替换博文内容
+        const contentBold = Array.isArray(tweet.contentBold) ? tweet.contentBold : JSON.parse(tweet.contentBold);
+        const contents = []; // 内容数据，将纯文本的content按 contentBold 记录的数据切分成片段，并在相关片段增加 <strong></strong>
+        let substrStart = 0;
+        if (Array.isArray(contentBold)) {
+          for (let i = 0; i < contentBold.length; i++) {
+            let [start, len] = contentBold[i].split(':').map(val => Number(val));
+            contents.push(content.substring(substrStart, start));
+            contents.push('<strong>' + content.substr(start, len) + '</strong>');
+            substrStart = start + len;
+          }
+        }
+        // 内容剩余部分
+        if (substrStart !== content.length) {
+          contents.push(content.substring(substrStart));
+        }
+        content = contents.join('');
+      } catch (e) {
+        // 如果出现错误，不再处理加粗内容
+      }
+
+      return content.replace(/\n/g, '<br>');
     },
   },
   mounted() {},
