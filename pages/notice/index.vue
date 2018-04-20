@@ -18,13 +18,13 @@
     </div> -->
     <div class="noticeList">
       <h1>通知列表</h1>
-      <div class="notice" v-if="noticeListData">
-        <!-- <div class="list">
+      <div class="notice" v-if="noticeData">
+        <div class="list" v-for="(item, index) in noticeData.rows" :key="index">
           <div class="list-top row">
-            <div class="list-top-l col-2"><img src="../../assets/img/profile-ho.png" alt="pravite-profile"/></div>
+            <div class="list-top-l col-2"><img :src="item.authUser.avatarImage ? item.authUser.avatarImage : '../../assets/img/profile-ho.png'" alt="pravite-profile"/></div>
             <div class="list-top-mid col-8">
-              <div class="list-top-mid-tit"><b>d牛哥</b>评论了你</div>
-              <div class="list-top-mid-publishTime"><span>25</span>分钟前</div>
+              <div class="list-top-mid-tit"><b>{{ item.authUser.nickName }}</b>评论了你</div>
+              <div class="list-top-mid-publishTime"><span>{{ items.createdAt | dynamicFormatTime }}</span></div>
             </div>
             <div class="list-top-r col-2"><a href="javascript:void(0)" class="comments">回复</a></div>
           </div>
@@ -37,30 +37,17 @@
             <div class="remarkDesc col-10">我每天都会更新一些行情研判，大家快来关注我，跟着我，保证翻倍</div>
           </div>
         </div>
-        <div class="list">
-          <div class="list-top row">
-            <div class="list-top-l col-2"><img src="../../assets/img/profile-ho.png" alt="pravite-profile"/></div>
-            <div class="list-top-mid col-8">
-              <div class="list-top-mid-tit"><b>阿拉丁</b>评论了你</div>
-              <div class="list-top-mid-publishTime"><span>30</span>分钟前</div>
-            </div>
-            <div class="list-top-r col-2"><a href="javascript:void(0)" class="comments">回复</a></div>
-          </div>
-          <div class="list-msgCont row">
-            <div class="col-2"></div>
-            <div class="msgContDesc col-10">我每天都会更新一些行情研判我每天都会更新一些行情研判我每天都会更新一些行情研判我每天都会更新一些行情研判</div>
-          </div>
-          <div class="list-remark row">
-            <div class="col-2"></div>
-            <div class="remarkDesc col-10">我每天都会更新一些行情研判，大家快来关注我，跟着我，保证翻倍</div>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
 </template>
 <script>
+import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
+import * as filters from '../../server/tools/filters';
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key]);
+});
 export default {
   name: 'message',
   data() {
@@ -68,18 +55,19 @@ export default {
   },
   head() {
     return {
-      title: '通知列表'
-    }
+      title: '通知列表',
+    };
   },
   middleware: 'authenticated',
   computed: {
-    ...mapGetters(['noticeListData', 'userInfo']),
+    ...mapGetters(['noticeListData', 'userInfo', 'noticeData']),
   },
   mounted() {
     this.GET_NOTICE_LIST_DATA();
+    this.GET_NOTICE_DATA({ page: 1, limit: 10 });
   },
   methods: {
-    ...mapActions(['GET_NOTICE_LIST_DATA']),
+    ...mapActions(['GET_NOTICE_LIST_DATA', 'GET_NOTICE_DATA']),
   },
 };
 </script>

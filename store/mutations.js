@@ -86,6 +86,14 @@ export default {
     NOTICE_LIST_DATA: (state, data) => {
         state.noticeListData = data
     },
+    // 消息列表数据
+    NOTICE_DATA: (state, data) => {
+        state.noticeData = data
+    },
+    // 消息未读数量
+    NOTICE_COUNT: (state, data) => {
+        state.noticeCount = data
+    },
     // 删除某一条数据重置
     spliceData(state, dataName, index) {
         state[dataName] = state[dataName].splice(index, 1)

@@ -155,6 +155,30 @@ export default {
             console.log(err)
         }
     },
+    // 消息数据
+    GET_NOTICE_DATA: async({ commit }, { page, limit }) => {
+        try {
+            const noticeData = await axios.post('/api/notice', { page: page, limit: limit });
+            if (noticeData.data.success) {
+               commit('NOTICE_DATA', noticeData.data.data)
+            }
+            // return noticeListData.data
+        } catch (err) {
+            console.log(err)
+        }
+    },
+    // 未读消息数量
+    GET_NOTICE_COUNT: async({ commit }) => {
+        try {
+            const countData = await axios.post('/api/notice/count');
+            if (countData.data.success) {
+               commit('NOTICE_COUNT', countData.data.data)
+            }
+            // return noticeListData.data
+        } catch (err) {
+            console.log(err)
+        }
+    },
     // 举报成功
     GET_CPS_DATA: async({ commit }) => {
         try {

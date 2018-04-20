@@ -38,6 +38,8 @@ const store = () => new Vuex.Store({
 
         categoryData:[],
         categoryListData: [],
+        noticeData: {},
+        noticeCount: '',
 
         //--------------
         loginPhone: null,   // 登录的手机号码

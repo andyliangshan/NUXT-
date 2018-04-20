@@ -19,6 +19,8 @@ export default {
     userFollowListData: state => state.userFollowListData, // 用户关注的博文列表数据
     categoryData: state => state.categoryData, // 分类数据
     categoryListData: state => state.categoryListData, // 分类列表数据
+    noticeData: state => state.noticeData, // 消息数据
+    noticeCount: state => state.noticeCount, // 消息数量
     //  --------
     isAuthenticated: state => !!state.userInfo,
     userInfo: state => state.userInfo,

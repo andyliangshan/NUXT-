@@ -32,7 +32,7 @@
             <div class="zhiB-msg" v-show="!!userInfo">
               <nuxt-link to="/notice" class="message">
                 <img src="../assets/img/Info.png" alt="Group"/>
-                <em ref="showFlagIcon">3</em>
+                <em v-show="noticeCount && noticeCount.count !== 0" ref="showFlagIcon">{{ noticeCount }}</em>
               </nuxt-link>
             </div>
             <div class="release">
@@ -79,10 +79,10 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 import axios from '~/plugins/axios';
 export default {
-  computed: mapGetters(['userInfo']),
+  computed: mapGetters(['userInfo', 'noticeData', 'noticeCount']),
   data() {
     return {
       loginState: false,
@@ -91,8 +91,12 @@ export default {
     };
   },
   middleware: 'authenticated',
+  mounted() {
+    this.GET_NOTICE_COUNT()
+  },
   methods: {
     ...mapMutations(['LOGINOUT']),
+    ...mapActions(['GET_NOTICE_COUNT']),
     async logout() {
       const logout = await axios.post('/api/logout');
       if (logout.data.success) {
