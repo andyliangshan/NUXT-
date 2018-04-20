@@ -23,7 +23,7 @@
                   <span class="triangle"></span>
                   <div class="logout">
                     <nuxt-link to="/user" class="user" >个人中心</nuxt-link>
-                    <nuxt-link to="/logout" class="logout" >退出登录</nuxt-link>
+                    <a href="javascript:void(0)" class="logout" @click="logout">退出登录</a>
                   </div>
                 </div>
               </div>
@@ -58,7 +58,7 @@
             <em class="triangle"></em>
             <div class="logout">
               <nuxt-link to="/notice" class="notice">消息列表</nuxt-link>
-              <nuxt-link to="/logout" class="logout">退出登录</nuxt-link>
+              <a href="javascript:void(0)" class="logout" @click="logout">退出登录</a>
             </div>
           </div>
         </div>
@@ -80,6 +80,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import axios from '~/plugins/axios';
 export default {
   computed: mapGetters(['userInfo']),
   data() {
@@ -90,21 +91,27 @@ export default {
     };
   },
   middleware: 'authenticated',
-  mounted() {
-  },
   methods: {
+    async logout() {
+      const logout = await axios.post('/api/logout');
+      if (logout.data.success) {
+        this.$router.push({ path: '/login' });
+      } else {
+        alert('退出失败');
+      }
+    },
     changeState() {
       // this.$emit('transmitState', !this.loginState)
       this.loginState = true;
       setTimeout(() => {
         this.loginState = false;
-      }, 2000)
+      }, 2000);
     },
     changeH5State() {
       this.h5LoginState = true;
       setTimeout(() => {
         this.h5LoginState = false;
-      }, 2000)
+      }, 2000);
     },
   },
 };

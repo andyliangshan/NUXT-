@@ -42,6 +42,7 @@
 
 <script>
 import Vue from 'vue';
+import { mapGetters } from 'vuex';
 import axios from '~/plugins/axios';
 import * as filters from '../../server/tools/filters';
 import ReportList from '../../components/ReportList.vue';
@@ -70,6 +71,9 @@ export default {
   mounted() {
     // this.limitSize()
   },
+  computed: {
+    ...mapGetters(['userInfo']),
+  },
   methods: {
     limitSize() {
       for (let i = 0, len = this.recommedList.essence.length; i < len; i++) {
@@ -83,46 +87,55 @@ export default {
       }
     },
     async changeStateAttent(item, evt) {
-      const selt = evt.currentTarget;
-      if (item.isfollow === null) {
-        this.action = 1;
-        selt.innerHTML = '已关注';
-        selt.style.border = '1px solid #939393';
-        selt.style.color = '#939393';
-      } else {
-        this.action = -1;
-        selt.innerHTML = '关注Ta';
-        selt.style.border = '1px solid #138FF2';
-        selt.style.color = '#138FF2';
-      }
-      const postdata = {
-        toFollowUserId: item.tweetUser.id,
-        action: this.action,
-      };
-      const bkData = await axios.post('/api/action/follow', postdata, { credentials: true });
-      if (bkData.data.success) {
-        alert(bkData.data.msg);
-      } else {
-        alert(bkData.data.msg);
-      }
-    },
-    async userDianZanFlag(item, evt) {
-      const selt = evt.currentTarget;
-      if (item.iszan !== null) {
-        alert('你已经点过赞啦～');
-      } else {
+      if (this.userInfo) {
+        const selt = evt.currentTarget;
+        if (item.isfollow === null) {
+          this.action = 1;
+          selt.innerHTML = '已关注';
+          selt.style.border = '1px solid #939393';
+          selt.style.color = '#939393';
+        } else {
+          this.action = -1;
+          selt.innerHTML = '关注Ta';
+          selt.style.border = '1px solid #138FF2';
+          selt.style.color = '#138FF2';
+        }
         const postdata = {
-          targetUserId: item.tweetUser.id,
-          tweetId: item.id,
+          toFollowUserId: item.tweetUser.id,
+          action: this.action,
         };
-        const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
-        console.log(bkData, '-----');
+        const bkData = await axios.post('/api/action/follow', postdata, { credentials: true });
         if (bkData.data.success) {
           alert(bkData.data.msg);
-          selt.children[1].innerText = bkData.data.data;
         } else {
           alert(bkData.data.msg);
         }
+      } else {
+        this.$router.push({ path: '/login' })
+      }
+    },
+    async userDianZanFlag(item, evt) {
+      if (this.userInfo) {
+        const selt = evt.currentTarget;
+        if (item.iszan !== null) {
+          alert('你已经点过赞啦～');
+        } else {
+          const postdata = {
+            targetUserId: item.tweetUser.id,
+            tweetId: item.id,
+          };
+          const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
+          console.log(bkData, '-----');
+          if (bkData.data.success) {
+            alert(bkData.data.msg);
+            selt.children[1].innerText = bkData.data.data.data;
+            selt.className = 'dianzan col-2 active';
+          } else {
+            alert(bkData.data.msg);
+          }
+        }
+      } else {
+        this.$router.push({ path: '/login' })
       }
     },
     // 解析博文图片

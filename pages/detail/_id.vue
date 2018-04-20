@@ -1,4 +1,5 @@
 <template>
+<div class="wrapperAll">
   <div class="tweet-detail" v-if="tweetInfoData && userInfo">
     <common-header :title="tweetInfoData.tweetUser.nickName + '的币文'"></common-header>
     <div class="tweet-content">
@@ -35,6 +36,7 @@
     </div>
     <complaint :show="showComplain"></complaint>
   </div>
+</div>  
 </template>
 <script>
 import Vue from 'vue';

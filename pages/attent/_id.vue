@@ -1,4 +1,5 @@
 <template>
+<div class="wrapperAll">
   <div class="attent" v-if="attentedData">
     <div class="fansTitle row">
       <div class="backtoPage col-1"><a href="javascript:history.back(-1);" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></a></div>
@@ -24,29 +25,32 @@
       </div>
     </div>
   </div>
+</div>  
 </template>
 <script>
-  import { mapActions, mapGetters } from 'vuex'
-  import axios from '~/plugins/axios'
-  export default {
-    name: 'attent',
-    data () {
-      return {}
-    },
-    head() {
-      return {
-        title: '我关注的'
-      }
-    },
-    mounted () {
-      this.MY_ATTENTED();
-    },
-    computed: {
-      ...mapGetters(['attentedData'])
-    },
-    methods: {
-      ...mapActions(['MY_ATTENTED']),
-      async changeStateAttent(item, evt) {
+import { mapActions, mapGetters } from 'vuex';
+import axios from '~/plugins/axios';
+export default {
+  name: 'attent',
+  data() {
+    return {};
+  },
+  head() {
+    return {
+      title: '我关注的',
+    };
+  },
+  mounted() {
+    const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
+    this.MY_ATTENTED({ otherUserId: uid });
+  },
+  computed: {
+    ...mapGetters(['attentedData', 'userInfo']),
+  },
+  methods: {
+    ...mapActions(['MY_ATTENTED']),
+    async changeStateAttent(item, evt) {
+      if (!this.userInfo) {
         const selt = evt.currentTarget;
         if (item.toFollowUser.isfollow === null) {
           this.action = 1;
@@ -69,12 +73,12 @@
         } else {
           alert(bkData.data.msg);
         }
-      },
-    }
-  }
+      }
+    },
+  },
+};
 </script>
 
 <style scoped lang="stylus">
-@import "../../assets/styl/attent.styl";
-
+@import '../../assets/styl/attent.styl';
 </style>

@@ -1,4 +1,5 @@
 <template>
+<div class="wrapperAll">
   <div class="fans" v-if="fansData">
     <div class="fansTitle row">
       <div class="backtoPage col-1"><a href="javascript:history.back(-1);" class="backtoPage"><img src="../../assets/img/back.png" alt="back"/></a></div>
@@ -26,32 +27,35 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 <script>
-  import { mapActions, mapGetters } from 'vuex'
-  import axios from '~/plugins/axios'
-  export default {
-    name: 'fans',
-    data () {
-      return {
-        page: 1,
-        limit: 10,
-      }
-    },
-    head () {
-      return {
-        title: '我的粉丝'
-      }
-    },
-    mounted() {
-      this.MY_FANS();
-    },
-    computed: {
-      ...mapGetters(['fansData'])
-    },
-    methods: {
-      ...mapActions(['MY_FANS']),
-      async changeStateAttent(item, evt) {
+import { mapActions, mapGetters } from 'vuex';
+import axios from '~/plugins/axios';
+export default {
+  name: 'fans',
+  data() {
+    return {
+      page: 1,
+      limit: 10,
+    };
+  },
+  head() {
+    return {
+      title: '我的粉丝',
+    };
+  },
+  mounted() {
+    const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
+    this.MY_FANS({ otherUserId: uid });
+  },
+  computed: {
+    ...mapGetters(['fansData', 'userInfo']),
+  },
+  methods: {
+    ...mapActions(['MY_FANS']),
+    async changeStateAttent(item, evt) {
+      if (!this.userInfo) {
         const selt = evt.currentTarget;
         if (item.followUser.isfollow === null) {
           this.action = 1;
@@ -74,11 +78,12 @@
         } else {
           alert(bkData.data.msg);
         }
-      },
-    }
-  }
+      }
+    },
+  },
+};
 </script>
 
 <style lang="stylus">
-@import "../../assets/styl/fans.styl";
+@import '../../assets/styl/fans.styl';
 </style>

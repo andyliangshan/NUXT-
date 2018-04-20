@@ -424,19 +424,16 @@ router.post('/fans', wrapper(async (req, res) => {
   const page = req.body.page || 1;
   const limit = req.body.limit || 20
   const otherUserId = req.body.otherUserId || ''
-  let userId;
-  if (req.session.loginData) {
-    userId = req.session.loginData.user.id;
-  } else {
-    userId = ''
-  }
-  const fansData = await new Request('/user/fans', {
-    userId,
-    page,
-    limit,
-    otherUserId
-  }).post();
+  const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
+  const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
+  const userId = req.session.loginData && req.session.loginData.user.id;
+
+  const aesStr = userId ? `page==${page}&&limit==${limit}&&otherUserId==${otherUserId}&&userId==${userId}` : `page==${page}&&limit==${limit}&&otherUserId==${otherUserId}`;
+  const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
+
+  const fansData = await agent.post(`${resApi.zhiBApi}/user/fans`, { timespan, raid }, { dba })
   console.log(fansData, '.......11.......')
+
   if (fansData.success) {
     return res.json({
       msg: '粉丝获取成功.',
@@ -465,19 +462,16 @@ router.post('/user/follow', wrapper(async (req, res) => {
   const page = req.body.page || 1;
   const limit = req.body.limit || 20
   const otherUserId = req.body.otherUserId || ''
-  let userId;
-  if (req.session.loginData) {
-    userId = req.session.loginData.user.id;
-  } else {
-    userId = ''
-  }
-  const followData = await new Request('/user/follow', {
-    userId,
-    page,
-    limit,
-    otherUserId
-  }).post();
+  const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
+  const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
+  const userId = req.session.loginData && req.session.loginData.user.id;
+
+  const aesStr = userId ? `page==${page}&&limit==${limit}&&otherUserId==${otherUserId}&&userId==${userId}` : `page==${page}&&limit==${limit}&&otherUserId==${otherUserId}`;
+  const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
+
+  const followData = await agent.post(`${resApi.zhiBApi}/user/follow`, { timespan, raid }, { dba })
   console.log(followData, '.......11.......')
+
   if (followData.success) {
     return res.json({
       msg: '粉丝获取成功.',

@@ -43,9 +43,9 @@ export default {
         }
     },
     // 我的粉丝
-    MY_FANS: async({ commit }) => {
+    MY_FANS: async({ commit }, otherUserId) => {
         try {
-            const fansData = await axios.post('/api/fans');
+            const fansData = await axios.post('/api/fans', otherUserId);
             if (fansData.data.success) {
                commit('MY_FANS_DATA', fansData.data.data)
             }
@@ -54,9 +54,9 @@ export default {
         }
     },
     // 我的关注
-    MY_ATTENTED: async({ commit }) => {
+    MY_ATTENTED: async({ commit }, otherUserId) => {
         try {
-            const attentedData = await axios.post('/api/user/follow');
+            const attentedData = await axios.post('/api/user/follow', otherUserId);
             if (attentedData.data.success) {
                commit('MY_ATTENTED_DATA', attentedData.data.data)
             }
