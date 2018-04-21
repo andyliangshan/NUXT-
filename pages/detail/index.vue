@@ -52,7 +52,7 @@
 <script>
   import SharePop from '../../components/SharePop.vue'
   import ReplayList from '../../components/ReplayList.vue'
-
+  
   export default {
     name: 'detail',
     data () {

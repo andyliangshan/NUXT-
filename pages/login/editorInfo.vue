@@ -31,6 +31,7 @@
 import axios from '~/plugins/axios';
 import { mapGetters, mapActions } from 'vuex';
 import cropProfile from './cropProfile.vue';
+import { toast } from '../../components/toast';
 
 export default {
   name: 'teaseInfo',
@@ -84,19 +85,19 @@ export default {
         return;
       }
       if (this.nickName.indexOf('官方') !== -1) {
-        alert('带有官方二字的账号需审核后才可注册，请联系我们或更换呢称。');
+        toast('带有官方二字的账号需审核后才可注册，请联系我们或更换呢称。');
         return;
       }
       if (this.nickName.length > 10) {
-        alert('名字太长');
+        toast('名字太长');
         return;
       }
       if (!this.$refs.introduce.innerHTML) {
-        alert('个人信息介绍不能为空');
+        toast('个人信息介绍不能为空');
         return;
       }
       if (!this.avatarImage) {
-        alert('请上传个人头像');
+        toast('请上传个人头像');
         return;
       }
       const postData = {
@@ -110,7 +111,7 @@ export default {
       });
       if (bkData.data.success) {
         this.errTips = '';
-        alert('信息修改成功');
+        toast('信息修改成功');
         this.$router.push({ path: '/recommend' });
       } else {
         this.setErrTips(bkData.data.msg);

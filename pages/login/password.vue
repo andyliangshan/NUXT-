@@ -19,6 +19,7 @@
 <script>
 import { mapState } from 'vuex';
 import axios from '~/plugins/axios'
+import { toast } from '../../components/toast';
 export default {
   name: 'accountCourse',
   middleware: 'anonymous',
@@ -41,7 +42,7 @@ export default {
   methods: {
     async submitLogin() {
       if (!this.password) {
-        alert('密码不能为空');
+        toast('密码不能为空');
         return;
       }
       if (this.isRequesting) {
@@ -64,7 +65,7 @@ export default {
         this.$router.push({ path: '/user' });
       } else {
         //  TODO:友好提示信息
-        alert(bkData.data.msg);
+        toast(bkData.data.msg);
       }
     },
   },

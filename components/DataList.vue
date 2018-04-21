@@ -8,11 +8,15 @@
           <div class="list-top-info-title"><a :href="'/user/' + item.tweetUser.id" class="backtoPage">{{ item.tweetUser.nickName }}</a></div>
           <div class="list-top-info-publishTime"><span>{{ item.createdAt | dynamicFormatTime }}</span></div>
         </div>
-        <div class="list-top-attent col-2" v-if="item.isfollow !== null">
+        <!-- <div class="list-top-attent col-2" v-if="item.isfollow !== null">
           <a href="javascript:void(0);" class="attention active" @click="changeStateAttent(item, $event)">已关注</a>
         </div>
         <div class="list-top-attent col-2" v-else>
           <a href="javascript:void(0);" class="attention" @click="changeStateAttent(item, $event)">关注</a>
+        </div> -->
+        <div class="list-top-attent col-2" v-if="item.isfollow !== null" v-show="userInfo.id === item.tweetUser.id"></div>
+        <div class="list-top-attent col-2" v-else  v-show="userInfo.id !== item.tweetUser.id">
+          <a href="javascript:void(0)" class="attention" ref="attentBtn" @click="changeStateAttent(item, $event)">关注</a>
         </div>
       </div>
       <div class="list-mid">
@@ -43,6 +47,7 @@ import * as filters from '../server/tools/filters';
 import ReportList from '../components/ReportList.vue';
 import TipPop from './TipPop.vue';
 import SharePop from '../components/SharePop.vue';
+import { toast } from '../components/toast';
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
@@ -95,9 +100,9 @@ export default {
         };
         const bkData = await axios.post('/api/action/follow', postdata, { credentials: true });
         if (bkData.data.success) {
-          alert(bkData.data.msg);
+          toast(bkData.data.msg);
         } else {
-          alert(bkData.data.msg);
+          toast(bkData.data.msg);
         }
       } else {
         this.$router.push({ path: '/login' });
@@ -107,7 +112,7 @@ export default {
       if (this.userInfo) {
         const selt = evt.currentTarget;
         if (item.iszan !== null) {
-          alert('你已经点过赞啦～');
+          toast('你已经点过赞啦～');
         } else {
           const postdata = {
             targetUserId: item.tweetUser.id,
@@ -116,11 +121,11 @@ export default {
           const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
           console.log(bkData, '-----');
           if (bkData.data.success) {
-            alert(bkData.data.msg);
+            toast(bkData.data.msg);
             selt.children[1].innerText = bkData.data.data.data;
             selt.className = 'dianzan col-2 active';
           } else {
-            alert(bkData.data.msg);
+            toast(bkData.data.msg);
           }
         }
       } else {

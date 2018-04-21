@@ -17,6 +17,7 @@
 <script>
 import axios from '~/plugins/axios';
 import searchList from './search-list.vue';
+import { toast } from '../../components/toast';
 
 export default {
   name: '',
@@ -52,7 +53,7 @@ export default {
       this.initial = bkData.data.data;
       this.result = bkData.data.data;
     } else {
-      alert('数据加载失败');
+      toast('数据加载失败');
     }
   },
   methods: {

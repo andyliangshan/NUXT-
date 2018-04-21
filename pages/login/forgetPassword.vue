@@ -23,6 +23,7 @@
 <script>
     import axios from '~/plugins/axios'
     import { mapState } from 'vuex'
+    import { toast } from '../../components/toast';
     export default{
       name: 'setPassword',
       middleware: 'anonymous',
@@ -82,24 +83,24 @@
               }, 1000)
               removeClick(_this)
             } else {
-              alert('短信发送过于频繁，请稍后刷新页面重试')
+              toast('短信发送过于频繁，请稍后刷新页面重试')
             }
           } catch (err) {
             removeClick(_this)
-            alert('获取验证码失败')
+            toast('获取验证码失败')
           }
         },
         async submitSetLogin() {
             if (!this.serPassword) {
-                alert('密码不能为空～');
+                toast('密码不能为空～');
                 return;
             }
             if (!this.phoneCode) {
-                alert('验证码不能为空～');
+                toast('验证码不能为空～');
                 return;
             }
             if (this.serPassword && this.serPassword.length < 6) {
-                alert('密码不能小于6位～');
+                toast('密码不能小于6位～');
                 return;
             }
             // 防止重复点击
@@ -126,11 +127,11 @@
                 this.errTips = '';
                 this.$router.push({ path: '/recommend' });
                 } else {
-                alert('密码设置过于频繁操作');
+                toast('密码设置过于频繁操作');
                 }
                 removeClick(_this);
             } catch (err) {
-                alert('设置密码失败');
+                toast('设置密码失败');
             }
         },
   },

@@ -44,6 +44,7 @@ import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import axios from '~/plugins/axios';
 import * as filters from '../server/tools/filters';
+import { toast } from './toast';
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
@@ -66,7 +67,7 @@ export default {
       if (this.userInfo) {
         const selt = evt.currentTarget;
         if (item.iszan !== null) {
-          alert('你已经点过赞啦～');
+          toast('你已经点过赞啦～');
         } else {
           const postdata = {
             targetUserId: item.UserId,
@@ -75,11 +76,11 @@ export default {
           const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
           console.log(bkData, '-----');
           if (bkData.data.success) {
-            alert(bkData.data.msg);
+            toast(bkData.data.msg);
             selt.children[0].innerText = bkData.data.data.data;
             selt.className = 'list-bot-zans col-2 active'
           } else {
-            alert(bkData.data.msg);
+            toast(bkData.data.msg);
           }
         }
       } else {

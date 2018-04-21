@@ -28,6 +28,7 @@
   </div>
 </template>
 <script>
+  import { toast } from '../../components/toast';
   import { mapActions, mapGetters } from 'vuex'
   import axios from '~/plugins/axios'
   export default {
@@ -70,9 +71,9 @@
         };
         const bkData = await axios.post('/api/action/follow', postdata, { credentials: true });
         if (bkData.data.success) {
-          alert(bkData.data.msg);
+          toast(bkData.data.msg);
         } else {
-          alert(bkData.data.msg);
+          toast(bkData.data.msg);
         }
       },
     }

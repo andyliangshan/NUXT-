@@ -22,6 +22,7 @@
 <script>
   import ReplayList from '../../components/ReplayList.vue'
   import ReportList from '../../components/ReportList.vue'
+  import { toast } from '../../components/toast';
 
   export default {
     name: 'moreReplay',

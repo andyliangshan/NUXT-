@@ -23,6 +23,7 @@
 <script>
 import axios from '~/plugins/axios';
 import { mapState } from 'vuex';
+import { toast } from '../../components/toast';
 export default {
   name: 'setPassword',
   middleware: 'anonymous',
@@ -72,10 +73,10 @@ export default {
             }
           }, 1000);
         } else {
-          alert('短信发送过于频繁，请稍后刷新页面重试');
+          toast('短信发送过于频繁，请稍后刷新页面重试');
         }
       } catch (err) {
-        alert('获取验证码失败');
+        toast('获取验证码失败');
       }
       this.isRequesting = false;
     },
@@ -84,15 +85,15 @@ export default {
         return;
       }
       if (!this.serPassword) {
-        alert('密码不能为空～');
+        toast('密码不能为空～');
         return;
       }
       if (!this.phoneCode) {
-        alert('验证码不能为空～');
+        toast('验证码不能为空～');
         return;
       }
       if (this.serPassword && this.serPassword.length < 6) {
-        alert('密码不能少于6位～');
+        toast('密码不能少于6位～');
         return;
       }
       const postData = {
@@ -111,11 +112,11 @@ export default {
           }
           this.$router.push({ path: '/user' });
         } else {
-            alert(bkData.data.msg);
+            toast(bkData.data.msg);
         }
         this.isRequesting = true;
       } catch (err) {
-        alert('网络异常');
+        toast('网络异常');
       }
       this.isRequesting = false;
     },

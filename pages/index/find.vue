@@ -20,6 +20,7 @@
       <data-list :pushDataList="categoryListData"></data-list>
     </keep-alive>
     <common-footer></common-footer>
+    <h2>{{ categoryData }}</h2>
   </div>
 </template>
 
@@ -36,6 +37,7 @@ export default {
       page: 1,
       limit: 10,
       currentCategoryVal: '',
+      newCategoryData: [],
     };
   },
   head() {
@@ -49,7 +51,9 @@ export default {
   },
   mounted() {
     this.CATEGORY_ALL_DATA({ page: 1, limit: 10 });
-    this.GET_CATEGORY_ALL_DATA({ page: 1, limit: 10, categoryId: '' })
+    this.GET_CATEGORY_ALL_DATA({ page: 1, limit: 10, categoryId: '' });
+    this.newCategoryDataConcat();
+    console.log(this.newCategoryData, this.$store.state.categoryData, '------')
   },
   computed: {
     ...mapGetters(['categoryData', 'categoryListData']),
@@ -63,7 +67,13 @@ export default {
       } else {
         categoryId = '';
       }
-      this.GET_CATEGORY_ALL_DATA({ page: 1, limit: 10, categoryId: categoryId })
+      this.GET_CATEGORY_ALL_DATA({ page: 1, limit: 10, categoryId: categoryId });
+    },
+    newCategoryDataConcat() {
+      for (let i = 0; i < this.categoryData.length; i++) {
+        const base = this.newCategoryData.push(this.categoryData[i].name);
+        this.newCategoryData = ['全部'].concat(this.base);
+      }
     },
   },
 };

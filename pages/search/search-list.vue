@@ -25,6 +25,7 @@
 
 <script>
   import axios from '~/plugins/axios'
+  import { toast } from '../../components/toast';
   export default{
     name: 'InterestList',
     data () {
@@ -69,9 +70,9 @@
         }
         const bkData = await axios.post('/api/action/follow', postdata, { credentials: true })
         if (bkData.data.success) {
-          alert(bkData.data.msg)
+          toast(bkData.data.msg)
         } else {
-          alert(bkData.data.msg)
+          toast(bkData.data.msg)
         }
       }
     }

@@ -50,6 +50,7 @@ import { mapGetters, mapActions } from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
 import * as filters from '../server/tools/filters';
 import ReportList from './ReportList.vue';
+import { toast } from './toast';
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
@@ -75,7 +76,6 @@ export default {
   mounted() {
     const rtime = new Date().getTime();
     this.USER_FOLLOW_TWEET_LIST_ALL_DATA({ page: 1, limit: 10, rtime: rtime });
-    // window.addEventListener('scroll', this.handLoadingDataScrollTop);
   },
   methods: {
     ...mapActions(['USER_FOLLOW_TWEET_LIST_ALL_DATA']),
@@ -136,9 +136,9 @@ export default {
         };
         const bkData = await axios.post('/api/action/follow', postdata, { credentials: true });
         if (bkData.data.success) {
-          alert(bkData.data.msg);
+          toast(bkData.data.msg);
         } else {
-          alert(bkData.data.msg);
+          toast(bkData.data.msg);
         }
       }
     },
@@ -148,7 +148,7 @@ export default {
       } else {
         const selt = evt.currentTarget;
         if (item.iszan !== null) {
-          alert('你已经点过赞啦～');
+          toast('你已经点过赞啦～');
         } else {
           const postdata = {
             targetUserId: item.tweetUser.id,
@@ -157,50 +157,15 @@ export default {
           const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
           console.log(bkData, '-----');
           if (bkData.data.success) {
-            alert(bkData.data.msg, '......');
+            toast(bkData.data.msg, '......');
             selt.children[1].innerText = bkData.data.data.data;
             selt.className = 'dianzan col-2 active';
           } else {
-            alert(bkData.data.msg);
+            toast(bkData.data.msg);
           }
         }
       }
     },
-    // 分页加载 page++ limit + 10
-    // infiniteHandler($state) {
-    //   const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
-    //   if (this.tweetListData.length) {
-    //     // this.tweetListData = this.tweetListData.concat(newData);
-    //     this.$store.dispatch('GET_TWEET_LIST_ALL_DATA', { page: ++this.page, limit: 10, otherUserId: uid });
-    //     $state.loaded();
-    //     if (parseInt(this.tweetListData.length / 10) === 3) {
-    //       $state.complete();
-    //     }
-    //   } else {
-    //     $state.complete();
-    //   }
-    //   document.querySelector('.infinite-status-prompt').innerHTML = '数据加载完～';
-    // },
-    // handLoadingDataScrollTop() {
-    //   const _this = this;
-    //   _this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-    //   const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
-    //   if (_this.scrollTop + document.body.clientHeight > document.body.scrollHeight - 10) {
-    //     console.log('aaaaa');
-    //     clearTimeout(this.timers);
-    //     this.timers = setTimeout(function() {
-    //       const page = _this.page++;
-    //       const len = Math.ceil(this.tweetListData / 10);
-    //       for (let i = 0; i < len; i++) {
-    //         this.off_on = true;
-    //         _this.limit += 10;
-    //         _this.$store.dispatch('GET_TWEET_LIST_ALL_DATA', { page: page, limit: _this.limit, otherUserId: uid });
-    //         i++;
-    //       }
-    //       console.log('第' + page + '页', _this.limit + '条数据');
-    //     }, 300);
-    //   }
-    // },
   },
 };
 </script>

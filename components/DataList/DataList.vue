@@ -43,6 +43,7 @@ import axios from '~/plugins/axios';
 import * as filters from '../../server/tools/filters';
 import ReportList from '../../components/ReportList.vue';
 import share from '../../components/SharePop.vue';
+import { toast } from '../../components/toast';
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
@@ -98,9 +99,9 @@ export default {
         };
         const bkData = await axios.post('/api/action/follow', postdata, { credentials: true });
         if (bkData.data.success) {
-          alert(bkData.data.msg);
+          toast(bkData.data.msg);
         } else {
-          alert(bkData.data.msg);
+          toast(bkData.data.msg);
         }
       } else {
         this.$router.push({ path: '/login' });
@@ -110,7 +111,7 @@ export default {
       if (this.userInfo) {
         const selt = evt.currentTarget;
         if (item.iszan !== null) {
-          alert('你已经点过赞啦～');
+          toast('你已经点过赞啦～');
         } else {
           const postdata = {
             targetUserId: item.tweetUser.id,
@@ -119,11 +120,11 @@ export default {
           const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
           console.log(bkData, '-----');
           if (bkData.data.success) {
-            alert(bkData.data.msg);
+            toast(bkData.data.msg);
             selt.children[1].innerText = bkData.data.data.data;
             selt.className = 'dianzan col-2 active';
           } else {
-            alert(bkData.data.msg);
+            toast(bkData.data.msg);
           }
         }
       } else {

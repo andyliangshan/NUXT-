@@ -20,6 +20,7 @@
 </template>
 <script>
   import axios from '~/plugins/axios'
+  import { toast } from '../../components/toast';
 
   export default {
     name: 'teaseInfo',
@@ -77,10 +78,10 @@
         console.log(bkData, '.....')
         if (bkData.data.success) {
           this.errTips = ''
-          alert(bkData.data.msg)
+          toast(bkData.data.msg)
           this.$router.push({ path: '/user' });
         } else {
-          alert(bkData.data.msg)
+          toast(bkData.data.msg)
         }
       }
     }

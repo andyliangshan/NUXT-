@@ -13,6 +13,7 @@
 </template>
 <script>
   import axios from '~/plugins/axios'
+  import { toast } from '../../components/toast';
 
   export default {
     name: 'findList',
@@ -25,23 +26,8 @@
         currentCategoryVal: ''
       }
     },
-    // async asyncData () {
-    //   try {
-    //     let res = await axios.get('/api/categoryList?page=1&limit=10')
-    //     console.log(res, '//////////---')
-    //     if (res.success) {
-    //       this.currentCategoryVal = res.data.currentCategoryVal
-    //       return { result: res.data.data }
-    //     } else {
-    //       alert('数据加载失败')
-    //     }
-    //   } catch (err) {
-    //     console.log(err)
-    //   }
-    // },
     mounted () {
       this.findTabUserData()
-      // this.getCategoryListData(0)
     },
     methods: {
       async getCategoryListData (item) {
@@ -63,7 +49,7 @@
           this.result = bkData.data.data
           this.$emit('tabList', this.result)
         } else {
-          alert('获取分类数据列表失败')
+          toast('获取分类数据列表失败')
         }
       },
       async findTabUserData () {
@@ -79,7 +65,7 @@
           this.initData = bkData.data.data
           this.currentCategoryVal = bkData.data.currentCategoryVal
         } else {
-          alert('数据加载失败')
+          toast('数据加载失败')
         }
       }
     }

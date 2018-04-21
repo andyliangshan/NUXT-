@@ -30,6 +30,7 @@
 <script>
 /* eslint-disable */
 import Cropper from 'cropperjs';
+import { toast } from '../../components/toast';
 
 export default {
   name: 'teaseInfo',
@@ -112,11 +113,11 @@ export default {
       const type = files[0].type; // 文件的类型，判断是否是图片
       const size = files[0].size; // 文件的大小，判断图片的大小
       if (this.imgCropperData.accept.indexOf(type) === -1) {
-        alert('请选择我们支持的图片格式！');
+        toast('请选择我们支持的图片格式！');
         return;
       }
       if (size > 5242880) {
-        alert('请选择5M以内的图片！');
+        toast('请选择5M以内的图片！');
         return;
       }
       this.picValue = files[0];
@@ -169,7 +170,7 @@ export default {
       request.addEventListener('load', evt => {
         const data = JSON.parse(evt.target.response);
         if (data.error) {
-          alert(data.msg);
+          toast(data.msg);
         } else {
           this.$emit('getHeaderImage', data.url);
         }

@@ -48,6 +48,7 @@ import { mapGetters, mapActions } from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
 import * as filters from '../../server/tools/filters';
 import ReportList from '../../components/ReportList.vue';
+import { toast } from '../../components/toast';
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
@@ -73,7 +74,6 @@ export default {
   mounted() {
     const otherUserId = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
     this.GET_TWEET_LIST_ALL_DATA({ page: 1, limit: 10, otherUserId: otherUserId });
-    // window.addEventListener('scroll', this.handLoadingDataScrollTop);
   },
   methods: {
     ...mapActions(['GET_TWEET_LIST_ALL_DATA']),
@@ -81,11 +81,12 @@ export default {
       // const evt = event.currentTarget;
       const deleteBtn = await axios.post('/api/deltweet', { tweetId: item.id });
       if (deleteBtn.data.success) {
-        alert('成功删除该条博文');
-        this.tweetListData.splice(index, 1);
-        this.$store.commit('GET_TWEET_LIST_ALL_DATA');
+        toast('成功删除该条博文');
+        // location.reload();
+        const otherUserId = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
+        this.GET_TWEET_LIST_ALL_DATA({ page: 1, limit: 10, otherUserId: otherUserId });
       } else {
-        alert('删除失败');
+        toast('删除失败');
       }
     },
     // 解析博文图片
@@ -143,9 +144,9 @@ export default {
         };
         const bkData = await axios.post('/api/action/follow', postdata, { credentials: true });
         if (bkData.data.success) {
-          alert(bkData.data.msg);
+          toast(bkData.data.msg);
         } else {
-          alert(bkData.data.msg);
+          toast(bkData.data.msg);
         }
       }
     },
@@ -155,7 +156,7 @@ export default {
       } else {
         const selt = evt.currentTarget;
         if (item.iszan !== null) {
-          alert('你已经点过赞啦～');
+          toast('你已经点过赞啦～');
         } else {
           const postdata = {
             targetUserId: item.tweetUser.id,
@@ -164,35 +165,15 @@ export default {
           const bkData = await axios.post('/api/action/zan', postdata, { credentials: true });
           console.log(bkData, '-----');
           if (bkData.data.success) {
-            alert(bkData.data.msg, '......');
+            toast(bkData.data.msg, '......');
             selt.children[1].innerText = bkData.data.data.data;
             selt.className = 'dianzan col-2 active';
           } else {
-            alert(bkData.data.msg);
+            toast(bkData.data.msg);
           }
         }
       }
     },
-     // handLoadingDataScrollTop() {
-    //   const _this = this;
-    //   _this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-    //   const uid = location.pathname.match(/\w{8}-(\w{4}-){3}\w{12}/)[0];
-    //   if (_this.scrollTop + document.body.clientHeight > document.body.scrollHeight - 10) {
-    //     console.log('aaaaa');
-    //     clearTimeout(this.timers);
-    //     this.timers = setTimeout(function() {
-    //       const page = _this.page++;
-    //       const len = Math.ceil(this.tweetListData / 10);
-    //       for (let i = 0; i < len; i++) {
-    //         this.off_on = true;
-    //         _this.limit += 10;
-    //         _this.$store.dispatch('GET_TWEET_LIST_ALL_DATA', { page: page, limit: _this.limit, otherUserId: uid });
-    //         i++;
-    //       }
-    //       console.log('第' + page + '页', _this.limit + '条数据');
-    //     }, 300);
-    //   }
-    // },
   },
 };
 </script>

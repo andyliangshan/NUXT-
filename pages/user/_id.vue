@@ -61,6 +61,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import axios from '~/plugins/axios';
 import DataListBox from '../../components/UserTweetDataList/UserTweetDataList.vue';
+import { toast } from '../../components/toast';
 
 export default {
   name: 'customState',
@@ -113,9 +114,9 @@ export default {
         };
         const bkData = await axios.post('/api/action/follow', postdata);
         if (bkData.data.success) {
-          alert(bkData.data.msg);
+          toast(bkData.data.msg);
         } else {
-          alert(bkData.data.msg);
+          toast(bkData.data.msg);
         }
       }
     },

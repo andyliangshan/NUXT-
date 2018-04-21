@@ -45,6 +45,7 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import * as filters from '../../server/tools/filters';
+
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });

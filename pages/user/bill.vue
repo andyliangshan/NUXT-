@@ -23,6 +23,7 @@
 <script>
 // import axios from '~/plugins/axios';
 import { mapActions, mapGetters } from 'vuex'
+import { toast } from '../../components/toast';
 export default {
   name: 'bill',
   middleware: 'authenticated',
@@ -39,7 +40,7 @@ export default {
   async mounted() {
     const flag = await this.GET_BILL_INFO_DATA()
     if (!flag) {
-      alert('网络异常，请稍后再试！');
+      toast('网络异常，请稍后再试！');
       this.$router.push({ path: '/user/myAssets' })
     }
   },
