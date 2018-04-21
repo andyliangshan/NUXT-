@@ -128,44 +128,36 @@ router.post('/falls', async (req, res) => {
  * dba： aes256(page==1&&limit==10&&userId==xxx) * userId 登录状态时必选
  */
 router.post('/tweet/rcd', async (req, res) => {
-    const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
-    const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
-    const userId = req.session.loginData && req.session.loginData.user.id
-    // const page = req.body.page || ''
-    // const limit = req.body.limit || ''
-    // console.log(page, limit, '...........')
-    // if (!validator.isInt(page)) {
-    //   return res.status(500).json({
-    //     msg: '页数应该是整数',
-    //     success: false
-    //   })
-    // }
-    // if (!validator.isInt(limit)) {
-    //   return res.status(500).json({
-    //     msg: '每页数据应该是整数',
-    //     success: false
-    //   })
-    // }
-    const aesStr = userId ? `page==1&&limit==10&&userId==${userId}` : 'page==1&&limit==10'
-    const dba = SecretKey.aesEncrypt256(aesStr, aesKeys)
-    const rcdData = await agent.post(`${resApi.zhiBApi}/tweet/rcd`, {
-        timespan,
-        raid
-    }, {
-        dba
-    })
-    // console.log(rcdData, '----------')
-    if (rcdData.success) {
-        res.json({
-            msg: '推荐栏目数据获取成功',
-            success: true,
-            rcdData
+    try {
+        const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
+        const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
+        const userId = req.session.loginData && req.session.loginData.user.id
+        const page = req.body.page || 1
+        const limit = req.body.limit || 10
+        console.log(page, limit, '...........')
+        const aesStr = userId ? `page==${page}&&limit==10&&userId==${userId}` : `page==${page}&&limit==10`
+        const dba = SecretKey.aesEncrypt256(aesStr, aesKeys)
+        const rcdData = await agent.post(`${resApi.zhiBApi}/tweet/rcd`, {
+            timespan,
+            raid
+        }, {
+            dba
         })
-    } else {
-        res.json({
-            msg: '推荐栏目数据获取错误',
-            success: false
-        })
+        // console.log(rcdData, '----------')
+        if (rcdData.success) {
+            res.json({
+                msg: '推荐栏目数据获取成功',
+                success: true,
+                rcdData
+            })
+        } else {
+            res.json({
+                msg: '推荐栏目数据获取错误',
+                success: false
+            })
+        }
+    } catch (err) {
+        console.log(err)
     }
 })
 

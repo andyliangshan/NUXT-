@@ -36,10 +36,10 @@
               </nuxt-link>
             </div>
             <div class="release">
-              <nuxt-link to="/release">
+              <a href="javascript:void(0)" @click="releaseTweet">
                 <img src="../assets/img/pencil.png" alt="Group"/>
                 <em>发文</em>
-              </nuxt-link>
+              </a>
             </div>
           </div>
       </div>
@@ -64,7 +64,7 @@
         </div>
       </div>
       <div class="editorArea">
-         <div class="release"><nuxt-link to="/release"><img src="../assets/img/zb-icon6.png" alt="release"/></nuxt-link></div>
+         <div class="release"><a href="javascript:void(0)" @click="releaseTweet"><img src="../assets/img/zb-icon6.png" alt="release"/></a></div>
          <div class="search"><nuxt-link to="/search"><img src="../assets/img/zb-icon7.png" alt="search"/></nuxt-link></div>
          <div class="reloadPage"><a href="javascript:void(0)"><img src="../assets/img/zb-icon5.png" alt="reloadPage"/></a></div> 
       </div>
@@ -75,12 +75,14 @@
         <nuxt-link :to="'/user'"><em>我</em></nuxt-link>
       </div>
     </div>
+    <atical-classfiy v-show="showCatagory" @listpop="showCg"></atical-classfiy>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 import axios from '~/plugins/axios';
+import AticalClassfiy from './../components/AticalClassfiy.vue';
 export default {
   computed: mapGetters(['userInfo', 'noticeData', 'noticeCount']),
   data() {
@@ -88,15 +90,26 @@ export default {
       loginState: false,
       h5LoginState: false,
       showMsgState: false,
+      showCatagory: false,
     };
   },
   middleware: 'authenticated',
   mounted() {
-    this.GET_NOTICE_COUNT()
+    this.GET_NOTICE_COUNT();
+  },
+  components: {
+    AticalClassfiy,
   },
   methods: {
     ...mapMutations(['LOGINOUT']),
     ...mapActions(['GET_NOTICE_COUNT']),
+    showCg(str) {
+      console.log(str, '..........')
+      this.showCatagory = str;
+    },
+    releaseTweet() {
+      this.showCatagory = true;
+    },
     async logout() {
       const logout = await axios.post('/api/logout');
       if (logout.data.success) {

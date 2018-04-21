@@ -14,6 +14,7 @@
     "async": "^2.6.0",
     "axios": "^0.16.2",
     "babel-runtime": "^6.26.0",
+    "better-scroll": "^1.10.0",
     "body-parser": "^1.18.2",
     "bytes": "^3.0.0",
     "cluster": "^0.7.7",
@@ -52,7 +53,7 @@
     "superagent": "^3.8.2",
     "validator": "^9.4.1",
     "vue-infinite-loading": "^2.3.1",
-    "vue-social-share": "^0.0.3",
+    "vue-social-share": "0.0.3",
     "vue2-touch-events": "^1.0.0",
     "vuex": "^3.0.1"
   },

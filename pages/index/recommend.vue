@@ -34,7 +34,7 @@ export default {
     commonFooter,
   },
   mounted() {
-    this.RECOMMEND_ATICLE_SPECAL_DATA()
+    this.RECOMMEND_ATICLE_SPECAL_DATA({ page: 1 })
   },
   computed: {
     ...mapGetters(['tweetRcdData'])

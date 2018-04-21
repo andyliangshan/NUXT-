@@ -76,7 +76,7 @@
     </div>  
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
 import axios from '~/plugins/axios';
 import nvHeader from '../Header.vue';
 import cps from '../../components/ReportSuccess.vue'
@@ -86,7 +86,10 @@ import cpsno from '../../components/AccountClosure.vue'
 export default {
   name: 'homepage',
   middleware: 'authenticated',
-  computed: mapGetters(['userInfo']),
+  computed: {
+    ...mapGetters(['userInfo']),
+    ...mapState(['isCps', 'isCpsed', 'isCpsNo'])
+  },
   head() {
     return {
       title: '个人主页',

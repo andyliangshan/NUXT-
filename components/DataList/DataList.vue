@@ -27,12 +27,12 @@
           <div class="coin"><span></span><em>{{ items.collectCount }}</em></div>
           <div :class="[items.iszan === null ? 'dianzan col-2' : 'dianzan col-2 active']" @click="userDianZanFlag(items, $event)"><span></span><em>{{ items.zanCount }}</em></div>
           <div class="sendmsg col-2"><nuxt-link :to="'/detail/' + items.id"><span></span>{{ items.viewCount }}</nuxt-link></div>
-          <div class="share col-7"><span></span>{{ items.shareCount }}</div>
+          <div class="share col-7" @click="shareTweet(items, $event)"><span></span>{{ items.shareCount }}</div>
         </div>
       </div>
-      <div class="pullUp"></div>
     </div>
     <report-list v-show="reportListPop"></report-list>
+    <share ref="shareState"></share>
   </div>
 </template>
 
@@ -42,6 +42,7 @@ import { mapGetters } from 'vuex';
 import axios from '~/plugins/axios';
 import * as filters from '../../server/tools/filters';
 import ReportList from '../../components/ReportList.vue';
+import share from '../../components/SharePop.vue';
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
@@ -53,6 +54,7 @@ export default {
       reportListPop: false,
       maxLen: 60,
       instroduce: '',
+      list: [],
     };
   },
   props: {
@@ -63,6 +65,7 @@ export default {
   },
   components: {
     ReportList,
+    share,
   },
   mounted() {
   },
@@ -70,6 +73,10 @@ export default {
     ...mapGetters(['userInfo']),
   },
   methods: {
+    // 分享
+    shareTweet(item, evt) {
+      this.$refs.shareState.style.display = 'block';
+    },
     async changeStateAttent(item, evt) {
       if (this.userInfo) {
         const selt = evt.currentTarget;
@@ -95,7 +102,7 @@ export default {
           alert(bkData.data.msg);
         }
       } else {
-        this.$router.push({ path: '/login' })
+        this.$router.push({ path: '/login' });
       }
     },
     async userDianZanFlag(item, evt) {
@@ -119,7 +126,7 @@ export default {
           }
         }
       } else {
-        this.$router.push({ path: '/login' })
+        this.$router.push({ path: '/login' });
       }
     },
     // 解析博文图片

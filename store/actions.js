@@ -76,9 +76,9 @@ export default {
         }
     },
     // 首页 推荐文章 + 1条精选
-    RECOMMEND_ATICLE_SPECAL_DATA: async({ commit }) => {
+    RECOMMEND_ATICLE_SPECAL_DATA: async({ commit }, { page, limit }) => {
         try {
-            const tweetRcdData = await axios.post('/api/tweet/rcd');
+            const tweetRcdData = await axios.post('/api/tweet/rcd', { page: page, limit: limit });
             if (tweetRcdData.data.success) {
                commit('RECOMMEND_ATICLE_SPECAL', tweetRcdData.data.rcdData.data)
             }

@@ -5,15 +5,8 @@
         <div class="incomeList">
           <div class="choice">请选择文章分类</div>
           <div class="list">
-            <div class="listInfo">
-              <a href="javascript:void(0)">快讯要闻</a>
-              <a href="javascript:void(0)">项目交流</a>
-              <a href="javascript:void(0)">行情解读</a>
-              <a href="javascript:void(0)">币圈说说</a>
-              <a href="javascript:void(0)">小道消息</a>
-              <a href="javascript:void(0)">撸羊毛</a>
-              <a href="javascript:void(0)">行业知识</a>
-              <a href="javascript:void(0)">其他</a>
+            <div class="listInfo" v-if="categoryData">
+              <a href="javascript:void(0)" @click="getCategoryID(item)" v-for="(item, index) in categoryData" :key="index">{{ item.name }}</a>
             </div>
             <div class="queryDetail" @click="listTopHide"><a href="javascript:void(0)">×</a></div>
           </div>
@@ -25,19 +18,36 @@
 </template>
 
 <script>
-  export default {
-    name: 'reportList',
-    data () {
-      return {
-        listPop: true
+import { mapGetters, mapActions } from 'vuex';
+export default {
+  name: 'reportList',
+  middleware: 'authenticated',
+  data() {
+    return {
+      listPop: true,
+    };
+  },
+  computed: {
+    ...mapGetters(['userInfo', 'categoryData']),
+  },
+  mounted() {
+    this.CATEGORY_ALL_DATA({ page: 1, limit: 10 });
+  },
+  methods: {
+    ...mapActions(['CATEGORY_ALL_DATA']),
+    listTopHide() {
+      this.listPop = false;
+      this.$emit('listpop', false);
+    },
+    getCategoryID(item) {
+      if (!this.userInfo) {
+        this.$router.push({ path: '/login' })
+      } else {
+        this.$router.push({ path: `/release/${item.id}` })
       }
     },
-    methods: {
-      listTopHide () {
-        this.listPop = false
-      }
-    }
-  }
+  },
+};
 </script>
 
 <style lang="stylus">
@@ -51,7 +61,7 @@
   z-index: 1000;
 
   .incomeInfo {
-    width: 94%;
+    width: 100%;
     margin: 0 auto;
     padding: 10px;
     position: fixed;
@@ -96,7 +106,7 @@
 
             &:nth-child(3n + 3) {
               margin-right: 0;
-             }
+            }
           }
         }
       }

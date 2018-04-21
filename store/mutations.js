@@ -126,4 +126,16 @@ export default {
     CATEGORY_LIST_DATA: (state, data) => {
         state.categoryListData = data
     },
+    // 是否有举报信息 isCps
+    CPS_INFO: (state, iscp) => {
+        state.isCps = iscp
+    },
+    // 是否有被举报信息 isCpsed
+    CPSED_INFO: (state, iscped) => {
+        state.isCpsed = iscped
+    },
+    // 是否有恶意举报信息 isCpsNo
+    CPSNO_INFO: (state, iscpNo) => {
+        state.isCpsNo = iscpNo
+    },
 }

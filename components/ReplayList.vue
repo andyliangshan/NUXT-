@@ -76,7 +76,7 @@ export default {
           console.log(bkData, '-----');
           if (bkData.data.success) {
             alert(bkData.data.msg);
-            selt.children[0].children[0].innerText = bkData.data.data.data;
+            selt.children[0].innerText = bkData.data.data.data;
             selt.className = 'list-bot-zans col-2 active'
           } else {
             alert(bkData.data.msg);

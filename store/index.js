@@ -44,6 +44,10 @@ const store = () => new Vuex.Store({
         //--------------
         loginPhone: null,   // 登录的手机号码
         isUserNew: false,   // 是否是新注册用户
+
+        isCps: false, // 是否举报成功信息
+        isCpsed: false, // 是否被举报信息
+        isCpsNo: false, // 是否有恶意举报信息
     },
     mutations,
     actions,

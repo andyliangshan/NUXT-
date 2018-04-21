@@ -29,10 +29,10 @@
         <div class="coin"><span>&nbsp;</span><em>{{ item.currentScoreWorth }}</em></div>
         <div :class="[item.iszan === null ? 'dianzan col-2' : 'dianzan col-2 active']" @click="userDianZanFlag(item, $event)"><span>&nbsp;</span><em>{{ item.zanCount }}</em></div>
         <div class="sendmsg col-2"><nuxt-link :to="'/detail/' + item.id"><span>&nbsp;</span>{{ item.collectCount }}</nuxt-link></div>
-        <div class="share col-6" @click="showSharePopCont"><span>&nbsp;</span>{{ item.shareCount }}</div>
+        <div class="share col-6" @click="showSharePopCont(item, $event)"><span>&nbsp;</span>{{ item.shareCount }}</div>
       </div>
     </div>
-    <!-- <share-pop v-show="showSharePop"></share-pop> -->
+    <share-pop ref="showSharePop"></share-pop>
   </div>
 </template>
 <script>
@@ -54,7 +54,6 @@ export default {
       result: [],
       page: 1,
       limit: 10,
-      showSharePop: false,
     };
   },
   props: {
@@ -72,8 +71,8 @@ export default {
     ...mapGetters(['userInfo']),
   },
   methods: {
-    showSharePopCont() {
-      this.showSharePop = true;
+    showSharePopCont(item, evt) {
+      this.$refs.showSharePop.style.display = 'block';
     },
     async changeStateAttent(item, evt) {
       if (this.userInfo) {
