@@ -32,7 +32,7 @@
       </div>
     </div>
     <report-list v-show="reportListPop"></report-list>
-    <share ref="shareState"></share>
+    <share v-show="shareState"></share>
   </div>
 </template>
 
@@ -55,6 +55,7 @@ export default {
       maxLen: 60,
       instroduce: '',
       list: [],
+      shareState: false,
     };
   },
   props: {
@@ -75,7 +76,7 @@ export default {
   methods: {
     // 分享
     shareTweet(item, evt) {
-      this.$refs.shareState.style.display = 'block';
+      this.shareState = true;
     },
     async changeStateAttent(item, evt) {
       if (this.userInfo) {
@@ -168,5 +169,5 @@ export default {
 };
 </script>
 <style lang="stylus">
-@import './Datalist.styl';
+@import './DataList.styl';
 </style>

@@ -2,10 +2,10 @@
   <div class="shareicon" ref="shareState">
     <!-- <share :config="config"></share> -->
     <div class="shareType">
-      <a href="javascript:void(0)" class="weibo"><span></span><em>微博</em></a>
+      <a href="javascript:void(0)" class="weibo" @click="shareToXl"><span></span><em>微博</em></a>
       <a href="javascript:void(0)" class="weichart"><span></span><em>微信</em></a>
       <a href="javascript:void(0)" class="friend"><span></span><em>朋友圈</em></a>
-      <a href="javascript:void(0)" class="qq"><span></span><em>QQ</em></a>
+      <a href="javascript:void(0)" class="qq" @click="shareToQq"><span></span><em>QQ</em></a>
       <a href="javascript:void(0)" class="qqzone"><span></span><em>QQ空间</em></a>
     </div>
     <div class="cancelShare" @click="closeShare">取消</div>
@@ -31,6 +31,19 @@ export default {
     closeShare() {
       this.$refs.shareState.style.display = 'none';
     },
+    shareToXl(title, url, picurl) {
+      // 分享到微博
+      const sharesinastring =
+        'http://v.t.sina.com.cn/share/share.php?title=' + title + '&url=' + url + '&content=utf-8&sourceUrl=' + url + '&pic=' + picurl;
+      window.open(sharesinastring, 'newwindow', 'height=400,width=400,top=100,left=100');
+    },
+    shareToQq(title, url, picurl) {
+      const shareqqzonestring = 'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?summary=' + title + '&url=' + url + '&pics=' + picurl;
+      window.open(shareqqzonestring, 'newwindow', 'height=400,width=400,top=100,left=100');
+    },
+    subinfo() {
+      this.shareToQq('测试标题', 'www.baidu.com', 'http://aladdin-vray.oss-cn-beijing.aliyuncs.com/Other/80de988c-ad11-449b-af48-b5341c957668.jpg');
+    },
   },
 };
 </script>
@@ -44,7 +57,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  z-index 1000
+  z-index: 1000;
 
   .shareType {
     position: absolute;
@@ -53,8 +66,8 @@ export default {
     display: flex;
     justify-content: space-between;
     text-align: center;
-    padding 10px 0
-    width 100%
+    padding: 10px 0;
+    width: 100%;
 
     a {
       display: inline-block;
@@ -113,7 +126,7 @@ export default {
     height: 44px;
     line-height: 44px;
     text-align: center;
-    font-size 16px
+    font-size: 16px;
   }
 }
 </style>

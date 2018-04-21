@@ -32,7 +32,7 @@
         <div class="share col-6" @click="showSharePopCont(item, $event)"><span>&nbsp;</span>{{ item.shareCount }}</div>
       </div>
     </div>
-    <share-pop ref="showSharePop"></share-pop>
+    <share-pop v-show="showSharePop"></share-pop>
   </div>
 </template>
 <script>
@@ -54,6 +54,7 @@ export default {
       result: [],
       page: 1,
       limit: 10,
+      showSharePop: false,
     };
   },
   props: {
@@ -72,7 +73,7 @@ export default {
   },
   methods: {
     showSharePopCont(item, evt) {
-      this.$refs.showSharePop.style.display = 'block';
+      this.showSharePop = true;
     },
     async changeStateAttent(item, evt) {
       if (this.userInfo) {
