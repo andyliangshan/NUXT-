@@ -42,7 +42,68 @@ const router = new Router()
  * tid(必须) aes 加密的 tweetId
  * did(必须) aes 加密的 deviceId
  */
+router.get('/tweet/vw', wrapper(async (req, res) => {
+    const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
+    const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
+    const tweetId = req.query.tweetId;
+    const deviceId = fetchDeviceId(req);
+    const tid = SecretKey.aesEncrypt256(tweetId, aesKeys);
+    const did = SecretKey.aesEncrypt256(deviceId, aesKeys);
 
+    const vwData = await agent.get(`${resApi.zhiBApi}/tweet/vw`, {
+        timespan,
+        raid,
+        tid,
+        did
+    });
+    console.log(vwData, '====vwdata=====')
+    if (vwData.success) {
+        res.json({
+            msg: '博文曝光成功.',
+            success: true
+        });
+    } else {
+        res.json({
+            msg: '博文曝光失败.',
+            success: false
+        });
+    }
+}))
+/**
+ * 博文分享
+/tweet/sh?timespan=xx&raid=xx&tid=xx&did=xx
+method: get
+query
+tid aes 加密 tweetId
+did aes 加密的 deviceId
+ */
+router.get('/tweet/sh', wrapper(async (req, res) => {
+    const timespan = SecretKey.aesEncrypt256(Date.now() + '', aesKeys)
+    const raid = SecretKey.aesEncrypt256(SecretKey.random(8), aesKeys)
+    const tweetId = req.query.tweetId;
+    const deviceId = fetchDeviceId(req);
+    const tid = SecretKey.aesEncrypt256(tweetId, aesKeys);
+    const did = SecretKey.aesEncrypt256(deviceId, aesKeys);
+
+    const shData = await agent.get(`${resApi.zhiBApi}/tweet/sh`, {
+        timespan,
+        raid,
+        tid,
+        did
+    });
+    console.log(shData, '====vwdata=====')
+    if (shData.success) {
+        res.json({
+            msg: '博文分享成功.',
+            success: true
+        });
+    } else {
+        res.json({
+            msg: '博文分享失败.',
+            success: false
+        });
+    }
+}))
 /**
  * /tweet/falls?timespan=xx&raid=xx
  * method: post
