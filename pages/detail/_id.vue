@@ -26,15 +26,7 @@
       <div class="comments-header">{{ tweetInfoData.replyCount }}评论</div>
       <replay-list :replayItems="tweetInfoData"></replay-list>      
     </div>
-    <div class="bottombar" v-show="showComment">
-      <div class="bottombat-height"></div>
-      <div class="comment">
-        <form @submit.stop.prevent="commentCont">
-           <input type="text" placeholder="发表评论…" class="commentText" v-model="comment" contenteditable="true" >
-        </form>
-      </div>
-    </div>
-    <complaint :show="showComplain"></complaint>
+    <complaint v-show="showComplain"></complaint>
   </div>
 </div>  
 </template>
@@ -58,11 +50,9 @@ export default {
   data() {
     return {
       showAttent: false,
-      showComment: false,
-      comment: '',
       title: '币文正文',
       canFollow: true,
-      showComplain: false
+      showComplain: false,
     };
   },
   components: {

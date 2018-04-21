@@ -23,6 +23,7 @@ const store = () => new Vuex.Store({
         recommedUserData: [],
         tweetRcdData: null,
         singleReplayListData: [],
+        levelReplayListData: [],
         otherUserMainInfoData: null,
         userMainInfoData: null,
         tweetListData: null,
@@ -48,6 +49,7 @@ const store = () => new Vuex.Store({
         isCps: false, // 是否举报成功信息
         isCpsed: false, // 是否被举报信息
         isCpsNo: false, // 是否有恶意举报信息
+        
     },
     mutations,
     actions,

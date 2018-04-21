@@ -8,11 +8,9 @@
             <div class="list-top-info-title"><nuxt-link :to="'/user/' + items.tweetUser.id" class="backtoPage">{{ items.tweetUser.nickName }}</nuxt-link></div>
             <div class="list-top-info-publishTime"><span>{{ items.createdAt | dynamicFormatTime }}</span></div>
           </div>
-          <div class="list-top-attent col-2" v-if="items.isfollow === null">
+          <div class="list-top-attent col-2">
              <a href="javascript:void(0)" class="attention active" ref="attentBtn" @click="changeStateAttent(items, $event)">已关注</a>
-          </div>
-          <div class="list-top-attent col-2" v-else>
-            <a href="javascript:void(0)" class="attention" ref="attentBtn" @click="changeStateAttent(items, $event)">关注</a>
+             <a href="javascript:void(0)" class="report">×</a>
           </div>
         </div>
         <div class="list-mid">
@@ -32,12 +30,6 @@
           <div class="share col-7"><span></span>{{ items.shareCount }}</div>
         </div>
       </div>
-
-      <!-- <infinite-loading @infinite="infiniteHandler">
-        <span slot="no-more">
-          数据已经加载完～😊
-        </span>
-      </infinite-loading> -->
     </div>
     <report-list v-show="reportListPop"></report-list>
   </div>
@@ -74,8 +66,7 @@ export default {
   },
   computed: mapGetters(['userInfo', 'userFollowListData']),
   mounted() {
-    const rtime = new Date().getTime();
-    this.USER_FOLLOW_TWEET_LIST_ALL_DATA({ page: 1, limit: 10, rtime: rtime });
+    this.USER_FOLLOW_TWEET_LIST_ALL_DATA({ page: 1, limit: 10 });
   },
   methods: {
     ...mapActions(['USER_FOLLOW_TWEET_LIST_ALL_DATA']),
@@ -209,6 +200,7 @@ export default {
           width: 32px;
           height: 32px;
           vertical-align: middle;
+          border-radius 50%
         }
       }
 

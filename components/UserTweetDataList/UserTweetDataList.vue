@@ -10,7 +10,6 @@
           </div>
           <div class="list-top-attent col-2" v-show="userInfo.id === items.tweetUser.id">
             <a href="javascript:void(0)" class="delete" ref="deleteBtn" @click="deleteTweet(items, ind, $event)">删除</a>
-            <!-- <a href="javascript:void(0)" class="report">×</a> -->
           </div>
           <div class="list-top-attent col-2" v-show="userInfo.id !== items.tweetUser.id" v-if="items.isfollow !== null">
             <a href="javascript:void(0)" class="attention active" ref="attentBtn" @click="changeStateAttent(items, $event)">已关注</a>

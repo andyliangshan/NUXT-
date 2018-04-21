@@ -1,16 +1,15 @@
 <template>
-  <div class="follow">
+  <div class="follow" ref="follow">
+    <!--已经有关注内容列表-->
+    <div v-if="userFollowListData"><follow-list-data></follow-list-data></div>
     <!--没有关注内容显示-->
-    <div class="noFollow" ref="follow" v-show="userFollowListData !== ''">
+    <div class="noFollow" v-else>
       <div class="cont">
         <div class="img"><img src="../../assets/img/attent.png" alt="Group"/></div>
         <div class="desc">还没有关注账号哟</div>
         <div class="find"><router-link to="/find">去发现</router-link></div>
       </div>
     </div>
-    <!--已经有关注内容列表-->
-    <!-- <data-list v-show="showSharePop" :pushDataList="result"></data-list> -->
-    <follow-list-data></follow-list-data>
     <common-footer></common-footer>
   </div>
 </template>

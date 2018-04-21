@@ -96,15 +96,18 @@ export default {
   middleware: 'authenticated',
   mounted() {
     this.GET_NOTICE_COUNT();
+    if (this.userInfo) {
+      this.GET_MASTER_INFO_DATA();
+    }
   },
   components: {
     AticalClassfiy,
   },
   methods: {
     ...mapMutations(['LOGINOUT']),
-    ...mapActions(['GET_NOTICE_COUNT']),
+    ...mapActions(['GET_NOTICE_COUNT', 'GET_MASTER_INFO_DATA']),
     showCg(str) {
-      console.log(str, '..........')
+      console.log(str, '..........');
       this.showCatagory = str;
     },
     releaseTweet() {

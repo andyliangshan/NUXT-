@@ -3,13 +3,8 @@
     <div class="findList">
       <div class="list">
         <ul>
-          <li>
-            <a href="javascript:void(0)" :class="''" @click="getCategoryListData('')">
-              全部
-            </a>
-          </li>
           <li v-for="(item, index) in categoryData" :key="index">
-            <a href="javascript:void(0)" :class="''" @click="getCategoryListData(item)">
+            <a href="javascript:void(0)" :class="[index === num ? 'active' : '']" @click="getCategoryListData(item, index)">
               {{ item.name }}
             </a>
           </li>
@@ -20,7 +15,6 @@
       <data-list :pushDataList="categoryListData"></data-list>
     </keep-alive>
     <common-footer></common-footer>
-    <h2>{{ categoryData }}</h2>
   </div>
 </template>
 
@@ -37,7 +31,7 @@ export default {
       page: 1,
       limit: 10,
       currentCategoryVal: '',
-      newCategoryData: [],
+      num: 0,
     };
   },
   head() {
@@ -52,15 +46,14 @@ export default {
   mounted() {
     this.CATEGORY_ALL_DATA({ page: 1, limit: 10 });
     this.GET_CATEGORY_ALL_DATA({ page: 1, limit: 10, categoryId: '' });
-    this.newCategoryDataConcat();
-    console.log(this.newCategoryData, this.$store.state.categoryData, '------')
   },
   computed: {
     ...mapGetters(['categoryData', 'categoryListData']),
   },
   methods: {
     ...mapActions(['CATEGORY_ALL_DATA', 'GET_CATEGORY_ALL_DATA']),
-    async getCategoryListData(item) {
+    async getCategoryListData(item, index) {
+      this.num = index;
       let categoryId;
       if (item.name !== '全部 ') {
         categoryId = item.id;
@@ -68,12 +61,6 @@ export default {
         categoryId = '';
       }
       this.GET_CATEGORY_ALL_DATA({ page: 1, limit: 10, categoryId: categoryId });
-    },
-    newCategoryDataConcat() {
-      for (let i = 0; i < this.categoryData.length; i++) {
-        const base = this.newCategoryData.push(this.categoryData[i].name);
-        this.newCategoryData = ['全部'].concat(this.base);
-      }
     },
   },
 };

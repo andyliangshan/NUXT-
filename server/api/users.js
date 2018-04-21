@@ -547,10 +547,10 @@ router.post('/user/follow/tweet', auth.authUser, async (req, res) => {
 
         const page = req.body.page || 1
         const limit = req.body.limit || 10
-        const rtime = req.body.rtime || 0 // 需要验证时间戳
+        // const rtime = req.body.rtime || 0 // 需要验证时间戳
 
-        console.log(page, limit, rtime, '...///.......')
-        const aesStr = `page==${page}&&limit==${limit}&&rtime==${rtime}&&userId==${userId}`;
+        console.log(page, limit, '...///.......')
+        const aesStr = `page==${page}&&limit==${limit}&&userId==${userId}`;
         const pubStr = `deviceId==${deviceId}&&phone==${phone}&&signature==${signature}`;
         const dba = SecretKey.aesEncrypt256(aesStr, aesKeys);
         const token = SecretKey.nodeRSAEncryptWithPubKey(pubStr, pubKeys);

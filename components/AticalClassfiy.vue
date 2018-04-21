@@ -94,14 +94,14 @@ export default {
           a {
             float: left;
             display: inline-block;
-            width: 82px;
+            width: 31%;
             text-align: center;
             color: #202020;
             font-size: 14px;
             height: 30px;
             border-radius: 3px;
             line-height: 30px;
-            margin: 0 10px 10px 0;
+            margin: 0 3% 3% 0;
             background: #efefef;
 
             &:nth-child(3n + 3) {

@@ -36,6 +36,10 @@ export default {
     MAIN_SINGLE_REPLAY_DATA: (state, data) => {
         state.singleReplayListData = data;
     },
+    // 二级 回复列表
+    LEVEL_REPLAY_ALL_DATA: (state, data) => {
+        state.levelReplayListData = data;
+    },
     // 博文详情页面的数据信息
     GET_TWEET_DETAIL_ALL_DATA: (state, data) => {
         state.tweetInfoData = data;

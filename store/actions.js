@@ -97,6 +97,17 @@ export default {
             console.log(err)
         }
     },
+    // 二级 回复列表
+    LEVEL_REPLAY_LIST: async({ commit }, { page, limit, topReplyId }) => {
+        try {
+            const levelReplyListData = await axios.post('/api/replyLevel', { page: page, limit: limit, topReplyId: topReplyId });
+            if (levelReplyListData.data.success) {
+               commit('LEVEL_REPLAY_ALL_DATA', levelReplyListData.data.data.rows)
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    },
     // 获取博文详情页面数据
     GET_TWEET_DETAIL_DATA: async({ commit }, tweetId) => {
         try {
@@ -228,9 +239,9 @@ export default {
         }
     },
     // 用户关注的博文列表数据
-    USER_FOLLOW_TWEET_LIST_ALL_DATA: async({ commit }, { page, limit, rtime }) => {
+    USER_FOLLOW_TWEET_LIST_ALL_DATA: async({ commit }, { page, limit }) => {
         try {
-            const userFollowData = await axios.post('/api/user/follow/tweet', { page: page, limit: limit, rtime: rtime });
+            const userFollowData = await axios.post('/api/user/follow/tweet', { page: page, limit: limit });
             if (userFollowData.data.success) {
                commit('USER_FOLLOW_TWEET_LIST_DATA', userFollowData.data.data)
             }
