@@ -32,7 +32,7 @@ app.use(require('cookie-parser')(''))
 
 app.use(session({
   name: 'sid',
-  secret: 'zhiB.mobile',
+  secret: 'andyliang',
   store: redisSessionStore,
   resave: true,
   saveUninitialized: true

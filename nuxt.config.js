@@ -44,7 +44,7 @@ module.exports = {
    ** Add axios globally
    */
   build: {
-    publicPath: isDebug ? '/_nuxt/' : 'https://cdn.zhib.net',
+    publicPath: isDebug ? '/_nuxt/' : '', // 配置  当前页面打包输入域名地址
     vendor: ['axios'],
     /*
      ** Run ESLINT on save
