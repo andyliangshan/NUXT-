@@ -2,7 +2,7 @@
   "name": "nuxt",
   "version": "1.0.0",
   "description": "Nuxt.js project",
-  "author": "noodless <noodleswang@shunshunliuxue.com>",
+  "author": "lwm634@163.com",
   "private": true,
   "scripts": {
     "dev": "backpack dev",
